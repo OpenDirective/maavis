@@ -8,11 +8,11 @@ xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 		<em:id>{4D498D0A-05AD-4fdb-97B5-8A0AABC1FC5B}</em:id>
 		<em:name>R-kiosk</em:name>
 		<em:version>0.7.2</em:version>
-		<em:description>RKiosk (Real Kiosk), fullscreen kiosk mode: all menus, keys etc. disabled</em:description>
-		<em:creator>Kimmo Heinaaro</em:creator>
+		<em:description>SIM WIN - simple access to computer and communications</em:description>
+		<em:creator>Steve Lee</em:creator>
 		<em:file>
-			<Description about="urn:mozilla:extension:file:rkiosk.jar">
-				<em:package>content/rkiosk/</em:package>
+			<Description about="urn:mozilla:extension:file:sim_win.jar">
+				<em:package>content/sim_win/</em:package>
 			</Description>
 		</em:file>
 		<em:targetApplication>

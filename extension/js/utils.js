@@ -3,7 +3,7 @@ if (!this.Utils) {
 // Create object only if one does not already exist. We create the
 // object in a closure to avoid creating global variables.
 
-    Utils = function () {
+    var Utils = function () {
         // private stuff
         var PATH_SEP = '/';
 
@@ -27,7 +27,7 @@ if (!this.Utils) {
         return { 
             PATH_SEP: function() { return PATH_SEP; }(),
             getPathFolder: getPathFolder,
-            makeAbsFileURI: makeAbsFileURI,
+            makeAbsFileURI: makeAbsFileURI
         }; // object literal
     }(); //function
 } // if

@@ -6,10 +6,11 @@
         onload="RkioskBrowserStartup()"> 
 </window>
 
-<script type="application/javascript" src="chrome://rkiosk/content/ipc_extension.js" />
-<script type="application/javascript" src="chrome://rkiosk/content/rkioskbrowser.js" />
+<script type="application/javascript" src="chrome://sim_win/content/utils.js" />
+<script type="application/javascript" src="chrome://sim_win/content/ipc_extension.js" />
+<script type="application/javascript" src="chrome://sim_win/content/rkioskbrowser.js" />
 
-    <menubar id="zzzmain-menubar" hidden="true"  fullscreentoolbar="false" disabled="true">
+    <menubar id="main-menubar" hidden="true"  fullscreentoolbar="false" disabled="true">
           <menuitem id="menu_preferences" disabled="true"/>
     </menubar>
 

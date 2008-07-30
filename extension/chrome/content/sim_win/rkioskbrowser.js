@@ -23,9 +23,9 @@ function Rkiosk_navbar_setting()
 
 function RkioskBrowserStartup()
 {
-//  Rkiosk_navbar_setting();
+  Rkiosk_navbar_setting();
   BrowserStartup();
-  loadURI("file:///C:/projects/SIM_WIN/extension/simwin.xhtml");
+  loadURI("file:///H:/SIM_WIN/extension/simwin.xhtml");
   setTimeout(RkioskdelayedStartup, 1000);
 }
 
@@ -34,17 +34,9 @@ function RkioskdelayedStartup()
   window.fullScreen = true;
 }
 
-function exec(command)
-{
-    var pm = Components.classes["@senecac.on.ca/processmanager;1"].
-    getService(Components.interfaces.IProcessManager);
-    pm.start(command);
-//pm.stop();
-}
-
 DataTransferListener.handleData = function(data, target) {
-    //alert("DataTransferListener.handleData: obtained " + data.name);
-    exec(data.what)
+   //alert("DataTransferListener.handleData: obtained " + data.name);
+    utils.exec(data.what)
         //alert("DataTransferListener.handleData: returning changed data")
         //return {id:2000, name:"Pong"};
     return null;
