@@ -3,12 +3,12 @@
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
 <window id="main-window"
-        onload="RkioskBrowserStartup()"> 
+        onload="sim_winBrowserStartup()"> 
 </window>
 
 <script type="application/javascript" src="chrome://sim_win/content/utils.js" />
 <script type="application/javascript" src="chrome://sim_win/content/ipc_extension.js" />
-<script type="application/javascript" src="chrome://sim_win/content/rkioskbrowser.js" />
+<script type="application/javascript" src="chrome://sim_win/content/sim_winbrowser.js" />
 
     <menubar id="main-menubar" hidden="true"  fullscreentoolbar="false" disabled="true">
           <menuitem id="menu_preferences" disabled="true"/>
@@ -95,7 +95,7 @@
   </commandset>
 
   <keyset id="mainKeyset">
-    <key id="rkiosk_f1" keycode="VK_F1" oncommand="Rkiosk_donothing();"/>
+    <key id="sim_win_f1" keycode="VK_F1" oncommand="sim_win_donothing();"/>
     <key id="key_newNavigator" disabled="true"/>
     <key id="key_newNavigatorTab" disabled="true"/>
     <key id="focusURLBar" disabled="true"/>
@@ -125,12 +125,12 @@
     <key id="addBookmarkAsKb" disabled="true"/>
     <key id="bookmarkAllTabsKb" disabled="true"/>
     <key id="key_stop" disabled="true"/>
-    <key id="key_gotoHistory" command="Rkiosk_donothing();"/>
+    <key id="key_gotoHistory" command="sim_win_donothing();"/>
     <key id="key_switchTextDirection" disabled="true"/>
     <key id="key_sanitize" disabled="true"/>
     <key id="key_undoCloseTab" disabled="true"/>
-    <key id="viewBookmarksSidebarKb" command="Rkiosk_donothing();"/>
-    <key id="viewBookmarksSidebarWinKb" command="Rkiosk_donothing();"/>
+    <key id="viewBookmarksSidebarKb" command="sim_win_donothing();"/>
+    <key id="viewBookmarksSidebarWinKb" command="sim_win_donothing();"/>
     <key id="key_fullScreen" disabled="true"/>
     <key id="key_textZoomReduce" disabled="true"/>
     <key id="key_textZoomEnlarge" disabled="true"/>

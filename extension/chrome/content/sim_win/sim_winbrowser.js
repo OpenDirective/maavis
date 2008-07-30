@@ -1,35 +1,35 @@
-function Rkiosk_donothing()
+function sim_win_donothing()
 {
 
 
 }
 
-function rkioskclose()
+function sim_winclose()
 {
   close();
 }
 
-function Rkiosk_navbar_setting()
+function sim_win_navbar_setting()
 {
-  var rkiosk_navbar_enable="true";
+  var sim_win_navbar_enable="true";
   var prefs = Components.classes["@mozilla.org/preferences-service;1"].
   	getService(Components.interfaces.nsIPrefBranch);
-  if (prefs.getPrefType("rkiosk.navbar") == prefs.PREF_BOOL){
-    if (prefs.getBoolPref("rkiosk.navbar")) rkiosk_navbar_enable = "false";
+  if (prefs.getPrefType("sim_win.navbar") == prefs.PREF_BOOL){
+    if (prefs.getBoolPref("sim_win.navbar")) sim_win_navbar_enable = "false";
   }
-  var rkiosk_element = document.getElementById("navigator-toolbox");
-  rkiosk_element.setAttribute("hidden", rkiosk_navbar_enable);
+  var sim_win_element = document.getElementById("navigator-toolbox");
+  sim_win_element.setAttribute("hidden", sim_win_navbar_enable);
 }
 
-function RkioskBrowserStartup()
+function sim_winBrowserStartup()
 {
-  Rkiosk_navbar_setting();
+  sim_win_navbar_setting();
   BrowserStartup();
   loadURI("file:///H:/SIM_WIN/extension/simwin.xhtml");
-  setTimeout(RkioskdelayedStartup, 1000);
+  setTimeout(sim_winDelayedStartup, 1000);
 }
 
-function RkioskdelayedStartup()
+function sim_winDelayedStartup()
 {
   window.fullScreen = true;
 }

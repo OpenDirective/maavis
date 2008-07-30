@@ -13,13 +13,13 @@ xmlns:chrome="http://www.mozilla.org/rdf/chrome#">
 	</RDF:Seq>
 
 	<RDF:Seq RDF:about="chrome://browser/content/browser.xul">
-		<RDF:li>chrome://sim_win/content/rkioskbrowser.xul</RDF:li>
+		<RDF:li>chrome://sim_win/content/sim_winbrowser.xul</RDF:li>
 	</RDF:Seq>
 	<RDF:Seq RDF:about="chrome://mozapps/content/xpinstall/xpinstallConfirm.xul">
-		<RDF:li>chrome://sim_win/content/rkioskxpinstallConfirm.xul</RDF:li>
+		<RDF:li>chrome://sim_win/content/sim_winxpinstallConfirm.xul</RDF:li>
 	</RDF:Seq>
 	<RDF:Seq RDF:about="chrome://mozapps/content/downloads/unknownContentType.xul">
-		<RDF:li>chrome://sim_win/content/rkioskunknownContentType.xul</RDF:li>
+		<RDF:li>chrome://sim_win/content/sim_winunknownContentType.xul</RDF:li>
 	</RDF:Seq>
 
 	<RDF:Description RDF:about="urn:mozilla:package:sim_win"
