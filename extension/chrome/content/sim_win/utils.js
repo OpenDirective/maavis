@@ -14,21 +14,21 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  * */
 
-const _EXTID = 'sim_win@fullmeasure.co.uk';   //same as id in install.rdf
-
-function logit() {
-    var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
-                         .getService(Components.interfaces.nsIConsoleService);
-    var text = '';
-    for(var i=0; i < arguments.length; i++) {
-	text += arguments[i] + ' ';
-    }
-    consoleService.logStringMessage(text);
-}
-
 if (!utils)
 {
 var utils = {
+    _EXTID : 'sim_win@fullmeasure.co.uk',  //same as id in install.rdf
+
+    logit : function () {
+        var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
+                             .getService(Components.interfaces.nsIConsoleService);
+        var text = '';
+        for(var i=0; i < arguments.length; i++) {
+        text += arguments[i] + ' ';
+        }
+        consoleService.logStringMessage(text);
+    },
+
     _ijson: null,
 	
     getJson: function() {
@@ -106,13 +106,23 @@ var utils = {
     },
 
     getExtensionPath: function(id) {
-        id = id || _EXTID;
+        id = id || utils._EXTID;
         var cls = Components.classes["@mozilla.org/extensions/manager;1"];
         var service = cls.getService(Components.interfaces.nsIExtensionManager);
         return service.getInstallLocation(id).getItemLocation(id).path;
     },
 
-    getInstalledPathForFile: function(filename /* or path as args*/)
+    getInstallationPath: function() {
+    // oh sodit lets assume / works in FF on Windows, its been there in windows since DOS and I won't be dealing with Drives
+        id = utils._EXTID;
+        var cls = Components.classes["@mozilla.org/extensions/manager;1"];
+        var service = cls.getService(Components.interfaces.nsIExtensionManager);
+        var path = service.getInstallLocation(id).getItemLocation(id).parent.path;
+        path = path.replace(/\\/g, '/');
+        return path + '/';
+    },
+
+/*    getInstalledPathForFile: function(filename ) // vaargs for path
     // for files outside extension
     {
         var cls = Components.classes["@mozilla.org/extensions/manager;1"];
@@ -128,7 +138,7 @@ var utils = {
     {
         return "file://" + file.replace(/\\/g, '/');    // / is fine in URLs on windows as its supported / and \ for years now
     },
-
+*/
 
     toJson: function(obj) {
         return this._getJson().ijson.encode(obj);

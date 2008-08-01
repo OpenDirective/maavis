@@ -1,5 +1,6 @@
 // the first page to show
-const HOME_URL =  utils.fileToFileURL(utils.getInstalledPathForFile('ui', 'simwin.xhtml')); // relative to 'extension' directory
+//const HOME_URL =  utils.fileToFileURL(utils.getInstalledPathForFile('ui', 'simwin.xhtml')); // relative to 'extension' directory
+const HOME_URL =  'file://' + utils.getInstallationPath() + 'ui/simwin.xhtml';
 
 function sim_win_donothing()
 {
