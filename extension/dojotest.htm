@@ -4,67 +4,66 @@
     <head>
     	<title>Dojo Toolkit Test Page</title>    
     
-	<!-- load the dojo toolkit base -->
-	<script type="text/javascript" src="js/dojo-release-1.1.1/dojo/dojo.js"
-	    djConfig="parseOnLoad:true, isDebug:true"></script>
-    
-	<script type="text/javascript">
-	/* our JavaScript will go here */
-	</script>
-    
-	<style type="text/css">
-.testClass {
-	background-color:red;
-} 
-	</style>    
-    </head>
-    <body><!-- this is a Typical WebPage starting point ... -->
-<h1 id="testHeading">Dojo Skeleton Page</h1>
-    
-<a class="link" href="#">First link</a>
-<a class="link" href="#">Second Link</a>    
+ <!--    <style type="text/css">
+        @import "http://o.aolcdn.com/dojo/1.1.1/dijit/themes/tundra/tundra.css";
+        @import "http://o.aolcdn.com/dojo/1.1.1/dojo/resources/dojo.css"
+    </style>
+    <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.1.1/dojo/dojo.xd.js"
+        djConfig="parseOnLoad: true, isDebug:true,  usePlainJson:true"></script>
+-->
+    <style type="text/css">
+        @import "js/dojo-release-1.1.1/dijit/themes/tundra/tundra.css";
+        @import "js/dojo-release-1.1.1/dojo/resources/dojo.css";
+	</style>
 
-<p class="para">First paragraph</p>
-<p class="para">Second paragraph</p>
-<p class="para">Third paragraph</p>    </body>
-    <div>
-        <p>Some Content To Replace</p>
-	</div>
+    <script type="text/javascript">
+        djConfig={                                     // see bootstrap.js
+        parseOnLoad: true, 
+        isDebug: true,                                // enable Firebug lite if firebug not installed
+        usePlainJson: true,                         // avoids warning from Ajax Hijack protection
+        modulePaths: {sim_win: "../../../digits"} // relative to dojo.js
+        };
+    </script>
+
+    <script type="text/javascript" src="js/dojo-release-1.1.1/dojo/dojo.js"></script>
+
+    <script type="text/javascript" src="js/json2.js" ></script>
+  
+    <script type="text/javascript">
+       // Load Dojo's code relating to the Button widget
+       dojo.require("dijit.form.Button");
+       dojo.require("dojo.data.ItemFileReadStore");
+       
+     function dstest()
+    {
+    var store = new dojo.data.ItemFileReadStore({url: "ds.json"});
+    var gotContinents = function(items, request){
+        for (var i = 0; i < items.length; i++){
+           var item = items[i];
+           console.log("Located continent: " + store.getLabel(item));
+        }
+    }
+    var request = store.fetch({query: {type:"continent"}, onComplete: gotContinents});
+}
+
+function djtest()
+{
+    var foo = dijit.byId('foo');
+    foo.fooMethod();
+}
+    </script>
+  
+     <script type="text/javascript">
+          // Explicitly require the parser for swapping in your widgets
+          // on page load.
+          dojo.require("dojo.parser");
+
+          // Require the widget being used in the page.
+          dojo.require("sim_win.FooWidget");
+      </script>
+  
+  <body class="tundra">
+    <button dojoType="dijit.form.Button" id="helloButton" onClick="djtest(); ">Hello World!</button>
+    <span dojoType="sim_win.FooWidget"  id='foo' title='yowser'></span>
+</body>
 </html>
-
-<script>
-dojo.require("dijit.form.Button");
-dojo.require("dijit.TitlePane");
-dojo.addOnLoad(function(){
-    dojo.byId("testHeading").innerHTML = "We're on our way!";
-    console.log("onLoad fires after require() is done"); 
-});  
-
-dojo.require("dojo.NodeList-fx");
-dojo.addOnLoad(function(){
-	// our dom is ready, get the node:
-/*	dojo.query("#testHeading")
-		 // add "testClass" to its class="" attribute
-		.addClass("testClass")
-		 // and fade it out after 500 ms
-		.fadeOut({ delay:500 }).play();*/
-	dojo.query(".para")
-		.addClass("testClass")
-		.fadeOut({ delay: 1000 }).play();
-});
-
-dojo.addOnLoad(function(){
-    var node = dojo.byId("testHeading");
-    dojo.connect(node,"onclick",function(){
-	node.innerHTML = "I've been clicked";    	
-    });	    
-});   
-
-dojo.require("dijit.form.Button");
-
-</script>
-
-<button dojoType="dijit.form.Button" id="helloButton">Hello World!
-        <script type="dojo/method" event="onClick">
-           alert('You pressed the button');
-        </script></button>

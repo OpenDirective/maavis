@@ -13,6 +13,9 @@
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  * */
+
+const _EXTID = 'sim_win@fullmeasure.co.uk';   //same as id in install.rdf
+
 function logit() {
     var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
                          .getService(Components.interfaces.nsIConsoleService);
@@ -102,12 +105,29 @@ var utils = {
         return path;
     },
 
-    getExtensionPath: function(guid) {
-        guid = guid || GUID;
+    getExtensionPath: function(id) {
+        id = id || _EXTID;
         var cls = Components.classes["@mozilla.org/extensions/manager;1"];
         var service = cls.getService(Components.interfaces.nsIExtensionManager);
-        return service.getInstallLocation(guid).getItemLocation(guid).path;
+        return service.getInstallLocation(id).getItemLocation(id).path;
     },
+
+    getInstalledPathForFile: function(filename)
+    // for files outside extension
+    {
+        var cls = Components.classes["@mozilla.org/extensions/manager;1"];
+        var service = cls.getService(Components.interfaces.nsIExtensionManager);
+        var dir = service.getInstallLocation(_EXTID).getItemLocation(_EXTID);
+        var file = dir.clone().parent;
+        file.append(filename); 
+        return file.path;
+    },
+
+    fileToFileURL: function(file)
+    {
+        return "file://" + file.replace(/\\/g, '/');    // / is fine in URLs on windows as its supported / and \ for years now
+    },
+
 
     toJson: function(obj) {
         return this._getJson().ijson.encode(obj);
