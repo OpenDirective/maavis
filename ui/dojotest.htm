@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" 
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+    	<title>Dojo Toolkit Test Page</title>    
+    
+ <!--    <style type="text/css">
+        @import "http://o.aolcdn.com/dojo/1.1.1/dijit/themes/tundra/tundra.css";
+        @import "http://o.aolcdn.com/dojo/1.1.1/dojo/resources/dojo.css"
+    </style>
+    <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.1.1/dojo/dojo.xd.js"
+        djConfig="parseOnLoad: true, isDebug:true,  usePlainJson:true"></script>
+-->
+    <style type="text/css">
+        @import "js/dojo-release-1.1.1/dijit/themes/tundra/tundra.css";
+        @import "js/dojo-release-1.1.1/dojo/resources/dojo.css";
+	</style>
+
+    <script type="text/javascript">
+        djConfig={                                     // see bootstrap.js
+        parseOnLoad: true, 
+        isDebug: true,                                // enable Firebug lite if firebug not installed
+        usePlainJson: true,                         // avoids warning from Ajax Hijack protection
+        modulePaths: {sim_win: "../../../digits"} // relative to dojo.js
+        };
+    </script>
+
+    <script type="text/javascript" src="js/dojo-release-1.1.1/dojo/dojo.js"></script>
+
+    <script type="text/javascript" src="js/json2.js" ></script>
+  
+    <script type="text/javascript">
+       // Load Dojo's code relating to the Button widget
+       dojo.require("dijit.form.Button");
+       dojo.require("dojo.data.ItemFileReadStore");
+       
+     function dstest()
+    {
+    var store = new dojo.data.ItemFileReadStore({url: "ds.json"});
+    var gotContinents = function(items, request){
+        for (var i = 0; i < items.length; i++){
+           var item = items[i];
+           console.log("Located continent: " + store.getLabel(item));
+        }
+    }
+    var request = store.fetch({query: {type:"continent"}, onComplete: gotContinents});
+}
+
+function djtest()
+{
+    var foo = dijit.byId('foo');
+    foo.fooMethod();
+}
+    </script>
+  
+     <script type="text/javascript">
+          // Explicitly require the parser for swapping in your widgets
+          // on page load.
+          dojo.require("dojo.parser");
+
+          // Require the widget being used in the page.
+          dojo.require("sim_win.FooWidget");
+      </script>
+  
+  <body class="tundra">
+    <button dojoType="dijit.form.Button" id="helloButton" onClick="djtest(); ">Hello World!</button>
+    <span dojoType="sim_win.FooWidget"  id='foo' title='yowser'></span>
+</body>
+</html>
