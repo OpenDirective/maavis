@@ -112,14 +112,15 @@ var utils = {
         return service.getInstallLocation(id).getItemLocation(id).path;
     },
 
-    getInstalledPathForFile: function(filename)
+    getInstalledPathForFile: function(filename /* or path as args*/)
     // for files outside extension
     {
         var cls = Components.classes["@mozilla.org/extensions/manager;1"];
         var service = cls.getService(Components.interfaces.nsIExtensionManager);
         var dir = service.getInstallLocation(_EXTID).getItemLocation(_EXTID);
         var file = dir.clone().parent;
-        file.append(filename); 
+        for (i=0; i< arguments.length; i++)
+            file.append(arguments[i]); 
         return file.path;
     },
 
