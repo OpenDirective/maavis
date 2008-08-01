@@ -86,12 +86,11 @@ function browseTo(url)
 </form>
 
 <!-- xdata="http://plugindoc.mozdev.org/testpages/ffwmv9.php" -->
-<script src="js/json2.js" />
-<script src="js/ipc_page.js" />
-<script src="js/utils.js" />
+<script src="../js/json2.js" />
+<script src="../js/ipc_page.js" />
+<script src="../js/utils.js" />
 
 <script>
-
 function func(aEvent) {
     data = JSON.parse(aEvent.target.parentNode.getAttribute('data-action'));
 	Communicator.call(data);

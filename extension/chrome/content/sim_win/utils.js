@@ -16,7 +16,8 @@
 
 if (!utils)
 {
-var utils = {
+     var utils = {
+
     _EXTID : 'sim_win@fullmeasure.co.uk',  //same as id in install.rdf
 
     logit : function () {
@@ -114,7 +115,7 @@ var utils = {
 
     getInstallationPath: function() {
     // oh sodit lets assume / works in FF on Windows, its been there in windows since DOS and I won't be dealing with Drives
-        id = utils._EXTID;
+        var id = utils._EXTID;
         var cls = Components.classes["@mozilla.org/extensions/manager;1"];
         var service = cls.getService(Components.interfaces.nsIExtensionManager);
         var path = service.getInstallLocation(id).getItemLocation(id).parent.path;
@@ -149,3 +150,10 @@ var utils = {
     }
 };
 }
+
+// TODO: temp home till i sort out a better solution for disabling kiosk mode
+function     goHome () {
+    const _HOME_URL = 'file://' + utils.getInstallationPath() + 'ui/simwin.xhtml';
+    loadURI(_HOME_URL);
+    };
+    

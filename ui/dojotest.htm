@@ -12,22 +12,16 @@
         djConfig="parseOnLoad: true, isDebug:true,  usePlainJson:true"></script>
 -->
     <style type="text/css">
-        @import "js/dojo-release-1.1.1/dijit/themes/tundra/tundra.css";
-        @import "js/dojo-release-1.1.1/dojo/resources/dojo.css";
+        @import "../js/dojo-release-1.1.1/dijit/themes/tundra/tundra.css";
+        @import "../js/dojo-release-1.1.1/dojo/resources/dojo.css";
 	</style>
 
-    <script type="text/javascript">
-        djConfig={                                     // see bootstrap.js
-        parseOnLoad: true, 
-        isDebug: true,                                // enable Firebug lite if firebug not installed
-        usePlainJson: true,                         // avoids warning from Ajax Hijack protection
-        modulePaths: {sim_win: "../../../digits"} // relative to dojo.js
-        };
+    <script type="text/javascript" src="../js/dojo-options.js">
     </script>
 
-    <script type="text/javascript" src="js/dojo-release-1.1.1/dojo/dojo.js"></script>
+    <script type="text/javascript" src="../js/dojo-release-1.1.1/dojo/dojo.js"></script>
 
-    <script type="text/javascript" src="js/json2.js" ></script>
+    <script type="text/javascript" src="../js/json2.js" ></script>
   
     <script type="text/javascript">
        // Load Dojo's code relating to the Button widget
