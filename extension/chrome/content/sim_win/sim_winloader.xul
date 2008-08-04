@@ -7,9 +7,13 @@
 <script type="application/javascript" src="chrome://sim_win/content/sim_winbrowser.js" />
 
 <script type="application/javascript" >
-    // options from command line
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].
     getService(Components.interfaces.nsIPrefBranch);
+    
+    // required to stop erros in dojo data acess
+    prefs.setBoolPref("security.fileuri.strict_origin_policy", false);
+
+    // options from command line
     var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
     var strHomePage = prefs.getCharPref("sim_win.commandline.homepage");
 
