@@ -1,5 +1,3 @@
-# comment out the first line below to disable kiosk mode
-#overlay	chrome://browser/content/browser.xul	chrome://sim_win/content/sim_winbrowser.xul
 overlay	chrome://browser/content/browser.xul	chrome://sim_win/content/sim_winloader.xul
 overlay	chrome://mozapps/content/xpinstall/xpinstallConfirm.xul	chrome://sim_win/content/sim_winxpinstallConfirm.xul
 overlay	chrome://mozapps/content/downloads/unknownContentType.xul	chrome://sim_win/content/sim_winunknownContentType.xul

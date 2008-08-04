@@ -2,13 +2,10 @@
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
-<window id="main-window"
-        onload="sim_winBrowserStartup()"> 
-</window>
-
-<script type="application/javascript" src="chrome://sim_win/content/utils.js" />
 <script type="application/javascript" src="chrome://sim_win/content/ipc_extension.js" />
 <script type="application/javascript" src="chrome://sim_win/content/sim_winbrowser.js" />
+
+<window id="main-window" /> 
 
     <menubar id="main-menubar" hidden="true"  fullscreentoolbar="false" disabled="true">
           <menuitem id="menu_preferences" disabled="true"/>
@@ -56,7 +53,7 @@
     <command id="Browser:OpenLocation" disabled="true"/>
     <command id="Tools:Search" disabled="true"/>
     <command id="Tools:Downloads" disabled="true"/>
-    <zzzcommand id="Tools:Addons" disabled="true"/>
+    <command id="Tools:Addons" disabled="true"/>
     <command id="Tools:Sanitize" disabled="true"/>
     <command id="History:UndoCloseTab" disabled="true"/>
     <command id="cmd_bm_open" disabled="true"/>
@@ -142,4 +139,9 @@
     <key id="key_fullZoomEnlarge" disabled="true"/>
     <key id="key_fullZoomReset" disabled="true"/>
   </keyset>
+ 
+ <script>
+    sim_winBrowserStartup();    
+</script>
+
 </overlay>

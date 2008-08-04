@@ -154,6 +154,6 @@ if (!utils)
 // TODO: temp home till i sort out a better solution for disabling kiosk mode
 function     goHome () {
     const _HOME_URL = 'file://' + utils.getInstallationPath() + 'ui/simwin.xhtml';
-    loadURI(_HOME_URL);
+    loadURI(_HOME_URL, nsIWebNavigation.LOAD_FLAGS_NONE, null);
     };
     

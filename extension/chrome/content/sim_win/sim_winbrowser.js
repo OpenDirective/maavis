@@ -24,13 +24,6 @@ function sim_winBrowserStartup()
 {
     sim_win_navbar_setting();
     BrowserStartup();
-    setTimeout(sim_winDelayedStartup, 1000);
-}
-
-function sim_winDelayedStartup()
-{
-    window.fullScreen = true;
-    goHome();
 }
 
 DataTransferListener.handleData = function(data, target) {
