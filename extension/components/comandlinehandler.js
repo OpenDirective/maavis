@@ -16,7 +16,7 @@ const CHROME_URI = "chrome://sim_win/content/";
 const clh_contractID = "@mozilla.org/commandlinehandler/general-startup;1?type=sim_win";
 
 // use uuidgen to generate a unique ID
-const clh_CID = Components.ID("{2991c315-b871-42cd-b33f-bfee4fcbf689}");
+const clh_CID = Components.ID("{412d63b0-639a-11dd-ad8b-0800200c9a66}");
 
 // category names are sorted alphabetically. Typical command-line handlers use a
 // category that begins with the letter "m".
@@ -74,9 +74,11 @@ const myAppHandler = {
       Components.utils.reportError("incorrect parameter passed to -homepage on the command line.");
     }
 
-    bNoKiosk = cmdLine.handleFlag("nokiosk", false);
+    var bNoKiosk = cmdLine.handleFlag("nokiosk", false);
     prefs.setBoolPref("sim_win.commandline.nokiosk", bNoKiosk);
-    var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
+    var bNoFullScreen = cmdLine.handleFlag("nofullscreen", false);
+    prefs.setBoolPref("sim_win.commandline.nofullscreen", bNoFullScreen);
+//    var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
    //cmdLine.preventDefault = true;
  
   },
@@ -88,7 +90,8 @@ const myAppHandler = {
   // 72 characters with embedded newlines,
   // and finally, the string should end with a newline
   helpInfo : "  -nokiosk               Don't use kiosk mode\n" +
-             "  -homepage <uri>       Home page to show\n",
+                "    -nofullscreen               Don't go full screen\n" +
+                "  -homepage <uri>       Home page to show\n",
 
   /* nsIFactory */
 
