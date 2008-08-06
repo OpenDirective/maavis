@@ -1,0 +1,27 @@
+DEPTH		= ../..
+topsrcdir	= @top_srcdir@
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+
+include $(DEPTH)/config/autoconf.mk
+
+MODULE 	= processmanager
+
+DIRS		= public \
+		  src \
+		  $(NULL)
+
+XPI_NAME 	= processmanager
+
+# A Unique ID for your extension
+INSTALL_EXTENSION_ID	= processmanager@senecac.on.ca
+
+# Will create a .xpi in /mozilla/$(MOZ_OBJDIR)/dist/xpi-stage/
+XPI_PKGNAME	= processmanager
+
+# install.rdf will tell Firefox how to install our extension and 
+# this says, "copy install.rdf into our extension dir and xpi"
+DIST_FILES = install.rdf
+
+include $(topsrcdir)/config/rules.mk
+
