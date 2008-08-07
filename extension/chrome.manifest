@@ -1,4 +1,4 @@
 overlay	chrome://browser/content/browser.xul	chrome://sim_win/content/sim_winloader.xul
-#overlay	chrome://mozapps/content/xpinstall/xpinstallConfirm.xul	chrome://sim_win/content/sim_winxpinstallConfirm.xul
+overlay	chrome://mozapps/content/xpinstall/xpinstallConfirm.xul	chrome://sim_win/content/sim_winxpinstallConfirm.xul
 overlay	chrome://mozapps/content/downloads/unknownContentType.xul	chrome://sim_win/content/sim_winunknownContentType.xul
 content	sim_win	chrome/content/sim_win/content	example	chrome/content/xbltest/skin example skin chrome/content/xbltest/

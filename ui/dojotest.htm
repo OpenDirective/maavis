@@ -30,7 +30,7 @@
        
      function dstest()
     {
-    var store = new dojo.data.ItemFileReadStore({url: "ds.json"});
+    var store = new dojo.data.ItemFileReadStore({url: "../data/ds.json"});
     var gotContinents = function(items, request){
         for (var i = 0; i < items.length; i++){
            var item = items[i];
@@ -42,8 +42,7 @@
 
 function djtest()
 {
-    var foo = dijit.byId('foo');
-    foo.fooMethod();
+    dstest();
 }
     </script>
   

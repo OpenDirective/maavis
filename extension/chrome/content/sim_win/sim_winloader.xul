@@ -11,9 +11,6 @@
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].
     getService(Components.interfaces.nsIPrefBranch);
     
-    // required to stop erros in dojo data acess
-    prefs.setBoolPref("security.fileuri.strict_origin_policy", false);
-
     // options from command line
     var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
     var bNoFullScreen = prefs.getBoolPref("sim_win.commandline.nofullscreen");
