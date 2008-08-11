@@ -54,8 +54,18 @@ function browseTo(url)
     </g>
         
     <g id="btnEdit" data-action='{"command":"exec", "what":"notepad.exe" }' >
-        <rect x="51%" y="1%" rx="20" ry="20" width="48%" height="24%" style="stroke:black;stroke-width:5;fill:url(#red_black)"/>
-        <text fill="#000000" x="67%" y="15%" stroke="black" font-size="45" font-family="Verdana" >Editor</text>
+        <rect x="51%" y="1%" rx="20" ry="20" width="15%" height="24%" style="stroke:black;stroke-width:5;fill:url(#red_black)"/>
+        <text fill="#000000" x="53%" y="15%" stroke="black" font-size="45" font-family="Verdana" >Edit</text>
+    </g>
+    
+    <g id="btnKill" data-action='{"command":"kill", "what":"notepad.exe" }' >
+        <rect x="67%" y="1%" rx="20" ry="20" width="15%" height="24%" style="stroke:black;stroke-width:5;fill:url(#red_black)"/>
+        <text fill="#000000" x="69%" y="15%" stroke="black" font-size="45" font-family="Verdana" >Kill</text>
+    </g>
+    
+    <g id="btnPoll" data-action='{"command":"poll", "what":"notepad.exe" }' >
+        <rect x="83%" y="1%" rx="20" ry="20" width="15%" height="24%" style="stroke:black;stroke-width:5;fill:url(#red_black)"/>
+        <text fill="#000000" x="85%" y="15%" stroke="black" font-size="45" font-family="Verdana" >Poll</text>
     </g>
     
     <g onclick = 'browseTo("http://www.actprogramme.org.uk")'>
@@ -108,6 +118,8 @@ document.addEventListener("DOMContentLoaded", function(aEvent) {
 	Communicator.init();
 	// add event Listener on button to test...
 	document.getElementById("btnEdit").addEventListener("click", func, true);
+	document.getElementById("btnKill").addEventListener("click", func, true);
+	document.getElementById("btnPoll").addEventListener("click", func, true);
 }, false);
 
 

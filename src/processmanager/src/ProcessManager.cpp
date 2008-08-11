@@ -18,14 +18,14 @@ private:
 protected:
   /* additional members */
   nsString mName;
-  PROCESS_INFORMATION pi; // this is the pointer to the process; use it to terminate the process
-
+  DWORD mpid;
 };
 
 /* Implementation file */
 NS_IMPL_ISUPPORTS1(ProcessManager, IProcessManager)
 
 ProcessManager::ProcessManager()
+ : mpid(0)
 {
   /* member initializers and constructor code */
   mName.Assign(NS_LITERAL_STRING("Process Manager"));
@@ -33,7 +33,6 @@ ProcessManager::ProcessManager()
 
 ProcessManager::~ProcessManager()
 {
-  /* destructor code */
 }
 
 /* attribute AString name; */
@@ -52,12 +51,19 @@ NS_IMETHODIMP ProcessManager::SetName(const nsAString & aName)
 //  return NS_ERROR_NOT_IMPLEMENTED;
 }
 
+/* readonly attribute unsigned long pid; */
+NS_IMETHODIMP ProcessManager::GetPid(PRUint32 *aPid)
+{
+    *aPid = mpid;
+    return NS_OK;
+}
+
 /* long start (in AString filename); */
-NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRInt32 *_retval)
+NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRBool *_retval NS_OUTPARAM)
 {
   // code to start a process
   STARTUPINFO si;
-  //  PROCESS_INFORMATION pi; // defined up in the protected section as we'll need it in scope as long as this object exists
+  PROCESS_INFORMATION pi;
 
   ZeroMemory( &si, sizeof(si) );
   si.cb = sizeof(si);
@@ -67,7 +73,7 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRInt32 *_retval
   char* file = ToNewUTF8String(filename); // free this later 
 
   // Start the process 
-  if( !CreateProcess( NULL,   // No module name (use command line)
+  BOOL br = CreateProcess( NULL,   // No module name (use command line)
     file,           // Filename to execute plus the arguments 
     NULL,           // Process handle not inheritable
     NULL,           // Thread handle not inheritable
@@ -76,25 +82,79 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRInt32 *_retval
     NULL,           // Use parent's environment block
     NULL,           // Use parent's starting directory 
     &si,            // Pointer to STARTUPINFO structure
-    &pi )           // Pointer to PROCESS_INFORMATION structure
-  ) 
+    &pi );         // Pointer to PROCESS_INFORMATION structure
+  NS_Free(file);
+  
+  if (!br)
   {
-    *_retval = 1;
+    *_retval = false; // REVIEW why return this as error is same
     return NS_ERROR_FAILURE;
   }
-  *_retval = 0;
+
+  CloseHandle( pi.hProcess );
+  CloseHandle( pi.hThread );
+  mpid = pi.dwProcessId;
+  
+  *_retval = true;
   return NS_OK;
 }
 
 /* long stop (); */
-NS_IMETHODIMP ProcessManager::Stop(PRInt32 *_retval)
+NS_IMETHODIMP ProcessManager::Stop(PRBool *_retval NS_OUTPARAM)
+// note this effectively force quits without allowing for clean shutdown
+// REVIEW what if already stopped?
 {
-  TerminateProcess(
-    pi.hProcess, // handle within the PROCESS_INFORMATION struct 
-    NULL // I just guessed for this value
-  );
+  if (!mpid)
+    return NS_ERROR_FAILURE;
+  
+  HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, false, mpid);
+  if (!hProcess)
+  {
+    *_retval = false;
+    return NS_OK;
+  }
+  BOOL br = TerminateProcess(
+        hProcess, // handle within the PROCESS_INFORMATION struct 
+        9999 // any non-0 value is a failure but application defined, so we pick something that won't often clash (hopefully)
+        );
+  CloseHandle(hProcess);
+  if (!br)
+  {
+    *_retval = false;
+    return NS_OK;
+  }
+  
+  mpid = 0; // this is debatable
+  *_retval = (br != 0);
+  return NS_OK;
+}
 
-  *_retval = 0;
+NS_IMETHODIMP ProcessManager::IsRunning(PRBool *_retval NS_OUTPARAM)
+// _retval = true if exited and exitCode is set otherwise exitcode is undefined (0)
+{
+  if (!mpid)
+  {
+    // we don't know 
+    *_retval = false;
+    return NS_OK;
+  }
+
+  HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, false, mpid);
+  if (!hProcess)
+  {
+    *_retval = false;
+    return NS_OK;
+  }
+  DWORD ec = 0;     // TODO pass back via out param. I removed as part of debugging a crash problem
+  BOOL br = GetExitCodeProcess(hProcess, &ec);
+  CloseHandle(hProcess);
+  if (!br)
+  {
+    *_retval = false;
+    return NS_OK;
+  }
+
+  *_retval = (ec == STILL_ACTIVE); // nb if proc returns 259 we think it active - 'bug' in win32 api
   return NS_OK;
 }
 
@@ -116,4 +176,3 @@ static const nsModuleComponentInfo components[] =
 };
 
 NS_IMPL_NSGETMODULE(ProcessManagerModule, components)
-

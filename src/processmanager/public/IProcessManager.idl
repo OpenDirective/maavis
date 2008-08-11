@@ -3,8 +3,9 @@
 [scriptable, uuid(af9c6848-a8f9-410e-bc88-9cbde7f4c72a)]
 interface IProcessManager: nsISupports
 {
-	attribute AString name;
-  long start(in AString filename);
-  long stop();
+  attribute AString name;
+  readonly attribute unsigned long pid;
+  boolean start(in AString filename);
+  boolean stop();
+  boolean isRunning();
 };
-

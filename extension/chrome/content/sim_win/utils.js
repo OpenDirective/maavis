@@ -90,8 +90,9 @@ if (!utils)
 	exec: function (command)
 	{
 	    var pm = Components.classes["@senecac.on.ca/processmanager;1"].
-	    getService(Components.interfaces.IProcessManager);
+	        createInstance(Components.interfaces.IProcessManager);
 	    pm.start(command);
+        return pm;
 	},
 
     buildPath: function(root) {

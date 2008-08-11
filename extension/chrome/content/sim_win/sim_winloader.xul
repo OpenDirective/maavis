@@ -38,6 +38,14 @@
         const strPage = (strHomePage == '') ? 'file://' + utils.getInstallationPath() + 'ui/simwin.xhtml'
                             : strHomePage;
         loadURI(strPage);
+        
+        var edproc=utils.exec('notepad.exe');
+        var bRunning = edproc.isRunning();
+        utils.logit(bRunning.toString());        
+        utils.logit(edproc.pid);        
+        edproc.stop();
+        bRunning = edproc.isRunning();
+        utils.logit(bRunning.toString());        
     }
 </script>
 
