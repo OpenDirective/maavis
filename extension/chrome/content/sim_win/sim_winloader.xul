@@ -6,47 +6,8 @@
 <script type="application/javascript" src="chrome://sim_win/content/ipc_extension.js" />
 <script type="application/javascript" src="chrome://sim_win/content/sim_winbrowser.js" />
 
-
-<script type="application/javascript" >
-    var prefs = Components.classes["@mozilla.org/preferences-service;1"].
-    getService(Components.interfaces.nsIPrefBranch);
-    
-    // options from command line
-    var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
-    var bNoFullScreen = prefs.getBoolPref("sim_win.commandline.nofullscreen");
-    var strHomePage = prefs.getCharPref("sim_win.commandline.homepage");
-
-    if (!bNoKiosk)
-    {
-        const strKioskOverlay = 'chrome://sim_win/content/sim_winbrowser.xul';
-        window.addEventListener("load", function foo() {
-                document.loadOverlay(strKioskOverlay, null);
-            }, true);
-    }
-
-    window.addEventListener("load", function () {
-                setTimeout(_delayedStartup, 500);
-        }, true);
-
-    function _delayedStartup() // note can't use name delayedStartup as that always gets called
-    {
-        if (!bNoFullScreen)
-        {
-            window.fullScreen = true;
-        }
-
-        const strPage = (strHomePage == '') ? 'file://' + utils.getInstallationPath() + 'ui/simwin.xhtml'
-                            : strHomePage;
-        loadURI(strPage);
-        
-        var edproc=utils.exec('notepad.exe');
-        var bRunning = edproc.isRunning();
-        utils.logit(bRunning.toString());        
-        utils.logit(edproc.pid);        
-        edproc.stop();
-        bRunning = edproc.isRunning();
-        utils.logit(bRunning.toString());        
-    }
+<script type="application/javascript" > 
+    sim_winFinalStartup();
 </script>
 
 </overlay >

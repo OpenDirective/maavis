@@ -1,3 +1,5 @@
+const defaultHomePage = 'file://' + utils.getInstallationPath() + 'ui/simwin.xhtml'
+
 function sim_win_donothing()
 {
 }
@@ -25,39 +27,37 @@ function sim_winBrowserStartup()
     sim_win_navbar_setting();
     BrowserStartup();
 }
-var edproc = null;
-DataTransferListener.handleData = function(data, target) {
-   //alert("DataTransferListener.handleData: obtained " + data.name);
-    if (data.command == 'exec')
-    {
-        edproc=utils.exec(data.what);
-          var bRunning = edproc.isRunning();
-          utils.logit(bRunning.toString());
-    }
-    else if (data.command == 'poll')
-    {
-        if (edproc)
-        {
-          var bRunning = edproc.isRunning();
-          var pid = edproc.pid;
-          utils.logit(bRunning + ' : ' + pid);
-        }
-    }
-    else if (data.command == 'kill')
-    {
-        if (edproc)
-        {
-            var bok = edproc.stop();
-            edproc=null;
-          }
-    }
-        //alert("DataTransferListener.handleData: returning changed data")
-        //return {id:2000, name:"Pong"};
-    return null;
-}
 
-/**
- * Acc. to web page (see above) the 4th parameter denotes if Events are accepted from
- * unsecure sources.
- */
-document.addEventListener(DataTransferListener.ELWMS_EVENT_NAME, DataTransferListener.listenToHTML, false, true);
+function sim_winFinalStartup()
+{
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"].
+    getService(Components.interfaces.nsIPrefBranch);
+    
+    // options from command line
+    var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
+    var bNoFullScreen = prefs.getBoolPref("sim_win.commandline.nofullscreen");
+    var strHomePage = prefs.getCharPref("sim_win.commandline.homepage");
+
+    if (!bNoKiosk)
+    {
+        const strKioskOverlay = 'chrome://sim_win/content/sim_winbrowser.xul';
+        window.addEventListener("load", function foo() {
+                document.loadOverlay(strKioskOverlay, null);
+            }, true);
+    }
+
+    window.addEventListener("load", function () {
+                setTimeout(_delayedStartup, 500); // this allows all delayed starup to occur
+        }, true);
+
+    function _delayedStartup() // note can't use name delayedStartup as that always gets called
+    {
+        if (!bNoFullScreen)
+        {
+            window.fullScreen = true;
+        }
+
+        const strPage = (strHomePage == '') ? defaultHomePage : strHomePage;
+        loadURI(strPage);
+    }
+}
