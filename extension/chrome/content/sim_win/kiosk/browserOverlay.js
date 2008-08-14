@@ -1,46 +1,45 @@
-const defaultHomePage = 'file://' + utils.getInstallationPath() + 'ui/simwin.xhtml'
+const _defaultHomePage = 'chrome://example/content/example.xul'
 
-function sim_win_donothing()
+function kioskDoNothing()
 {
 }
 
-function sim_winclose()
+function kioskClose()
 {
     close();
 }
 
-function sim_win_navbar_setting()
+function kioskNavbarSetting()
 {
-    var sim_win_navbar_enable="true";
+    var kiosk_navbar_enable="true";
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].
     getService(Components.interfaces.nsIPrefBranch);
-    if (prefs.getPrefType("sim_win.navbar") == prefs.PREF_BOOL)
+    if (prefs.getPrefType("kiosk.navbar") == prefs.PREF_BOOL)
     {
-        if (prefs.getBoolPref("sim_win.navbar")) sim_win_navbar_enable = "false";
+        if (prefs.getBoolPref("kiosk.navbar")) kiosk_navbar_enable = "false";
     }
-    var sim_win_element = document.getElementById("navigator-toolbox");
-    sim_win_element.setAttribute("hidden", sim_win_navbar_enable);
+    var kiosk_element = document.getElementById("navigator-toolbox");
+    kiosk_element.setAttribute("hidden", kiosk_navbar_enable);
 }
 
-function sim_winBrowserStartup()
+function kioskBrowserStartup()
 {
-    sim_win_navbar_setting();
+    kioskNavbarSetting();
     BrowserStartup();
 }
 
-function sim_winFinalStartup()
+function kioskStartup()
 {
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].
     getService(Components.interfaces.nsIPrefBranch);
     
     // options from command line
     var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
-    var bNoFullScreen = prefs.getBoolPref("sim_win.commandline.nofullscreen");
     var strHomePage = prefs.getCharPref("sim_win.commandline.homepage");
 
     if (!bNoKiosk)
     {
-        const strKioskOverlay = 'chrome://sim_win/content/sim_winbrowser.xul';
+        const strKioskOverlay = 'chrome://sim_win/content/kiosk/browserOverlay2.xul';
         window.addEventListener("load", function foo() {
                 document.loadOverlay(strKioskOverlay, null);
             }, true);
@@ -52,12 +51,12 @@ function sim_winFinalStartup()
 
     function _delayedStartup() // note can't use name delayedStartup as that always gets called
     {
-        if (!bNoFullScreen)
+        if (!bNoKiosk)
         {
             window.fullScreen = true;
         }
 
-        const strPage = (strHomePage == '') ? defaultHomePage : strHomePage;
+        const strPage = ((strHomePage == '') ? _defaultHomePage : strHomePage);
         loadURI(strPage);
     }
 }

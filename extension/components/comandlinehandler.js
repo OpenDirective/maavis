@@ -8,14 +8,10 @@ const nsIFactory            = Components.interfaces.nsIFactory;
 const nsIModule             = Components.interfaces.nsIModule;
 const nsIWindowWatcher      = Components.interfaces.nsIWindowWatcher;
 
-// CHANGEME: to the chrome URI of your extension or application
-const CHROME_URI = "chrome://sim_win/content/";
+const CHROME_URI = "chrome://sim_win/content/sim_win.xul"; 
 
-// CHANGEME: change the contract id, CID, and category to be unique
-// to your application.
 const clh_contractID = "@mozilla.org/commandlinehandler/general-startup;1?type=sim_win";
 
-// use uuidgen to generate a unique ID
 const clh_CID = Components.ID("{412d63b0-639a-11dd-ad8b-0800200c9a66}");
 
 // category names are sorted alphabetically. Typical command-line handlers use a
@@ -31,12 +27,15 @@ const clh_category = "m-sim_win";
  * @param aChromeURISpec a string specifying the URI of the window to open.
  * @param aArgument an argument to pass to the window (may be null)
  */
-function openWindow(aChromeURISpec, aArgument)
+function openWindow(aChromeURISpec, aArgument, bKiosked)
 {
+  const strFeatures = (bKiosked) ? "chrome,titlebar=no,dialog=no" : 
+                        "chrome,menubar,toolbar,status,resizable,dialog=no";
+                        
   var ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"].
-    getService(Components.interfaces.nsIWindowWatcher);
+    getService(nsIWindowWatcher);
   ww.openWindow(null, aChromeURISpec, "_blank",
-                "chrome,menubar,toolbar,status,resizable,dialog=no",
+                strFeatures,
                 aArgument);
 }
  
@@ -63,24 +62,40 @@ const myAppHandler = {
    // we use pref to communicate with the startup XUL - bit of a hack
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].
                 getService(Components.interfaces.nsIPrefBranch);
+    var uristr = '';
+    
+    var bNoKiosk = cmdLine.handleFlag("nokiosk", false);
+    prefs.setBoolPref("sim_win.commandline.nokiosk", bNoKiosk);
 
     try {
-      var uristr = cmdLine.handleFlagWithParam("homepage", false);
+      uristr = cmdLine.handleFlagWithParam("xulpage", false);
+      if (uristr) {
+        // convert uristr to an nsIURI
+        var uri = cmdLine.resolveURI(uristr);
+        openWindow(CHROME_URI, uri, !bNoKiosk);
+        cmdLine.preventDefault = true;
+      }
+    }
+    catch (e) {
+      Components.utils.reportError("incorrect parameter passed to -xulpage on the command line.");
+    }
+
+    try {
+      uristr = cmdLine.handleFlagWithParam("homepage", false);
       uristr = (uristr) ? uristr : '';
       prefs.setCharPref("sim_win.commandline.homepage", uristr);
-        //cmdLine.preventDefault = true;
     }
     catch (e) {
       Components.utils.reportError("incorrect parameter passed to -homepage on the command line.");
     }
-
-    var bNoKiosk = cmdLine.handleFlag("nokiosk", false);
-    prefs.setBoolPref("sim_win.commandline.nokiosk", bNoKiosk);
-    var bNoFullScreen = cmdLine.handleFlag("nofullscreen", false);
-    prefs.setBoolPref("sim_win.commandline.nofullscreen", bNoFullScreen);
-//    var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
-   //cmdLine.preventDefault = true;
- 
+    
+    // default is to open sim win in a chrome window
+    if (!uristr)
+    {
+        openWindow(CHROME_URI, null, !bNoKiosk);
+        cmdLine.preventDefault = true;
+    }
+    
   },
 
   // CHANGEME: change the help info as appropriate, but
@@ -89,9 +104,9 @@ const myAppHandler = {
   // character 24, and lines should be wrapped at
   // 72 characters with embedded newlines,
   // and finally, the string should end with a newline
-  helpInfo : "  -nokiosk               Don't use kiosk mode\n" +
-                "    -nofullscreen               Don't go full screen\n" +
-                "  -homepage <uri>       Home page to show\n",
+  helpInfo : "  -xulpage <uri>       XUL page to open in chrome window\n" +
+                "  -homepage <uri>   Home page to show in the browser\n"+
+                "  -nokiosk          Don't use kiosk mode\n",
 
   /* nsIFactory */
 
