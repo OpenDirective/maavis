@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://example/content/example.css" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html = "http://www.w3.org/1999/xhtml">
+
+    <script type="application/javascript" src="chrome://sim_win/content/utils.js" />
+
+    <script type="application/javascript"><![CDATA[
+        function setWindowKiosked() 
+        {
+            window.resizeTo(screen.Width, screen.Height);
+            window.fullScreen = true;   // lose border
+        }
+
+        var prefs = Components.classes["@mozilla.org/preferences-service;1"].
+                            getService(Components.interfaces.nsIPrefBranch);
+        const bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
+        if (!bNoKiosk)
+            setTimeout('setWindowKiosked();', 200); // must be async to work 
+    ]]></script>
+
+    <!--- <oik label="Press Me"/>-->
+
+    <oik id='a-oik' label="randomizer">
+        <button label='button'/>
+    </oik>
+
+    <box id="random-box" class="randomizer"/>
+
+
+    <button label="Wibble"
+               oncommand="alert(p.wibble); "/>
+
+    <button label="Generate"
+               oncommand="t.size=Math.random();"/>
+    <button label="Show"
+               oncommand="alert(o.getMaximum(t.size, 0.5)); "/>
+
+    <box id="player" class="video" />
+    <button label="Play"
+               oncommand="p.play('file://h:sim_win/media/test.wmv'); "/>
+    <button label="Play CD"
+               oncommand="p.play('cdda://D:'); "/>
+
+    <script type="application/javascript" src="dojo-options.js" />
+    <script type="application/javascript" src="dojo-release-1.1.1/dojo/dojo.js" />
+  
+    <script type="application/javascript"><![CDATA[
+        var t = document.getElementById('random-box');
+        var o = document.getElementById('a-oik');
+        var p = document.getElementById('player');
+
+        t.setAttribute('size', '123');
+        
+        dojo.require("dojo.data.ItemFileReadStore");
+           
+        function dstest()
+        {
+            var store = new dojo.data.ItemFileReadStore({url: "./ds.json"});
+            var gotContinents = function(items, request)
+                {
+                for (var i = 0; i < items.length; i++){
+                   var item = items[i];
+                   alert("Located continent: " + store.getLabel(item));
+                }
+        }
+        var request = store.fetch({query: {type:"continent"}, onError: function(error, request){alert(error);}, onComplete: gotContinents});
+    }
+
+    var edproc = null;
+
+    ]]></script>
+    <button label="dstest"
+               oncommand="dstest(); "/>
+
+    <hbox>
+    <button label="edit"
+               oncommand="
+        {
+            edproc=utils.exec('notepad.exe');
+              var bRunning = edproc.isRunning();
+        }"/>
+        
+        
+    <button label="poll"
+               oncommand="
+            if (edproc)
+            {
+              var bRunning = edproc.isRunning();
+              var pid = edproc.pid;
+              utils.logit(bRunning + ' : ' + pid);
+            }
+    "/>
+    <button label="kill"
+               oncommand="
+            if (edproc)
+            {
+                var bok = edproc.stop();
+                edproc=null;
+              }"/>
+    </hbox>
+</window>
