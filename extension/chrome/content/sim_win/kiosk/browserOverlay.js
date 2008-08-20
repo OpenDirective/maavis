@@ -1,4 +1,4 @@
-const _defaultHomePage = 'chrome://example/content/example.xul'
+const _defaultHomePage = 'chrome://sim_win/content/sim_win.xul'
 
 function kioskDoNothing()
 {

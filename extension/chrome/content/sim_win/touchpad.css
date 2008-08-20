@@ -1,0 +1,110 @@
+touchpad {
+  background-color: green;
+}
+
+touchkey {
+  -moz-appearance: button;
+  margin: 1px 5px 2px 5px;
+  min-width: 6.3em;
+  border: 3px solid;
+  -moz-border-top-colors: transparent ThreeDHighlight ThreeDLightShadow;
+  -moz-border-right-colors: transparent ThreeDDarkShadow ThreeDShadow;
+  -moz-border-bottom-colors: transparent ThreeDDarkShadow ThreeDShadow;
+  -moz-border-left-colors: transparent ThreeDHighlight ThreeDLightShadow;
+  background-color: ThreeDFace;
+  color: ButtonText;
+}
+
+.touchkey-box {
+  -moz-appearance: button-focus;
+  border: 1px solid transparent;
+  padding-top: 1px;
+  padding-bottom: 2px;
+  -moz-padding-start: 3px;
+  -moz-padding-end: 4px;
+}
+
+.touchkey-image {
+  margin-right: 2px;
+}
+
+.touchkey-text {
+  /*margin: 0 !important;*/
+  text-align: center;
+  /*display:block;*/
+  font-size: 24pt;
+  margin: 3px;
+}
+
+
+
+/* .......... focused state .......... */
+
+touchkey:focus {
+  -moz-border-top-colors: ThreeDDarkShadow ThreeDHighlight transparent;
+  -moz-border-right-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
+  -moz-border-bottom-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
+  -moz-border-left-colors: ThreeDDarkShadow ThreeDHighlight transparent;
+}
+
+touchkey:focus > .button-box {
+  border: 1px dotted ThreeDDarkShadow;
+}
+
+/* .......... default state .......... */
+
+touchkey[default="true"] {
+  -moz-border-top-colors: ThreeDDarkShadow ThreeDHighlight ThreeDLightShadow;
+  -moz-border-right-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
+  -moz-border-bottom-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
+  -moz-border-left-colors: ThreeDDarkShadow ThreeDHighlight ThreeDLightShadow;
+}
+
+/* .......... hover state .......... */
+
+touchkey:hover {
+  color: -moz-buttonhovertext;
+  background-color: -moz-buttonhoverface;
+}
+
+/* .......... active/open/checked state .......... */
+
+touchkey:hover:active,
+touchkey[open="true"],
+touchkey[checked="true"] {
+  -moz-border-top-colors: ThreeDDarkShadow ThreeDShadow transparent;
+  -moz-border-right-colors: ThreeDDarkShadow ThreeDShadow transparent;
+  -moz-border-bottom-colors: ThreeDDarkShadow ThreeDShadow transparent;
+  -moz-border-left-colors: ThreeDDarkShadow ThreeDShadow transparent;
+  color: ButtonText;
+}
+
+touchkey:hover:active > .button-box,
+touchkey[open="true"] > .button-box,
+touchkey[checked="true"] > .button-box {
+  padding-top: 2px;
+  padding-bottom: 1px;
+  -moz-padding-start: 4px;
+  -moz-padding-end: 3px;
+}
+
+/* .......... disabled state .......... */
+
+touchkey[disabled="true"],
+touchkey[disabled="true"]:hover:active {
+  -moz-border-top-colors: transparent ThreeDHighlight ThreeDLightShadow !important;
+  -moz-border-right-colors: transparent ThreeDDarkShadow ThreeDShadow !important;
+  -moz-border-bottom-colors: transparent ThreeDDarkShadow ThreeDShadow !important;
+  -moz-border-left-colors: transparent ThreeDHighlight ThreeDLightShadow !important;
+  color: GrayText;
+}
+
+touchkey[disabled="true"] > .button-box {
+  padding-top: 1px !important;
+  padding-bottom: 2px !important;
+  -moz-padding-start: 3px !important;
+  -moz-padding-end: 4px !important;
+}
+
+
+/** {border:solid;}*/
