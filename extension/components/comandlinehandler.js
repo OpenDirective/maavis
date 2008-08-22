@@ -29,14 +29,21 @@ const clh_category = "m-sim_win";
  */
 function openWindow(aChromeURISpec, aArgument, bKiosked)
 {
-  const strFeatures = (bKiosked) ? "chrome,titlebar=no,dialog=no" : 
-                        "chrome,menubar,toolbar,status,resizable,dialog=no";
+    // TODO seems we always get a chrome window whatever is specified here
+    // would like to have status bar so cn get at firebug in debug
+    const strFeatures = (bKiosked) ? "titlebar=no,dialog=no" : 
+                        "menubar,toolbar,status=yes,resizable,dialog=no";
                         
-  var ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"].
-    getService(nsIWindowWatcher);
-  ww.openWindow(null, aChromeURISpec, "_blank",
-                strFeatures,
-                aArgument);
+    var ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"].
+                getService(nsIWindowWatcher);
+
+    const params = Components.classes["@mozilla.org/embedcomp/dialogparam;1"]
+                              .createInstance(Components.interfaces.nsIDialogParamBlock);
+    params.SetInt(0, bKiosked);
+  
+    ww.openWindow(null, aChromeURISpec, "sim_win",
+                    strFeatures,
+                    params );
 }
  
 /**
@@ -81,6 +88,7 @@ const myAppHandler = {
     }
 
     try {
+        // TODO: handle -url and -chrome instead
       uristr = cmdLine.handleFlagWithParam("homepage", false);
       uristr = (uristr) ? uristr : '';
       prefs.setCharPref("sim_win.commandline.homepage", uristr);

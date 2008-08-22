@@ -1,0 +1,13 @@
+touchpad
+{
+	-moz-binding: url("chrome://sim_win/content/touchpad.xml#touchpad");
+}
+
+touchkey{
+	-moz-binding: url('chrome://sim_win/content/touchpad.xml#touchkey');
+}
+
+video {
+    -moz-binding: url('chrome://sim_win/content/mediaplayer.xml#video');
+}
+

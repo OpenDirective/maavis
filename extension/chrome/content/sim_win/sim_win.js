@@ -1,3 +1,6 @@
+var winutils = {};
+Components.utils.import("resource://modules/winutils.js", winutils);
+
 var p = null;
 var edproc = null;
 

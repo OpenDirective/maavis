@@ -21,9 +21,9 @@
             <![CDATA[
             // variables used in following closures
             // TODO tidy this up and it looks like these become public - huh?
-            const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image_frame');
+            const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
             if (!imageFrame)
-                throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"image_frame\"";
+                throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"image-frame\"";
             const src = this.getAttribute('image');
             const scale = (this.hasAttribute('image-scale')) ? this.getAttribute('image-scale') : 1;
         
@@ -50,8 +50,9 @@
 
                 function setImageSize()
                 {
-                    // add child image (xul:image) no HTML to avoid display problems
+                    // add child image (xul:image) not HTML to avoid display problems
                     var i = document.createElement('image');
+                    i.setAttribute('class', 'touchkey-image');
                     i.setAttribute('src', src);
                     i.width = width * scale;
                     i.height = height * scale;
@@ -101,10 +102,9 @@
    <content>
         <xul:vbox class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
                 align="stretch" pack="center" orient="vertical" flex="1">
-            <xul:vbox anonid='image_frame' flex='1'> 
-            </xul:vbox>
+            <xul:vbox anonid='image-frame' flex='1' />
             <xul:vbox flex='0'>
-            <xul:label flex='1' anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"></xul:label>
+                <xul:label flex='1' anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"></xul:label>
             </xul:vbox>
         </xul:vbox> 
       </content>

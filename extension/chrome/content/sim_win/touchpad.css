@@ -29,13 +29,10 @@ touchkey {
 }
 
 .touchkey-text {
-  /*margin: 0 !important;*/
+  margin: 3px !important;
   text-align: center;
-  /*display:block;*/
   font-size: 24pt;
-  margin: 3px;
 }
-
 
 
 /* .......... focused state .......... */
@@ -47,7 +44,7 @@ touchkey:focus {
   -moz-border-left-colors: ThreeDDarkShadow ThreeDHighlight transparent;
 }
 
-touchkey:focus > .button-box {
+touchkey:focus > .touchkey-box {
   border: 1px dotted ThreeDDarkShadow;
 }
 
@@ -79,9 +76,9 @@ touchkey[checked="true"] {
   color: ButtonText;
 }
 
-touchkey:hover:active > .button-box,
-touchkey[open="true"] > .button-box,
-touchkey[checked="true"] > .button-box {
+touchkey:hover:active > .touchkey-box,
+touchkey[open="true"] > .touchkey-box,
+touchkey[checked="true"] > .touchkey-box {
   padding-top: 2px;
   padding-bottom: 1px;
   -moz-padding-start: 4px;
@@ -99,7 +96,7 @@ touchkey[disabled="true"]:hover:active {
   color: GrayText;
 }
 
-touchkey[disabled="true"] > .button-box {
+touchkey[disabled="true"] > .touchkey-box {
   padding-top: 1px !important;
   padding-bottom: 2px !important;
   -moz-padding-start: 3px !important;
