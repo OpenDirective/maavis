@@ -9,7 +9,7 @@ var app =
     showVideo: function(mrl, options)
     {
         this.mainwindow.setProps({mrl: mrl, options: options});
-        this.mainwindow.setPage("chrome://sim_win/content/video.xul");
+        this.mainwindow.setPage("chrome://sim_win/content/videoplayer.xul");
     },
 
     loadPage: function(window)

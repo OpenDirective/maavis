@@ -37,15 +37,15 @@ function setPage(page)
 }
 
 var _strHomeUrl;
-var p={};
+
 function setHome(strUrl)
 { 
-    p._strHomeUrl = strUrl;
+    _strHomeUrl = strUrl;
 }
 
 function goHome()
 { 
-    setPage(p._strHomeUrl);
+    setPage(_strHomeUrl);
 }
 
 var _props = {};
