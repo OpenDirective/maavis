@@ -1,30 +1,33 @@
-var winutils = {};
-Components.utils.import("resource://modules/winutils.js", winutils);
+var mainwindow = {};
+Components.utils.import("resource://modules/mainwindow.js", mainwindow);
+Components.utils.import("resource://modules/utils.js");
 
-var p = null;
-var edproc = null;
-
-function loadApp()
+var app =
 {
-
-    p = document.getElementById('player');
-
-    dojo.require("dojo.data.ItemFileReadStore");
-       
-}
-
-function dstest()
-{
-    var store = new dojo.data.ItemFileReadStore({url: "./ds.json"});
-    var gotContinents = function(items, request)
+    mainwindow: mainwindow,
+    
+    showVideo: function(mrl, options)
     {
-        for (var i = 0; i < items.length; i++)
-        {
-           var item = items[i];
-           alert("Located continent: " + store.getLabel(item));
-        }
+        this.mainwindow.setProps({mrl: mrl, options: options});
+        this.mainwindow.setPage("chrome://sim_win/content/video.xul");
+    },
+
+    loadPage: function(window)
+    {
+        var action = {};
+        Components.utils.import("resource://modules/action.js", action);
+        var mt=this;
+        action.setAction('video', this.showVideo, this);
+
+        mainwindow.goHome.apply(mainwindow);
+    },
+
+    initWindow: function()
+    {
+        window.removeEventListener('load', app.initWindow, false);
+        mainwindow.setHome("chrome://sim_win/content/home.xul");
+        mainwindow.showWindow(window, function(){app.loadPage();});
     }
-    store.fetch({query: {type:"continent"}, onError: function(error, request){alert(error);}, onComplete: gotContinents});
-}
+};
 
-
+window.addEventListener('load', app.initWindow, false);

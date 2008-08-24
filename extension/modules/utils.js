@@ -1,6 +1,6 @@
 var EXPORTED_SYMBOLS = ["logit", "runProcess", "exec", "getInstallationPath"];
 
-const _EXTID : 'sim_win@fullmeasure.co.uk',  //same as id in install.rdf
+const _EXTID = 'sim_win@fullmeasure.co.uk';  //same as id in install.rdf
 
 function logit()
 {
@@ -135,7 +135,7 @@ function _getJson()
         }
 }
     
-functiontoJson(obj)
+function toJson(obj)
 {
     return _getJson().ijson.encode(obj);
 }

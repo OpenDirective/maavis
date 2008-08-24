@@ -5,9 +5,15 @@ touchpad
 
 touchkey{
 	-moz-binding: url('chrome://sim_win/content/touchpad.xml#touchkey');
+	color: yellow;
 }
 
-video {
-    -moz-binding: url('chrome://sim_win/content/mediaplayer.xml#video');
+videoplayer {
+    -moz-binding: url('chrome://sim_win/content/mediaplayer.xml#videop');
 }
 
+.touchkey-dse
+{
+		color: red;
+	background: green;
+}

@@ -6,57 +6,9 @@
         xmlns:html = "http://www.w3.org/1999/xhtml" width='800' height='600'>
 
     <script type="application/javascript" src="chrome://sim_win/content/sim_win.js" />
-    <script type="application/javascript" src="dojo-options.js" />
-    <script type="application/javascript" src="dojo-release-1.1.1/dojo/dojo.js" />
-    <script type="application/javascript"><![CDATA[
-        window.addEventListener('load', function() { winutils.setWindowSize(window);}, false);
-        window.addEventListener('load', loadApp, false, window);
-    ]]></script>
 
-<!--
-    <vbox flex='1'>
-    <hbox flex='1'>
-        <touchkey label="do something else that uses loads of space" image-scale='0.5' image='cap.png'  accesskey='w' flex="1" />
-        <touchkey label="do something else" image='capL.png' oncommand="alert('z')" accesskey='w' flex="1" />
-        <touchkey label="do something else" image='capL.png' oncommand="alert('z')" accesskey='w' flex="1" />
-        <touchkey label="do something else" image='capL.png' oncommand="alert('z')" accesskey='w' flex="1" />
-    </hbox>
-    <hbox flex='1'>
-        <touchkey label="do something else" image='moz-head-big.png' oncommand="alert('z')" accesskey='w' flex="1" />
-        <touchkey label="do something else" image='cap.png' oncommand="alert('z')" accesskey='w' flex="1" />
-    </hbox>
+    <vbox id='startpage'>
+        <description>Loading SIM WIN ....</description>
     </vbox>
-    
--->   
-<!--
-    <vbox flex='1'>
-    <grid flex='1'>
-    <columns>
-      <column flex="1"/>
-      <column flex="1"/>
-      <column flex="1"/>
-      <column flex="1"/>
-    </columns>
-    <rows>
-      <row flex='1'>
-        <touchkey label="do something else that uses loads of space" image-scale='0.5' image='cap.png'  accesskey='w' />
-        <touchkey label="do something else" image='capL.png' oncommand="alert('z')" accesskey='w'  />
-        <touchkey label="do something else" image='capL.png' oncommand="alert('z')" accesskey='w'/>
-        <touchkey label="do something else" image='capL.png' oncommand="alert('z')" accesskey='w' />
-      </row>
-      <row flex='1'>
-        <touchkey label="do something else" image='moz-head-big.png' oncommand="alert('z')" accesskey='w'  />
-        <touchkey label="do something else" image='cap.png' oncommand="alert('z')" accesskey='w' />
-      </row>
-    </rows>
-  </grid>
-  </vbox> 
-
--->
-    <touchpad flex='1' rows='4' cols='4' >
-      <button label="123" row='1' col='1' rows='1' cols='1' />
-      <touchkey disabled='true' row='0' col='0' rows='1' cols='1' label="have fun lots and lots" image='moz-head-big.png' oncommand="alert('z')" accesskey='w'  />
-      <touchkey row='2' col='2' rows='2' cols='2' image-scale='0.5' label="do something else" image='moz-head-big.png' oncommand="alert('y')" accesskey='s'  />
-    </touchpad>
 
 </window>

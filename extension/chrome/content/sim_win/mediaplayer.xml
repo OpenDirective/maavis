@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html = "http://www.w3.org/1999/xhtml"
+    xmlns:xul  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:svg  = "http://www.w3.org/2000/svg"
+    xmlns:xlink= "http://www.w3.org/1999/xlink">
+
+<!--      <html:object id="vlc" type="application/x-vlc-plugin" version="VideoLAN.VLCPlugin.2" />-->
+
+ <binding id="videop" display='xul:box'>
+    <content>
+    </content>
+    
+  <implementation>
+     <constructor><![CDATA[
+             //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
+            var mythis = this    
+         function showImage()
+         {
+            var e = document.createElementNS("http://www.w3.org/1999/xhtml", 'embed');
+            e.setAttribute('type', "application/x-vlc-plugin");
+            e.setAttribute('version', "VideoLAN.VLCPlugin.2");
+            e.setAttribute('id', "vlc");
+            e.setAttributeNS('http://www.mozilla.org/xbl', 'inherits', 'top,left,width,height')
+            mythis.appendChild(e);
+
+            mythis._vlc = e;
+            
+            e.setAttribute('top', mythis.getAttribute('top'));
+            e.setAttribute('left', mythis.getAttribute('left'));
+            e.setAttribute('height', mythis.getAttribute('height'));
+            e.setAttribute('width', mythis.getAttribute('width'));
+            
+            if(mythis.getAttribute('invisible') == 'true') // hiding bound obj means player not created
+                e.setAttribute('hidden', 'true');
+            
+            if (mythis._readyFunc)
+            {
+                setTimeout(mythis._readyFunc, 1);
+            }
+         }
+         setTimeout(showImage, 500); // so layout completes without image
+
+        this._pollState = function()
+        {
+            // TODO prolly need a state machine if vids can take a while to start
+            const vlc = mythis._vlc;
+            if (vlc.input.state == 0) // idle
+                vlc.playlist.play()
+        }
+            
+
+        ]]>
+     </constructor> 
+
+   <property name="onPlayerReady"   
+            onget="return this._readyFunc;// attrib converts everthing to a string"
+            onset="this._readyFunc = val; return val;"/>
+
+    <method name='play'>
+    <parameter name="mrl" />
+    <body><![CDATA[
+        const vlc = this._vlc;
+        vlc.playlist.clear();
+        var item = vlc.playlist.add(mrl);
+        vlc.playlist.playItem(item);
+        this._poller = setInterval(this._pollState, 3000);
+        ]]>
+    </body>
+    </method>
+ 
+   <method name='stop'>
+     <body><![CDATA[
+        if (this._poller)
+            clearInterval(this._poller);
+        this._vlc.playlist.stop();
+        ]]>
+    </body>
+    </method>
+ 
+  </implementation>
+
+  </binding>
+  
+</bindings>
+

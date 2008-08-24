@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://sim_win/skin/sim_win.css" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html = "http://www.w3.org/1999/xhtml" width='1016' height='692'>
+
+    <script type="application/javascript" src="chrome://sim_win/content/video.js" />
+
+    <touchpad flex='1' rows='5' cols='1'>
+        <videoplayer id='player' row='0' col='0' rows='4' cols='1' />
+        <touchkey id="stop" row='4' col='0' rows='1' cols='1' class='touchkey-dse' label="Do something else" accesskey='s' />
+    </touchpad>
+
+</window>

@@ -31,8 +31,8 @@ function openWindow(aChromeURISpec, aArgument, bKiosked)
 {
     // TODO seems we always get a chrome window whatever is specified here
     // would like to have status bar so cn get at firebug in debug
-    const strFeatures = (bKiosked) ? "titlebar=no,dialog=no" : 
-                        "menubar,toolbar,status=yes,resizable,dialog=no";
+    const strFeatures = (bKiosked) ? "centerscreen,titlebar=no,dialog=no" : 
+                        "centerscreen,menubar,toolbar,status=yes,resizable,dialog=no";
                         
     var ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"].
                 getService(nsIWindowWatcher);

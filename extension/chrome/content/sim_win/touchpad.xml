@@ -34,7 +34,7 @@
                 // resize to fit keeping aspect ratio
                 const imageWidth = this.naturalWidth;
                 const imageHeight = this.naturalHeight;
-                const availableWidth = imageFrame.boxObject.width;
+                const availableWidth = imageFrame.boxObject.width; // note could also use getComputedStyle
                 const availableHeight = imageFrame.boxObject.height;
                 var width = availableWidth;
                 var height = availableWidth * imageHeight / imageWidth;
@@ -59,7 +59,7 @@
                     imageFrame.appendChild(i);
                 }
                   
-                setTimeout(setImageSize, 1); // need this as well
+                setTimeout(setImageSize, 1); // seem to need this as well
               }
               
               // create a temp HTML img which includes the actual image size so we can keep aspect ratio
@@ -75,9 +75,18 @@
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
             var text = document.createTextNode(this.getAttribute('label')); 
             label.appendChild(text);
+
+            if (this.hasAttribute('action'))
+            { 
+                Components.utils.import("resource://modules/action.js");
+                action = new Action(this.getAttribute('action'));
+                this.addEventListener('command', function(){ action.execute();}, false);
+            }
             
-            setTimeout(showImage, 300); // so layout completes without image
-                                      // ToDO find a better way
+            if (src)
+            // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
+                setTimeout(showImage, 300); // so layout completes without image
+                                        // TODO find a better way to know layout has completed
             ]]>
         </constructor>
 
@@ -117,10 +126,15 @@
 
     <implementation>
         <constructor><![CDATA[
+            var stack = document.getAnonymousElementByAttribute(this, 'anonid', 'stack');
+            if (!stack)
+                 throw "XBL binding for <button type=\"touchpad\"/> binding must contain an element with anonid=\"stack\"";
+            this._stack = stack;
+            
             const obj = this;
             function f()
             {
-               obj.layoutKeys();
+                obj.layoutKeys();
             }
             window.addEventListener('load', function(){setTimeout(f, 1);}, false);
         ]]>
@@ -136,14 +150,11 @@
 
      <method name="_getGridCellDimensions">
         <body><![CDATA[
-            var stack = document.getAnonymousElementByAttribute(this, 'anonid', 'stack');
-            if (!stack)
-                 throw "XBL binding for <button type=\"touchpad\"/> binding must contain an element with anonid=\"stack\"";
-            const width = stack.boxObject.width;
-            const height = stack.boxObject.height;
+            const width = this._stack.boxObject.width;
+            const height = this._stack.boxObject.height;
             var size = {};
-            size.w = Math.floor(width / this.rows);
-            size.h = Math.floor(height / this.cols);
+            size.w = Math.floor(width / this.cols);
+            size.h = Math.floor(height / this.rows);
             return size;
         ]]>
         </body>
@@ -153,10 +164,10 @@
         <parameter name='key' />
         <body><![CDATA[
                 var size = this._getGridCellDimensions();
-                key.left = key.row * size.w;
-                key.top = key.col * size.h;
-                key.width = key.rows * size.w;
-                key.height = key.cols * size.h;
+                key.setAttribute('top', key.getAttribute('row') * size.h);
+                key.setAttribute('left', key.getAttribute('col') * size.w);
+                key.setAttribute('height', key.getAttribute('rows') * size.h);
+                key.setAttribute('width', key.getAttribute('cols') * size.w);
         ]]>
         </body>
       </method>

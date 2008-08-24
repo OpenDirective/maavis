@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getWindowIntArgument", "setWindowSize"];
+var EXPORTED_SYMBOLS = ["getWindowIntArgument", "setWindowFullscreen"];
 
 function getWindowIntArgument(window, index)
 {
@@ -11,18 +11,11 @@ function getWindowIntArgument(window, index)
     return arg;
 }
 
-function  setWindowSize(window)
+function setWindowFullscreen(window) 
 {
-    function setWindowFullscreen() 
-    {
-        window.resizeTo(window.screen.Width, window.screen.Height);
-        window.setTimeout('window.fullScreen = true;', 500);   // lose border
-    }
-
-    const bKiosked = Boolean(getWindowIntArgument(window, 0));
-    if (bKiosked)
-    {
-        window.setTimeout(setWindowFullscreen, 500); // must be async to work and cover Windows task bar
-    }
+    window.moveTo(0, 0);
+    window.resizeTo(window.screen.width, window.screen.height);
+    function f (){ window.fullScreen = true; }
+    window.setTimeout(f, 1);   // lose border
 }
 
