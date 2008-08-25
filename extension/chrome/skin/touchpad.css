@@ -1,8 +1,8 @@
 touchpad {
-  background-color: green;
+  background-color: lightgrey;
 }
 
-touchkey {
+touchkey, togglekey{
   -moz-appearance: button;
   margin: 1px 5px 2px 5px;
   min-width: 6.3em;
@@ -103,5 +103,9 @@ touchkey[disabled="true"] > .touchkey-box {
   -moz-padding-end: 4px !important;
 }
 
+/* doesn't work yet */
+touchkey .touchkey-image {
+  list-style-image: url("chrome://sim_win/skin/playerbuttons/pause.png");
+}
 
 /** {border:solid;}*/

@@ -24,78 +24,20 @@
             this._label_box = document.getAnonymousElementByAttribute(this, 'anonid', 'label-box');
             if (!this._label_box)
                  throw "XBL binding for <button type=\"touchkey\"/> must contain an element with anonid=\"label-box\"";
-            const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
-            if (!imageFrame)
-                throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"image-frame\"";
-            const src = this.getAttribute('image');
-            const scale = (this.hasAttribute('image-scale')) ? this.getAttribute('image-scale') : 1;
-        
-            function showImage()
-            {
-              function setImageSizez()
-              {
-                // resize to fit keeping aspect ratio
-                const imageWidth = this.naturalWidth;
-                const imageHeight = this.naturalHeight;
-                const availableWidth = imageFrame.boxObject.width; // note could also use getComputedStyle
-                const availableHeight = imageFrame.boxObject.height;
-                var width = availableWidth;
-                var height = availableWidth * imageHeight / imageWidth;
-                if (height > availableHeight)
-                {
-                    height = availableHeight;
-                    width = availableHeight * imageWidth / imageHeight;
-                }
-                
-                // fix size by removing flex (was needed to get size)
-                imageFrame.align='center';
-                imageFrame.pack='center';
-
-                function setImageSize()
-                {
-                    // add child image (xul:image) not HTML to avoid display problems
-                    var i = document.createElement('image');
-                    i.setAttribute('class', 'touchkey-image');
-                    i.setAttribute('src', src);
-                    i.width = width * scale;
-                    i.height = height * scale;
-                    imageFrame.appendChild(i);
-                }
-                  
-                setTimeout(setImageSize, 1); // seem to need this as well
-              }
-              
-              // create a temp HTML img which includes the actual image size so we can keep aspect ratio
-              var i = document.createElementNS("http://www.w3.org/1999/xhtml", 'img');
-              i.setAttribute('src', src);
-              i.onload = setImageSizez;
-            }
-
-            // set the text of the label so it is wrapped
-            // TODO prolly want to set/get property+attrib as well
-            var label = document.getAnonymousElementByAttribute(this, 'anonid', 'label');
-            if (!label)
-                 throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
-            var text = document.createTextNode(this.getAttribute('label')); 
-            label.appendChild(text);
+ 
+            this._setLabel();
 
             if (this.hasAttribute('action'))
             { 
                 Components.utils.import("resource://modules/action.js");
-                action = new Action(this.getAttribute('action'));
+                const action = new Action(this.getAttribute('action'));
                 this.addEventListener('command', function(){ action.execute();}, false);
             }
             
-            if (src)
-            {
-                // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
-                setTimeout(showImage, 300); // so layout completes without image
-                                            // TODO find a better way to know layout has completed
-            }
-            else
-            {
-                imageFrame.collapsed='true';
-            }
+            // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
+            const mt = this;
+            setTimeout(function (){mt._setImage();}, 300); // so layout completes without image
+                                        // TODO find a better way to know layout has completed
             
             ]]>
         </constructor>
@@ -131,8 +73,7 @@
         <method name="setOrientation">
         <body><![CDATA[
             const bHoriz = (this.width / this.height > 2);
-            const bHasImage = this.getAttribute('image') != '';
-            //alert(this.getAttribute('image'));
+            const bHasImage = this.hasAttribute('image');
             const box = this._label_box.parentNode;
             box.orient = (bHoriz) ? 'horizontal' : 'vertical';
             this._label_box.align = (bHoriz) ? 'start' : 'stretch';
@@ -140,7 +81,81 @@
             ]]>
         </body>
       </method>
-            
+
+        <method name="_setLabel">
+        <body><![CDATA[
+            // set the text of the label so it is wrapped
+            // TODO prolly want to set/get property+attrib as well
+            var label = document.getAnonymousElementByAttribute(this, 'anonid', 'label');
+            if (!label)
+                 throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
+            var text = document.createTextNode(this.getAttribute('label')); 
+            if (label.firstChild)
+                label.replaceChild(text, label.firstChild);
+            else
+                label.appendChild(text);
+            ]]>
+        </body>
+      </method>
+
+      <method name="_setImage">
+        <body><![CDATA[
+          const src = this.getAttribute('image');
+          const scale = (this.hasAttribute('image-scale')) ? this.getAttribute('image-scale') : 1;
+          const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
+          if (!imageFrame)
+            throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"image-frame\"";
+          if (src)
+          {
+              function setImageSizez()
+              {
+                // resize to fit keeping aspect ratio
+                const imageWidth = this.naturalWidth;
+                const imageHeight = this.naturalHeight;
+                const availableWidth = imageFrame.boxObject.width; // note could also use getComputedStyle
+                const availableHeight = imageFrame.boxObject.height;
+                var width = availableWidth;
+                var height = availableWidth * imageHeight / imageWidth;
+                if (height > availableHeight)
+                {
+                    height = availableHeight;
+                    width = availableHeight * imageWidth / imageHeight;
+                }
+                
+                // fix size by removing flex (was needed to get size)
+                imageFrame.align='center';
+                imageFrame.pack='center';
+
+                function setImageSize()
+                {
+                    // add child image (xul:image) not HTML to avoid display problems
+                    var i = document.createElement('image');
+                    i.setAttribute('class', 'touchkey-image');
+                    i.setAttribute('src', src);
+                    i.width = width * scale;
+                    i.height = height * scale;
+                    if (imageFrame.firstChild)
+                      imageFrame.replaceChild(i, imageFrame.firstChild);
+                    else
+                      imageFrame.appendChild(i);
+                }
+                  
+                setTimeout(setImageSize, 1); // seem to need this as well
+              }
+              
+              // create a temp HTML img which includes the actual image size so we can keep aspect ratio
+              var i = document.createElementNS("http://www.w3.org/1999/xhtml", 'img');
+              i.setAttribute('src', src);
+              i.onload = setImageSizez;
+            }
+            else
+            {
+                imageFrame.collapsed='true';
+            }
+        ]]>
+        </body>
+      </method>
+
     </implementation>
     
                 
@@ -154,7 +169,49 @@
         </xul:vbox> 
       </content>
   </binding>
-  
+
+
+  <binding id="togglekey" 
+           extends="chrome://sim_win/content/bindings/touchpad.xml#touchkey">
+
+    <implementation>
+        <constructor>
+            <![CDATA[
+            this.setAttribute('labelA', this.getAttribute('label'));
+            this.setAttribute('imageA', this.getAttribute('image'));
+        ]]>
+        </constructor>
+        
+    <field name="_state">'a'</field>
+
+     <method name="_toggleState">
+        <body>
+        <![CDATA[
+          if (!this.disabled) 
+          {
+            this._state = (this._state == 'a') ? 'b' : 'a';
+            this.setAttribute('label', ((this._state == 'a') ? this.getAttribute('labelA') : this.getAttribute('labelB')));
+            this._setLabel()
+            this.setAttribute('image', ((this._state == 'a') ? this.getAttribute('imageA') : this.getAttribute('imageB')));
+            this._setImage()
+          }
+        ]]>
+        </body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <!-- While it would seem we could do this by handling oncommand, we can't
+           because any external oncommand handlers might get called before ours,
+           and then they would see the incorrect value of checked. Additionally
+           a command attribute would redirect the command events anyway.-->
+        <!-- I'm assumong don't need to call base class methods -->
+      <handler event="click" button="0" action="this._toggleState();"/>
+      <handler event="keypress" key=" " action="this._handleClick();"/>
+    </handlers>
+    
+    </binding>
+
    <binding id="touchpad">
     <resources>
       <stylesheet src="chrome://sim_win/skin/touchpad.css"/>
@@ -251,5 +308,4 @@
       </content>
   </binding>
  
-
 </bindings>

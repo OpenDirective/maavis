@@ -1,19 +1,21 @@
 touchpad
 {
-	-moz-binding: url("chrome://sim_win/content/touchpad.xml#touchpad");
+	-moz-binding: url("chrome://sim_win/content/bindings/touchpad.xml#touchpad");
 }
 
 touchkey{
-	-moz-binding: url('chrome://sim_win/content/touchpad.xml#touchkey');
-	color: yellow;
+	-moz-binding: url('chrome://sim_win/content/bindings/touchpad.xml#touchkey');
+}
+
+togglekey{
+	-moz-binding: url('chrome://sim_win/content/bindings/touchpad.xml#togglekey');
 }
 
 videoplayer {
-    -moz-binding: url('chrome://sim_win/content/mediaplayer.xml#videop');
+    -moz-binding: url('chrome://sim_win/content/bindings/mediaplayer.xml#videop');
 }
 
-.touchkey-dse
+.dse
 {
-		color: red;
-	background: green;
+  color: green;
 }

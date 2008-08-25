@@ -3,18 +3,29 @@
 <?xml-stylesheet href="chrome://sim_win/skin/sim_win.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        xmlns:html = "http://www.w3.org/1999/xhtml">
+        xmlns:html = "http://www.w3.org/1999/xhtml" width='1016' height='692'>
 
     <script type="application/javascript" src="chrome://sim_win/content/videoplayer.js" />
 
-    <touchpad flex='1' rows='5' cols='3'>
-        <touchkey id="dse" row='0' col='0' rows='1' cols='2'
+    <videoplayer id='player' invisible="true" />
+    
+    <touchpad flex='1' rows='5' cols='5'>
+        <touchkey id="dse" row='0' col='0' rows='1' cols='3'
                 class='dse' label="Do something else" accesskey='s' 
                 action="goHome" />
                 
-        <touchkey id="pause" row='1' col='2' rows='1' cols='1'
-                class='player_pause' label="Pause" accesskey='p' 
+        <touchkey id="prev" row='2' col='1' rows='1' cols='1'
+                class='player_prev' label="Play prev" accesskey='v' 
+                image='chrome://sim_win/skin/playerbuttons/back.png' 
+                action="mediaPrev" />
+        <touchkey id="next" row='2' col='2' rows='1' cols='1'
+                class='player_next' label="Play next" accesskey='p' 
+                image='chrome://sim_win/skin/playerbuttons/forward.png' 
+                action="mediaNext" />
+        <togglekey id="pause" row='2' col='3' rows='1' cols='1'
+                class='player_pause' label='Pause' labelB="Play" accesskey='p' 
                 image='chrome://sim_win/skin/playerbuttons/pause.png' 
+                imageB='chrome://sim_win/skin/playerbuttons/play.png' 
                 action="mediaPause" />
                 
         <touchkey id="pause" row='3' col='2' rows='1' cols='1'
@@ -25,8 +36,6 @@
                 class='player_incvol' label="Quieter" accesskey='q' 
                 image='chrome://sim_win/skin/playerbuttons/quieter.png' 
                 action="mediaQuieter" />
-                
-        <videoplayer id='player' row='1' col='0' rows='4' cols='2' />
     </touchpad>
 
 </window>

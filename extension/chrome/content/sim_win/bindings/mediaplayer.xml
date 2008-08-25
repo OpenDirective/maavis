@@ -8,20 +8,31 @@
 
 <!--      <html:object id="vlc" type="application/x-vlc-plugin" version="VideoLAN.VLCPlugin.2" />-->
 
- <binding id="videop" display='xul:box'>
+<script>
+</script>
+
+  <binding id="videop" display='xul:box'>
     <content>
     </content>
     
-  <implementation>
+    <resources>
+      <stylesheet src="chrome://sim_win/skin/mediaplayer.css"/>
+    </resources>
+
+    <implementation>
      <constructor><![CDATA[
-             //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
-            var mythis = this    
+        this._MINVOL = 0;
+        this._MAXVOL = 200
+     
+        //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
+        var mythis = this    
          function showImage()
          {
             var e = document.createElementNS("http://www.w3.org/1999/xhtml", 'embed');
             e.setAttribute('type', "application/x-vlc-plugin");
             e.setAttribute('version', "VideoLAN.VLCPlugin.2");
             e.setAttribute('id', "vlc");
+            e.setAttribute('class', "mediaplayer");
             e.setAttributeNS('http://www.mozilla.org/xbl', 'inherits', 'top,left,width,height')
             mythis.appendChild(e);
 
@@ -79,6 +90,84 @@
     </body>
     </method>
  
+   <method name='togglePause'>
+     <body><![CDATA[
+        // no need to close poller as it will see we are puased
+        this._vlc.playlist.togglePause();
+        ]]>
+    </body>
+    </method>
+ 
+   <method name='restart'>
+    <body><![CDATA[
+        this._vlc.playlist.stop();
+        // poller will restart it
+        ]]>
+    </body>
+    </method>
+  
+  <method name='prevItem'>
+    <body><![CDATA[
+        this._vlc.playlist.prev();
+        // poller will restart it
+        ]]>
+    </body>
+    </method>
+
+  <method name='nextItem'>
+    <body><![CDATA[
+        this._vlc.playlist.next();
+        // poller will restart it
+        ]]>
+    </body>
+    </method>
+
+  <method name='toggleMute'>
+     <body><![CDATA[
+        this._vlc.audio.mute = !this._vlc.audio.mute;
+        ]]>
+    </body>
+    </method>
+ 
+   <method name='incVolume'>
+     <body><![CDATA[
+        this.changeVolume(1);
+        ]]>
+    </body>
+    </method>
+
+   <method name='decVolume'>
+     <body><![CDATA[
+        this.changeVolume(-1);
+        ]]>
+    </body>
+    </method>
+
+  <method name='changeVolume'>
+    <parameter name="upDown" />
+    <body><![CDATA[
+        const VOLSTEPS = 10;
+        const VOLSTEP = Math.floor(this._MAXVOL / VOLSTEPS);
+        const delta =  (upDown > 0) ? VOLSTEP : (upDown < 0) ? -VOLSTEP : 0;
+        var newVol = this._vlc.audio.volume + delta
+        newVol = Math.max(this._MINVOL, newVol);
+        newVol = Math.min(newVol, this._MAXVOL);
+        this._vlc.audio.volume = newVol;
+        ]]>
+    </body>
+    </method>
+
+  <method name='setVolume'>
+    <parameter name="pc" />
+    <body><![CDATA[
+        var newVol = this._vlc.audio.volume + (this._MAXVOL * Math.floor(pc / 100) )
+        newVol = Math.max(this._MINVOL, newVol);
+        newVol = Math.min(newVol, this._MAXVOL);
+        this._vlc.audio.volume = newVol;
+        ]]>
+    </body>
+    </method>
+    
   </implementation>
 
   </binding>

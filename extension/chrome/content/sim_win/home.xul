@@ -8,9 +8,11 @@
     <script type="application/javascript" src="chrome://sim_win/content/home.js" />
 
 <hbox flex='1'>
-    <touchpad flex='1' rows='2' cols='2'>
-        <touchkey id="stop" row='0' col='1' rows='1' cols='1' 
-                    class='touchkey' label="Play test video" action="video|file://h:/sim_win/media/test.wmv,close" accesskey='s' />
+    <touchpad flex='1' rows='2' cols='3'>
+        <touchkey id="playAudio" row='0' col='0' rows='1' cols='1' 
+                    class='top' label="Music" action="showPage|audioplayer.xul,test.wmv" accesskey='m' />
+        <touchkey id="playVideo" row='0' col='1' rows='1' cols='1' 
+                    class='top' label="Video" action="showPage|videoplayer.xul,test.wmv" accesskey='v' />
     </touchpad>
 </hbox>
 

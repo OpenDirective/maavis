@@ -6,18 +6,34 @@ var app =
 {
     mainwindow: mainwindow,
     
-    showVideo: function(mrl, options)
+    showPage: function(page /*...*/)
     {
-        this.mainwindow.setProps({mrl: mrl, options: options});
-        this.mainwindow.setPage("chrome://sim_win/content/videoplayer.xul");
+        const fpage = "chrome://sim_win/content/" + page;
+        var args = Array();
+        for (i=1; i < arguments.length; i++)
+            args.push(arguments[i]); // copy to a real array
+        this.mainwindow.setProps(args); // pass args to new window
+        this.mainwindow.loadPage(fpage);
     },
-
+    
+    
     loadPage: function(window)
     {
         var action = {};
         Components.utils.import("resource://modules/action.js", action);
         var mt=this;
-        action.setAction('video', this.showVideo, this);
+
+        action.setAction('goHome', function(){ this.mainwindow.goHome(); }, this);
+        
+        action.setAction('showPage', this.showPage, this);
+        action.setAction('mediaPause', function(){ this.mainwindow.getElementById("player").togglePause()}, this);
+        action.setAction('mediaRestart', function(){ this.mainwindow.getElementById("player").restart()}, this);
+        action.setAction('mediaToggleMute', function(){ this.mainwindow.getElementById("player").toggleMute()}, this);
+        action.setAction('mediaSetVolume', function(){ this.mainwindow.getElementById("player").setVolume()}, this);
+        action.setAction('mediaLouder', function(){ this.mainwindow.getElementById("player").incVolume()}, this);
+        action.setAction('mediaQuieter', function(){ this.mainwindow.getElementById("player").decVolume()}, this);
+        action.setAction('mediaPrev', function(){ this.mainwindow.getElementById("player").prevItem()}, this);
+        action.setAction('mediaNext', function(){ this.mainwindow.getElementById("player").nextItem()}, this);
 
         mainwindow.goHome.apply(mainwindow);
     },

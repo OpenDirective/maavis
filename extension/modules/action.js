@@ -14,16 +14,17 @@ function setAction(name, func, context)
 function Action(str)
 {
   // TODO tighten up the error handling
-  ar = str.split("|");
-  this._action = ar[0].toLowerCase();
-  this._args = ar[1].split(",");
+  const ar = str.split("|");
+  this._action = ar[0];
+  this._args = (ar.length > 1) ? ar[1].split(",") : [];
 }
 
 Action.prototype.execute = function()
 {
     if (actions[this._action] !== undefined)
-    {
+    { 
         const functor = actions[this._action];
+//        mainwindow.getWindow().alert(this._action);
         if (functor.context !== undefined)
             functor.func.apply(functor.context, this._args);
         else

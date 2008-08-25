@@ -8,13 +8,11 @@ function loadPage()
 
     window.removeEventListener('load', loadPage, false);
     
-    const props = mainwindow.getProps();
+    const args = mainwindow.getProps();
+    const mrl = 'file://h:/sim_win/media/' + args[0];
     
-    const stop = document.getElementById('stop')
-    stop.addEventListener('command', function(){ player.stop(); mainwindow.goHome();}, false);
-
     var player = document.getElementById('player');
-    player.onPlayerReady = function(){ player.play(props.mrl);};
+    player.onPlayerReady = function(){ player.play(mrl); };
 }
 
 window.addEventListener('load', loadPage, false);

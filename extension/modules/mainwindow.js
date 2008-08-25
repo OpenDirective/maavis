@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["showWindow", "setPage", "setHome", "goHome", "setProps", "getProps"];
+var EXPORTED_SYMBOLS = ["showWindow", "loadPage", "getWindow", "getDocument()", "getElementById", "setHome", "goHome", "setProps", "getProps"];
 
 var winutils = {};
 Components.utils.import("resource://modules/winutils.js", winutils);
@@ -29,7 +29,22 @@ function showWindow(window, callback)
     }
 }
 
-function setPage(page)
+function getWindow(page)
+{
+  return _window;
+}
+
+function getDocument(page)
+{
+  return _window.document;
+}
+
+function getElementById(id)
+{
+  return _window.document.getElementById(id);
+}
+
+function loadPage(page)
 {
     _window.location.replace(page);
 //        const path = _window.document.location.pathname;
@@ -45,7 +60,7 @@ function setHome(strUrl)
 
 function goHome()
 { 
-    setPage(_strHomeUrl);
+    loadPage(_strHomeUrl);
 }
 
 var _props = {};
