@@ -40,7 +40,7 @@
                 setTimeout(mythis._readyFunc, 1);
             }
          }
-         setTimeout(showImage, 500); // so layout completes without image
+         setTimeout(showImage, 100); // so layout completes without image
 
         this._pollState = function()
         {

@@ -21,6 +21,9 @@
             <![CDATA[
             // variables used in following closures
             // TODO tidy this up and it looks like these become public - huh?
+            this._label_box = document.getAnonymousElementByAttribute(this, 'anonid', 'label-box');
+            if (!this._label_box)
+                 throw "XBL binding for <button type=\"touchkey\"/> must contain an element with anonid=\"label-box\"";
             const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
             if (!imageFrame)
                 throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"image-frame\"";
@@ -84,9 +87,16 @@
             }
             
             if (src)
-            // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
+            {
+                // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
                 setTimeout(showImage, 300); // so layout completes without image
-                                        // TODO find a better way to know layout has completed
+                                            // TODO find a better way to know layout has completed
+            }
+            else
+            {
+                imageFrame.collapsed='true';
+            }
+            
             ]]>
         </constructor>
 
@@ -99,21 +109,47 @@
                 onset="this.setAttribute('col', val); return val;"/>
                 
         <property name="rows"
-                onget="return this.getAttribute('rows')"
-                onset="this.setAttribute('rows', val); return val;"/>
+                onget="return this.getAttribute('rows')">
+            <setter><![CDATA[
+                this.setAttribute('rows', val);
+                this.setOrientation();
+                return val;
+                ]]>
+           </setter>
+        </property>
                 
         <property name="cols"
-                onget="return this.getAttribute('cols')"
-                onset="this.setAttribute('cols', val); return val;"/>
+                onget="return this.getAttribute('cols')" >
+            <setter><![CDATA[
+                this.setAttribute('cols', val);
+                this.setOrientation();
+                return val;
+                ]]> 
+            </setter>
+        </property>
+        
+        <method name="setOrientation">
+        <body><![CDATA[
+            const bHoriz = (this.width / this.height > 2);
+            const bHasImage = this.getAttribute('image') != '';
+            //alert(this.getAttribute('image'));
+            const box = this._label_box.parentNode;
+            box.orient = (bHoriz) ? 'horizontal' : 'vertical';
+            this._label_box.align = (bHoriz) ? 'start' : 'stretch';
+            this._label_box.flex = (bHoriz && bHasImage) ? '5' : '0';
+            ]]>
+        </body>
+      </method>
+            
     </implementation>
     
                 
    <content>
-        <xul:vbox class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
+        <xul:vbox anonid='box' class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
                 align="stretch" pack="center" orient="vertical" flex="1">
             <xul:vbox anonid='image-frame' flex='1' />
-            <xul:vbox flex='0'>
-                <xul:label flex='1' anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"></xul:label>
+            <xul:vbox anonid="label-box" flex='0' pack="center" >
+                <xul:label anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"></xul:label>
             </xul:vbox>
         </xul:vbox> 
       </content>
@@ -128,13 +164,13 @@
         <constructor><![CDATA[
             var stack = document.getAnonymousElementByAttribute(this, 'anonid', 'stack');
             if (!stack)
-                 throw "XBL binding for <button type=\"touchpad\"/> binding must contain an element with anonid=\"stack\"";
+                 throw "XBL binding for <button type=\"touchpad\"/> must contain an element with anonid=\"stack\"";
             this._stack = stack;
             
             const obj = this;
             function f()
             {
-                obj.layoutKeys();
+                obj.layoutKeys(); // TODO we're fighting against gecko here so find a better way
             }
             window.addEventListener('load', function(){setTimeout(f, 1);}, false);
         ]]>
@@ -164,10 +200,21 @@
         <parameter name='key' />
         <body><![CDATA[
                 var size = this._getGridCellDimensions();
-                key.setAttribute('top', key.getAttribute('row') * size.h);
-                key.setAttribute('left', key.getAttribute('col') * size.w);
-                key.setAttribute('height', key.getAttribute('rows') * size.h);
-                key.setAttribute('width', key.getAttribute('cols') * size.w);
+                if (key.nodeName == "touchkey")
+                {   
+                    key.top = key.row * size.h;
+                    key.left = key.col * size.w;
+                    key.height = key.rows * size.h;
+                    key.width = key.cols * size.w;
+                    key.setOrientation();
+                }
+                else
+                {
+                    key.setAttribute('top', key.getAttribute('row') * size.h);
+                    key.setAttribute('left', key.getAttribute('col') * size.w);
+                    key.setAttribute('height', key.getAttribute('rows') * size.h);
+                    key.setAttribute('width', key.getAttribute('cols') * size.w);
+                }
         ]]>
         </body>
       </method>
@@ -187,7 +234,7 @@
             {
                 var key = keys[i];
 //                if (!key.nodeName != 'touchkey')
-//                     throw "XBL binding for <touchpad /> onley expects <touchkey> children";
+//                     throw "XBL binding for <touchpad /> only expects <touchkey> children";
                 this._positionKey(key);
 //                this._dumpKey(key);
             };
