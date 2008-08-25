@@ -1,0 +1,255 @@
+<?xml version="1.0"?>
+
+<bindings id="buttonBindings"
+   xmlns="http://www.mozilla.org/xbl"
+   xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+   xmlns:xbl="http://www.mozilla.org/xbl"
+   xmlns:svg="http://www.w3.org/2000/svg" 
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:html="http://www.w3.org/1999/xhtml"
+>
+
+  <!-- NB display= needed for event handling -->
+  <binding id="touchkey" display="xul:button" 
+           extends="chrome://global/content/bindings/button.xml#button-base">
+    <resources>
+      <stylesheet src="chrome://sim_win/skin/touchpad.css"/>
+    </resources>
+
+    <implementation>
+        <constructor>
+            <![CDATA[
+            // variables used in following closures
+            // TODO tidy this up and it looks like these become public - huh?
+            this._label_box = document.getAnonymousElementByAttribute(this, 'anonid', 'label-box');
+            if (!this._label_box)
+                 throw "XBL binding for <button type=\"touchkey\"/> must contain an element with anonid=\"label-box\"";
+            const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
+            if (!imageFrame)
+                throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"image-frame\"";
+            const src = this.getAttribute('image');
+            const scale = (this.hasAttribute('image-scale')) ? this.getAttribute('image-scale') : 1;
+        
+            function showImage()
+            {
+              function setImageSizez()
+              {
+                // resize to fit keeping aspect ratio
+                const imageWidth = this.naturalWidth;
+                const imageHeight = this.naturalHeight;
+                const availableWidth = imageFrame.boxObject.width; // note could also use getComputedStyle
+                const availableHeight = imageFrame.boxObject.height;
+                var width = availableWidth;
+                var height = availableWidth * imageHeight / imageWidth;
+                if (height > availableHeight)
+                {
+                    height = availableHeight;
+                    width = availableHeight * imageWidth / imageHeight;
+                }
+                
+                // fix size by removing flex (was needed to get size)
+                imageFrame.align='center';
+                imageFrame.pack='center';
+
+                function setImageSize()
+                {
+                    // add child image (xul:image) not HTML to avoid display problems
+                    var i = document.createElement('image');
+                    i.setAttribute('class', 'touchkey-image');
+                    i.setAttribute('src', src);
+                    i.width = width * scale;
+                    i.height = height * scale;
+                    imageFrame.appendChild(i);
+                }
+                  
+                setTimeout(setImageSize, 1); // seem to need this as well
+              }
+              
+              // create a temp HTML img which includes the actual image size so we can keep aspect ratio
+              var i = document.createElementNS("http://www.w3.org/1999/xhtml", 'img');
+              i.setAttribute('src', src);
+              i.onload = setImageSizez;
+            }
+
+            // set the text of the label so it is wrapped
+            // TODO prolly want to set/get property+attrib as well
+            var label = document.getAnonymousElementByAttribute(this, 'anonid', 'label');
+            if (!label)
+                 throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
+            var text = document.createTextNode(this.getAttribute('label')); 
+            label.appendChild(text);
+
+            if (this.hasAttribute('action'))
+            { 
+                Components.utils.import("resource://modules/action.js");
+                action = new Action(this.getAttribute('action'));
+                this.addEventListener('command', function(){ action.execute();}, false);
+            }
+            
+            if (src)
+            {
+                // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
+                setTimeout(showImage, 300); // so layout completes without image
+                                            // TODO find a better way to know layout has completed
+            }
+            else
+            {
+                imageFrame.collapsed='true';
+            }
+            
+            ]]>
+        </constructor>
+
+        <property name="row"
+                onget="return this.getAttribute('row')"
+                onset="this.setAttribute('row', val); return val;"/>
+                
+        <property name="col"
+                onget="return this.getAttribute('col')"
+                onset="this.setAttribute('col', val); return val;"/>
+                
+        <property name="rows"
+                onget="return this.getAttribute('rows')">
+            <setter><![CDATA[
+                this.setAttribute('rows', val);
+                this.setOrientation();
+                return val;
+                ]]>
+           </setter>
+        </property>
+                
+        <property name="cols"
+                onget="return this.getAttribute('cols')" >
+            <setter><![CDATA[
+                this.setAttribute('cols', val);
+                this.setOrientation();
+                return val;
+                ]]> 
+            </setter>
+        </property>
+        
+        <method name="setOrientation">
+        <body><![CDATA[
+            const bHoriz = (this.width / this.height > 2);
+            const bHasImage = this.getAttribute('image') != '';
+            //alert(this.getAttribute('image'));
+            const box = this._label_box.parentNode;
+            box.orient = (bHoriz) ? 'horizontal' : 'vertical';
+            this._label_box.align = (bHoriz) ? 'start' : 'stretch';
+            this._label_box.flex = (bHoriz && bHasImage) ? '5' : '0';
+            ]]>
+        </body>
+      </method>
+            
+    </implementation>
+    
+                
+   <content>
+        <xul:vbox anonid='box' class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
+                align="stretch" pack="center" orient="vertical" flex="1">
+            <xul:vbox anonid='image-frame' flex='1' />
+            <xul:vbox anonid="label-box" flex='0' pack="center" >
+                <xul:label anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"></xul:label>
+            </xul:vbox>
+        </xul:vbox> 
+      </content>
+  </binding>
+  
+   <binding id="touchpad">
+    <resources>
+      <stylesheet src="chrome://sim_win/skin/touchpad.css"/>
+    </resources>
+
+    <implementation>
+        <constructor><![CDATA[
+            var stack = document.getAnonymousElementByAttribute(this, 'anonid', 'stack');
+            if (!stack)
+                 throw "XBL binding for <button type=\"touchpad\"/> must contain an element with anonid=\"stack\"";
+            this._stack = stack;
+            
+            const obj = this;
+            function f()
+            {
+                obj.layoutKeys(); // TODO we're fighting against gecko here so find a better way
+            }
+            window.addEventListener('load', function(){setTimeout(f, 1);}, false);
+        ]]>
+        </constructor>
+
+      <property name="rows"
+                onget="return this.getAttribute('rows')"
+                onset="this.setAttribute('rows', val); return val;"/>
+                
+      <property name="cols"
+                onget="return this.getAttribute('cols')"
+                onset="this.setAttribute('cols', val); return val;"/>
+
+     <method name="_getGridCellDimensions">
+        <body><![CDATA[
+            const width = this._stack.boxObject.width;
+            const height = this._stack.boxObject.height;
+            var size = {};
+            size.w = Math.floor(width / this.cols);
+            size.h = Math.floor(height / this.rows);
+            return size;
+        ]]>
+        </body>
+      </method>
+
+     <method name="_positionKey">
+        <parameter name='key' />
+        <body><![CDATA[
+                var size = this._getGridCellDimensions();
+                if (key.nodeName == "touchkey")
+                {   
+                    key.top = key.row * size.h;
+                    key.left = key.col * size.w;
+                    key.height = key.rows * size.h;
+                    key.width = key.cols * size.w;
+                    key.setOrientation();
+                }
+                else
+                {
+                    key.setAttribute('top', key.getAttribute('row') * size.h);
+                    key.setAttribute('left', key.getAttribute('col') * size.w);
+                    key.setAttribute('height', key.getAttribute('rows') * size.h);
+                    key.setAttribute('width', key.getAttribute('cols') * size.w);
+                }
+        ]]>
+        </body>
+      </method>
+
+     <method name="_dumpKey">
+        <parameter name='key' />
+        <body><![CDATA[
+           alert(key.left +':'+key.top+'x'+key.width+':'+key.height);
+        ]]>
+        </body>
+      </method>
+
+    <method name="layoutKeys">
+        <body><![CDATA[
+            const keys = this.childNodes;
+            for (var i = 0; i < keys.length; i++) 
+            {
+                var key = keys[i];
+//                if (!key.nodeName != 'touchkey')
+//                     throw "XBL binding for <touchpad /> only expects <touchkey> children";
+                this._positionKey(key);
+//                this._dumpKey(key);
+            };
+
+        ]]>
+        </body>
+      </method>
+    </implementation>
+
+    <content>
+        <xul:stack anonid='stack' orient='vertical' flex='1'>
+          <children/>
+        </xul:stack>
+      </content>
+  </binding>
+ 
+
+</bindings>
