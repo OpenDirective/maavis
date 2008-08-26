@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["logit", "runProcess", "exec", "getInstallationPath"];
+var EXPORTED_SYMBOLS = ["logit", "runProcess", "exec", "toJSON", "fromJSON"];
 
 const _EXTID = 'sim_win@fullmeasure.co.uk';  //same as id in install.rdf
 
@@ -73,74 +73,25 @@ function exec(command)
     return pm;
 }
 
-function buildPath(root)
-{
-    var path = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-    if(root == null) {
-        root = utils.getExtensionPath();
-    }
-    path.initWithPath(root);
-    for(var i=1; i < arguments.length; i++) {
-        path.append(arguments[i]);
-    }
-    return path;
-}
-
-function getExtensionPath(id)
-{
-    id = id || utils._EXTID;
-    var cls = Components.classes["@mozilla.org/extensions/manager;1"];
-    var service = cls.getService(Components.interfaces.nsIExtensionManager);
-    return service.getInstallLocation(id).getItemLocation(id).path;
-}
-
-function getInstallationPath()
-{
-    // oh sodit lets assume / works in FF on Windows, its been there in windows since DOS and I won't be dealing with Drives
-    var id = utils._EXTID;
-    var cls = Components.classes["@mozilla.org/extensions/manager;1"];
-    var service = cls.getService(Components.interfaces.nsIExtensionManager);
-    var path = service.getInstallLocation(id).getItemLocation(id).parent.path;
-    path = path.replace(/\\/g, '/');
-    return path + '/';
-}
-
-/*    getInstalledPathForFile: function(filename ) // vaargs for path
-    // for files outside extension
-    {
-        var cls = Components.classes["@mozilla.org/extensions/manager;1"];
-        var service = cls.getService(Components.interfaces.nsIExtensionManager);
-        var dir = service.getInstallLocation(_EXTID).getItemLocation(_EXTID);
-        var file = dir.clone().parent;
-        for (i=0; i< arguments.length; i++)
-            file.append(arguments[i]); 
-        return file.path;
-    },
-
-    fileToFileURL: function(file)
-    {
-        return "file://" + file.replace(/\\/g, '/');    // / is fine in URLs on windows as its supported / and \ for years now
-    },
-*/
-
 
 /* access to nave JSON */
-_ijson: null,
+var _ijson = null;
 
 function _getJson()
 {
-    if(!_ijson) {
+    if(!_ijson)
+    {
         _ijson = Components.classes["@mozilla.org/dom/json;1"].createInstance(Components.interfaces.nsIJSON);
-        return _ijson;
-        }
+    }
+    return _ijson;
 }
     
-function toJson(obj)
+function toJSON(obj)
 {
     return _getJson().ijson.encode(obj);
 }
 
-function fromJson(text)
+function fromJSON(text)
 {
     return _getJson().decode(text);
 }

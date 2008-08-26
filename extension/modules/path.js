@@ -1,0 +1,63 @@
+var EXPORTED_SYMBOLS = ["getFile", "getAppDataDir", "fileToURL"];
+
+function getFile(path)
+{
+    var file = Components.classes["@mozilla.org/file/local;1"]
+                         .createInstance(Components.interfaces.nsILocalFile);
+    file.initWithPath(path);
+    return file;
+}
+
+function getAppDataDir()
+{
+    // bit of a cludge but can't seem to use %appdata%
+    const dirAppData = Components.classes["@mozilla.org/file/directory_service;1"]
+                         .getService(Components.interfaces.nsIProperties)
+                         .get("AppRegD", Components.interfaces.nsIFile);
+    var simwinAppDir = dirAppData.parent.parent;
+    simwinAppDir.append("SIM_WIN");
+    return simwinAppDir;
+    }
+
+function fileToURL(file)
+{
+    const ios = Components.classes["@mozilla.org/network/io-service;1"]
+                        .getService(Components.interfaces.nsIIOService);
+    const URL = ios.newFileURI(file);
+    return URL.spec;
+}
+
+function buildPath(root)
+{
+    var path = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+    if(root == null) {
+        root = utils._getExtensionPath();
+    }
+    path.initWithPath(root);
+    for(var i=1; i < arguments.length; i++) {
+        path.append(arguments[i]);
+    }
+    return path;
+}
+
+
+function _getExtensionPath(id)
+{
+    id = id || utils._EXTID;
+    var cls = Components.classes["@mozilla.org/extensions/manager;1"];
+    var service = cls.getService(Components.interfaces.nsIExtensionManager);
+    return service.getInstallLocation(id).ggetExtensionPathetItemLocation(id).path;
+}
+
+function getInstallationPath()
+{
+    // oh sodit lets assume / works in FF on Windows, its been there in windows since DOS and I won't be dealing with Drives
+    var id = utils._EXTID;
+    var cls = Components.classes["@mozilla.org/extensions/manager;1"];
+    var service = cls.getService(Components.interfaces.nsIExtensionManager);
+    var path = service.getInstallLocation(id).getItemLocation(id).parent.path;
+    path = path.replace(/\\/g, '/');
+    return path + '/';
+}
+
+

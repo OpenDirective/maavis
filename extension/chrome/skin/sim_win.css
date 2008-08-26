@@ -15,6 +15,10 @@ videoplayer {
     -moz-binding: url('chrome://sim_win/content/bindings/mediaplayer.xml#videop');
 }
 
+webbrowser {
+    -moz-binding: url('chrome://sim_win/content/bindings/browser.xml#browser');
+}
+
 .dse
 {
   color: green;

@@ -13,10 +13,19 @@ function setAction(name, func, context)
 
 function Action(str)
 {
-  // TODO tighten up the error handling
-  const ar = str.split("|");
-  this._action = ar[0];
-  this._args = (ar.length > 1) ? ar[1].split(",") : [];
+    // TODO tighten up the error handling
+    const ar = str.split("|");
+
+    const action = ar[0];
+    if (actions[action] === undefined)
+    {
+        logit("Unknown action: '" + action + "'");
+    }
+    else
+    {
+      this._action = action;
+      this._args = (ar.length > 1) ? ar[1].split(",") : [];
+    }
 }
 
 Action.prototype.execute = function()

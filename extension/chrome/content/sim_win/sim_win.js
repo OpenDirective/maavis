@@ -35,6 +35,11 @@ var app =
         action.setAction('mediaPrev', function(){ this.mainwindow.getElementById("player").prevItem()}, this);
         action.setAction('mediaNext', function(){ this.mainwindow.getElementById("player").nextItem()}, this);
 
+        action.setAction('browseTo', function(page){ this.mainwindow.getElementById("browser").loadURI(page)}, this);
+        action.setAction('browseBack', function(){ this.mainwindow.getElementById("browser").goBack()}, this);
+        action.setAction('browseForward', function(){ this.mainwindow.getElementById("browser").goForward()}, this);
+        action.setAction('browseReload', function(){ this.mainwindow.getElementById("browser").reload()}, this);
+
         mainwindow.goHome.apply(mainwindow);
     },
 
