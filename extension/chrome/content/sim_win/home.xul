@@ -7,15 +7,24 @@
 
     <script type="application/javascript" src="chrome://sim_win/content/home.js" />
 
-    <hbox flex='1'>
-        <touchpad flex='1' rows='2' cols='3'>
-            <touchkey id="playAudio" row='0' col='0' rows='1' cols='1' 
-                        class='top' label="Music" action="showPage|audioplayer.xul,test.wmv" accesskey='m' />
-            <touchkey id="playVideo" row='0' col='1' rows='1' cols='1' 
-                        class='top' label="Video" action="showPage|videoplayer.xul,test.wmv" accesskey='v' />
-            <touchkey id="playVideo" row='0' col='2' rows='1' cols='1' 
-                        class='top' label="News" action="showPage|browser.xul" accesskey='v' />
-        </touchpad>
-    </hbox>
+    <touchpad flex='1' rows='2' cols='3'>
+        <touchkey id="playAudio" row='0' col='0' rows='1' cols='1' 
+                    class='top' label="Music" 
+                    action="showPage|audioplayer.xul,file:///%User%Music/" accesskey='m' />
+        <touchkey id="playVideo" row='0' col='1' rows='1' cols='1' 
+                    class='top' label="Video"
+                    image="file:///%User%Images\rats.jpg" image-scale="0.8"
+                    action="showPage|videoplayer.xul,file:///%User%Videos/rats.mpg" accesskey='v' />
+        <touchkey id="playVideo" row='0' col='2' rows='1' cols='1' 
+                    class='top' label="Web" 
+                    action="showPage|browser.xul" accesskey='v' />
+                    
+        <touchkey id="call" row='1' col='0' rows='1' cols='1' 
+                    class='top' label="Call Friends" 
+                    action="showPage|call.xul" accesskey='c' />
+        <touchkey id="call" row='1' col='1' rows='1' cols='1' 
+                    class='top' label="get help" 
+                    action="exec|hh.exe c:\program files\touchkit\userguide.chm" accesskey='c' />
+    </touchpad>
 
 </window>

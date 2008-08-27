@@ -1,4 +1,7 @@
-var EXPORTED_SYMBOLS = ["getFile", "getAppDataDir", "fileToURL"];
+var EXPORTED_SYMBOLS = ["getFile", "getAppDataDir", "fileToURI", "expandURI"];
+
+var utils = {};
+Components.utils.import("resource://modules/utils.js", utils);
 
 function getFile(path)
 {
@@ -19,11 +22,15 @@ function getAppDataDir()
     return simwinAppDir;
     }
 
-function fileToURL(file)
+function fileToURI(file)
 {
+    if ( typeof file == "string" )
+        file = getFile(file);
+
     const ios = Components.classes["@mozilla.org/network/io-service;1"]
                         .getService(Components.interfaces.nsIIOService);
     const URL = ios.newFileURI(file);
+    
     return URL.spec;
 }
 
@@ -60,4 +67,28 @@ function getInstallationPath()
     return path + '/';
 }
 
+function expandURI(strURI, arURIs)
+{
+    const ios = Components.classes["@mozilla.org/network/io-service;1"]
+                        .getService(Components.interfaces.nsIIOService);
+    const URI = ios.newURI(strURI, null, null);
+    const fileURI = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+              
+    if (!fileURI.isDirectory())
+    {
+        return false;
+    }
 
+    const file = {};
+    Components.utils.import("resource://modules/file.js", file);
+    var files = file.getDirFiles(fileURI);
+    
+    arURIs.length = 0;
+    function addFileURI(file)
+    { 
+        arURIs.push(fileToURI(file));
+    }
+    files.forEach(addFileURI);
+    
+    return true;
+}

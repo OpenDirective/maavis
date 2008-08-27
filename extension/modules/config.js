@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getAppConfig", "getUsers", "setCurrentUser", "getCurrentUserConfig"];
+var EXPORTED_SYMBOLS = ["getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getUserConfig", "getUserContacts"];
 
 var file = {};
 Components.utils.import("resource://modules/file.js", file);
@@ -30,6 +30,11 @@ function getAppConfigFile()
     const f = path.getAppDataDir();
     f.append("config.json");
     return f;
+}
+
+function getUserDataPath()
+{
+    return getUserDataDir(g_currentUser).path +  "\\";
 }
 
 function getUserDataDir(user)
@@ -84,7 +89,7 @@ function getUserDirFilenames(user, dirname)
 }
 
 function setCurrentUser(user)
-{ debugger;
+{ 
     if (getUsers().indexOf(user) != -1 &&
         g_currentUser != user)
     {
@@ -95,7 +100,21 @@ function setCurrentUser(user)
     }   
 }
 
-function getCurrentUserConfig()
+function getUserConfig()
 {
     return g_currentUserConfig;
 }
+
+function parseURI(str)
+{
+    str = str.replace(/%User%/gi, getUserDataPath());
+    if (str.slice(0, 5).toLowerCase() == 'file:')
+        str = str.replace(/\\/gi, '/'); 
+    return str;
+}
+
+function getUserContacts()
+{
+    return g_currentUserConfig.contacts;
+}
+

@@ -26,18 +26,12 @@
                  throw "XBL binding for <button type=\"touchkey\"/> must contain an element with anonid=\"label-box\"";
  
             this._setLabel();
-
-            if (this.hasAttribute('action'))
-            { 
-                Components.utils.import("resource://modules/action.js");
-                const action = new Action(this.getAttribute('action'));
-                this.addEventListener('command', function(){ action.execute();}, false);
-            }
+            this._setAction();
             
             // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
-            const mt = this;
-            setTimeout(function (){mt._setImage();}, 300); // so layout completes without image
-                                        // TODO find a better way to know layout has completed
+ //           const mt = this;
+ //           setTimeout(function (){mt._setImage();}, 300); // so layout completes without image
+ //                                       // TODO find a better way to know layout has completed
             
             ]]>
         </constructor>
@@ -69,7 +63,22 @@
                 ]]> 
             </setter>
         </property>
-        
+
+        <method name="_setAction">
+        <body><![CDATA[
+           if (this.hasAttribute('action'))
+            { 
+                Components.utils.import("resource://modules/action.js");
+                const action = new Action(this.getAttribute('action'));
+                //var win = window;
+                //this.addEventListener('command', function(){ win.setTimeout(action.execute, 1);}, false);
+                this.addEventListener('command', function(){ action.execute();}, false);
+
+            }
+            ]]>
+        </body>
+      </method>
+ 
         <method name="setOrientation">
         <body><![CDATA[
             const bHoriz = (this.width / this.height > 2);
@@ -100,13 +109,17 @@
 
       <method name="_setImage">
         <body><![CDATA[
-          const src = this.getAttribute('image');
           const scale = (this.hasAttribute('image-scale')) ? this.getAttribute('image-scale') : 1;
           const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
           if (!imageFrame)
             throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"image-frame\"";
+          var src = this.getAttribute('image');
           if (src)
           {
+              var config = {};
+              Components.utils.import("resource://modules/config.js", config);
+              src = config.parseURI(src); // TODO review bad design having this here
+              
               function setImageSizez()
               {
                 // resize to fit keeping aspect ratio
@@ -193,7 +206,7 @@
             this.setAttribute('label', ((this._state == 'a') ? this.getAttribute('labelA') : this.getAttribute('labelB')));
             this._setLabel()
             this.setAttribute('image', ((this._state == 'a') ? this.getAttribute('imageA') : this.getAttribute('imageB')));
-            this._setImage()
+            this._setImage();
           }
         ]]>
         </body>
@@ -257,13 +270,15 @@
         <parameter name='key' />
         <body><![CDATA[
                 var size = this._getGridCellDimensions();
-                if (key.nodeName == "touchkey")
+                if (key.nodeName == "touchkey" || key.nodeName == "togglekey") // TODO do this better
                 {   
                     key.top = key.row * size.h;
                     key.left = key.col * size.w;
                     key.height = key.rows * size.h;
                     key.width = key.cols * size.w;
                     key.setOrientation();
+                    key._setImage();
+                    key._setLabel();
                 }
                 else
                 {
@@ -280,6 +295,33 @@
         <parameter name='key' />
         <body><![CDATA[
            alert(key.left +':'+key.top+'x'+key.width+':'+key.height);
+        ]]>
+        </body>
+      </method>
+
+     <method name="createKey">
+        <parameter name='row' />
+        <parameter name='col' />
+        <parameter name='rows' />
+        <parameter name='cols' />
+        <parameter name='label' />
+        <parameter name='image' />
+        <parameter name='action' />
+        <body><![CDATA[
+           var key = document.createElement("touchkey");
+           key.setAttribute("row", row);
+           key.setAttribute("col", col);
+           key.setAttribute("rows", rows);
+           key.setAttribute("cols", cols);
+           key.setAttribute("label", label);
+           if (image)
+           {
+             key.setAttribute("image", image);
+           }
+           key.setAttribute("action", action);
+           this._stack.appendChild(key);
+           this._positionKey(key); // sets the image too
+           return key
         ]]>
         </body>
       </method>

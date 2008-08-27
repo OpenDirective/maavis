@@ -18,24 +18,24 @@
                 class='player_prev' label="Play prev" accesskey='v' 
                 image='chrome://sim_win/skin/playerbuttons/back.png' 
                 action="mediaPrev" />
-        <touchkey id="next" row='2' col='2' rows='1' cols='1'
-                class='player_next' label="Play next" accesskey='p' 
-                image='chrome://sim_win/skin/playerbuttons/forward.png' 
-                action="mediaNext" />
-        <togglekey id="pause" row='2' col='3' rows='1' cols='1'
+        <togglekey id="pause" row='2' col='2' rows='1' cols='1'
                 class='player_pause' label='Pause' labelB="Play" accesskey='p' 
                 image='chrome://sim_win/skin/playerbuttons/pause.png' 
                 imageB='chrome://sim_win/skin/playerbuttons/play.png' 
                 action="mediaPause" />
+        <touchkey id="next" row='2' col='3' rows='1' cols='1'
+                class='player_next' label="Play next" accesskey='p' 
+                image='chrome://sim_win/skin/playerbuttons/forward.png' 
+                action="mediaNext" />
                 
-        <touchkey id="pause" row='3' col='2' rows='1' cols='1'
-                class='player_incvol' label="Louder" accesskey='m' 
-                image='chrome://sim_win/skin/playerbuttons/louder.png' 
-                action="mediaLouder" />
-        <touchkey id="pause" row='4' col='2' rows='1' cols='1'
+        <touchkey id="pause" row='4' col='1' rows='1' cols='1'
                 class='player_incvol' label="Quieter" accesskey='q' 
                 image='chrome://sim_win/skin/playerbuttons/quieter.png' 
                 action="mediaQuieter" />
+        <touchkey id="pause" row='4' col='2' rows='1' cols='1'
+                class='player_incvol' label="Louder" accesskey='m' 
+                image='chrome://sim_win/skin/playerbuttons/louder.png' 
+                action="mediaLouder" />
     </touchpad>
 
 </window>

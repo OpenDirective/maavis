@@ -8,16 +8,14 @@ function loadPage()
     window.removeEventListener('load', loadPage, false);
     
     var row = 1;
-    function addPad(item)
+    function addContactPad(contact)
     {
        const pad = mainwindow.getElementById("pad");
-       var key = pad.createKey(row++, 3, 1, 1, item.name, null, "browseTo|"+ item.uri);
+       var key = pad.createKey(row++, 0, 1, 2, contact.name, config.parseURI(contact.photo), "voipCall|"+ contact.VOIP);
      }
     
-    var items = config.getUserConfig().web;
-    items.forEach(addPad);
-    
+    var contacts = config.getUserContacts();
+    contacts.forEach(addContactPad);
 }
 
 window.addEventListener('load', loadPage, false);
-

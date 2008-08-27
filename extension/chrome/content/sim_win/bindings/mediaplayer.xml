@@ -58,7 +58,7 @@
             // TODO prolly need a state machine if vids can take a while to start
             const vlc = mythis._vlc;
             if (vlc.input.state == 0) // idle
-                vlc.playlist.play()
+                vlc.playlist.next(); // will repeat single item too
         }
             
 
@@ -74,8 +74,21 @@
     <body><![CDATA[
         const vlc = this._vlc;
         vlc.playlist.clear();
-        var item = vlc.playlist.add(mrl);
-        vlc.playlist.playItem(item);
+        Components.utils.import("resource://modules/utils.js");
+        if (isArray(mrl))
+        {
+            function addToPlaylist(amrl)
+            {
+               vlc.playlist.add(amrl);
+            }
+            mrl.forEach(addToPlaylist);
+            vlc.playlist.play(); // first I hope
+        }
+        else
+        {
+            var item = vlc.playlist.add(mrl);
+            vlc.playlist.playItem(item);
+        }
         this._poller = setInterval(this._pollState, 3000);
         ]]>
     </body>
@@ -146,7 +159,7 @@
   <method name='changeVolume'>
     <parameter name="upDown" />
     <body><![CDATA[
-        const VOLSTEPS = 10;
+        const VOLSTEPS = 8;
         const VOLSTEP = Math.floor(this._MAXVOL / VOLSTEPS);
         const delta =  (upDown > 0) ? VOLSTEP : (upDown < 0) ? -VOLSTEP : 0;
         var newVol = this._vlc.audio.volume + delta

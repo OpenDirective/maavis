@@ -33,11 +33,14 @@ Action.prototype.execute = function()
     if (actions[this._action] !== undefined)
     { 
         const functor = actions[this._action];
-//        mainwindow.getWindow().alert(this._action);
         if (functor.context !== undefined)
+        {
             functor.func.apply(functor.context, this._args);
+        }
         else
+        {
             functor.func(this._args); //TODO sort this to pass sep params like above
+        }
     }
 }
             

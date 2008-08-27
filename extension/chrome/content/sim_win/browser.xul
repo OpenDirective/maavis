@@ -7,22 +7,20 @@
 
     <script type="application/javascript" src="chrome://sim_win/content/browser.js" />
 
-    <hbox flex='1'>
-        <touchpad flex='1' rows='5' cols='4'>
+        <touchpad id="pad" flex='1' rows='5' cols='4'>
        <touchkey id="dse" row='0' col='0' rows='1' cols='3'
                 class='dse' label="Do something else" accesskey='s' 
                 action="goHome" />
-            <browser id="browser" row='1' col='0' rows='4' cols='3' src="http://foxkehdance.com/" autoscroll="true" type="content" />
-            <!--<webbrowser row="0" col="0" rows="2" cols="2" />-->
+            <browser id="browser" row='1' col='0' rows='4' cols='3' src="http://news.bbc.co.uk/" autoscroll="true" type="content" />
+ <!--           
             <touchkey id="news" row='1' col='3' rows='1' cols='1' 
                         class='top' label="Beeb" action="browseTo|http://news.bbc.co.uk" accesskey='b' />
             <touchkey id="news" row='2' col='3' rows='1' cols='1' 
-                        class='top' label="last.fm" action="browseTo|http://last.fm/music" accesskey='f' />
+                        class='top' label="last.fm" action="browseTo|http://www.last.fm/listen/globaltags/oldies" accesskey='f' />-->
             <touchkey id="news" row='3' col='3' rows='1' cols='1' 
                         class='top' label="Back" action="browseBack" accesskey='k' />
             <touchkey id="news" row='4' col='3' rows='1' cols='1' 
                         class='top' label="Refresh" action="browseReload" accesskey='b' />
         </touchpad>
-    </hbox>
 
 </window>

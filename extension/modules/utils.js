@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["logit", "runProcess", "exec", "toJSON", "fromJSON"];
+var EXPORTED_SYMBOLS = ["logit", "runProcess", "exec", "toJSON", "fromJSON", "isArray"];
 
 const _EXTID = 'sim_win@fullmeasure.co.uk';  //same as id in install.rdf
 
@@ -96,3 +96,8 @@ function fromJSON(text)
     return _getJson().decode(text);
 }
 
+
+function isArray(obj)
+{
+    return obj.constructor.toString().indexOf("Array") != -1;
+}

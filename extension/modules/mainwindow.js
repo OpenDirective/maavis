@@ -1,7 +1,9 @@
-var EXPORTED_SYMBOLS = ["showWindow", "loadPage", "getWindow", "getDocument()", "getElementById", "setHome", "goHome", "setProps", "getProps"];
+var EXPORTED_SYMBOLS = ["showWindow", "loadPage", "getWindow", "getDocument()", "getElementById", "setHome", "goHome", "setProps", "getProps", "alert", "logit"];
 
 var winutils = {};
 Components.utils.import("resource://modules/winutils.js", winutils);
+var utils = {};
+Components.utils.import("resource://modules/utils.js", utils);
 
 var _window = undefined;
 
@@ -73,4 +75,14 @@ function setProps(props)
 function getProps()
 {
     return _props;
+}
+
+function alert(str)
+{
+  _window.alert(str);
+}
+
+function logit(str)
+{
+  utils.logit(str);
 }

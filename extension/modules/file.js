@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getDirFiles", "writeStringToFile", "readFileToString"];
+var EXPORTED_SYMBOLS = ["getDirFiles", "writeStringToFile", "readFileToString", "launchFile"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -55,3 +55,10 @@ function getDirFiles(dir)
     return array;
 }
 
+function launchFile(path)
+{
+    var file = Components.classes["@mozilla.org/file/local;1"]
+                 .createInstance(Components.interfaces.nsILocalFile);
+    file.initWithPath(path);
+    file.launch();
+}
