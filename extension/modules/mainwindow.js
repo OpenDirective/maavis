@@ -48,9 +48,10 @@ function getElementById(id)
 
 function loadPage(page)
 {
+    // NB this kills any global objects like timers
     _window.location.replace(page);
 //        const path = _window.document.location.pathname;
-//        _window.document.title = "SIM WIN - " + path;
+//        _window.document.title = "SIM WIN - " + pa;
 }
 
 var _strHomeUrl;

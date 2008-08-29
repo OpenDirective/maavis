@@ -57,14 +57,24 @@ this.modules.utils.logit('tick');
             }*/
         },
 
+    kill: function(prog)
+    {
+        this.proc.stop();
+        const window = this.mainwindow.getWindow();
+        window.minimize();
+    },
+    
     exec: function(prog)
     {
-        var proc = this.modules.utils.exec(prog);
-        
-        var mt = this;
         const window = this.mainwindow.getWindow();
-        this.pollProc();
-        var pollerid = window.setInterval( function(){ mt.pollProc();}, 1000);
+        this.proc = this.modules.utils.exec(prog);
+        var pollerid = window.setInterval( function(){ window.alert('v');}, 1000);
+        window.open("chrome://sim_win/content/stop.xul", "stop", "chrome,top=0,left=0,modal,titlebar=no,alwaysRaised" );
+//var wm = Components.classes["@mozilla.org/appshell/window-mediator;1"]  
+//                             .getService(Components.interfaces.nsIWindowMediator);  
+// var newWindow = wm.getMostRecentWindow("navigator:browser");  
+// newWindow.getBrowser();  
+        window.minimize();
     },
     
     loadPage: function(window)
@@ -92,11 +102,13 @@ this.modules.utils.logit('tick');
 
         action.setAction('voipCall', this.voipCall, this);
 
-        action.setAction('exec', this.exec, this);
+        action.setAction('progExec', this.exec, this);
+        action.setAction('progKill', this.kill, this);
 
-        const mainwindow = modules.mainwindow;
-        mainwindow.goHome.apply(mainwindow);
-    },
+        //const mainwindow = modules.mainwindow;
+        modules.mainwindow.goHome();
+        modules.mainwindow.getWindow().setInterval( " alert('tock');", 3000);
+     },
 
     initWindow: function()
     {
@@ -107,3 +119,4 @@ this.modules.utils.logit('tick');
 };
 
 window.addEventListener('load', app.initWindow, false);
+

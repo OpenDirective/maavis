@@ -18,6 +18,17 @@ const clh_CID = Components.ID("{412d63b0-639a-11dd-ad8b-0800200c9a66}");
 // category that begins with the letter "m".
 const clh_category = "m-sim_win";
 
+function logit()
+{
+    var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
+                         .getService(Components.interfaces.nsIConsoleService);
+    var text = '';
+    for(var i=0; i < arguments.length; i++) {
+    text += arguments[i] + ' ';
+    }
+    consoleService.logStringMessage(text);
+}
+
 /**
  * Utility functions
  */
@@ -25,9 +36,8 @@ const clh_category = "m-sim_win";
 /**
  * Opens a chrome window.
  * @param aChromeURISpec a string specifying the URI of the window to open.
- * @param aArgument an argument to pass to the window (may be null)
  */
-function openWindow(aChromeURISpec, aArgument, bKiosked)
+function openWindow(aChromeURISpec, bKiosked)
 {
     // TODO seems we always get a chrome window whatever is specified here
     // would like to have status bar so cn get at firebug in debug
@@ -70,17 +80,16 @@ const myAppHandler = {
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].
                 getService(Components.interfaces.nsIPrefBranch);
     var uristr = '';
-    
+
     var bNoKiosk = cmdLine.handleFlag("nokiosk", false);
     prefs.setBoolPref("sim_win.commandline.nokiosk", bNoKiosk);
 
     try {
       uristr = cmdLine.handleFlagWithParam("xulpage", false);
       if (uristr) {
-        // convert uristr to an nsIURI
-        var uri = cmdLine.resolveURI(uristr);
-        openWindow(CHROME_URI, uri, !bNoKiosk);
+        openWindow(uristr, !bNoKiosk);
         cmdLine.preventDefault = true;
+        return;
       }
     }
     catch (e) {
@@ -100,7 +109,7 @@ const myAppHandler = {
     // default is to open sim win in a chrome window
     if (!uristr)
     {
-        openWindow(CHROME_URI, null, !bNoKiosk);
+        openWindow(CHROME_URI, !bNoKiosk);
         cmdLine.preventDefault = true;
     }
     

@@ -2,17 +2,21 @@ touchpad {
   background-color: lightgrey;
 }
 
-touchkey, togglekey{
-  -moz-appearance: button;
-  margin: 1px 5px 2px 5px;
-  min-width: 6.3em;
+touchkey,
+togglekey {
+/*  -moz-appearance: button;*/
+  margin: 5px 5px 5px 5px;
+ /* min-width: 6.3em;*/
   border: 3px solid;
-  -moz-border-top-colors: transparent ThreeDHighlight ThreeDLightShadow;
+/*  -moz-border-top-colors: transparent ThreeDHighlight ThreeDLightShadow;
   -moz-border-right-colors: transparent ThreeDDarkShadow ThreeDShadow;
   -moz-border-bottom-colors: transparent ThreeDDarkShadow ThreeDShadow;
   -moz-border-left-colors: transparent ThreeDHighlight ThreeDLightShadow;
   background-color: ThreeDFace;
-  color: ButtonText;
+  color: ButtonText;*/
+  border-color: blue;
+  color: blue;
+  background-color: pink;
 }
 
 .touchkey-box {
@@ -31,7 +35,7 @@ touchkey, togglekey{
 .touchkey-text {
   margin: 3px !important;
   text-align: center;
-  font-size: 24pt;
+  font-size: 28pt;
 }
 
 
@@ -59,12 +63,16 @@ touchkey[default="true"] {
 
 /* .......... hover state .......... */
 
-touchkey:hover {
+touchkey:hover,
+togglekey:hover {
   color: -moz-buttonhovertext;
   background-color: -moz-buttonhoverface;
 }
 
 /* .......... active/open/checked state .......... */
+.stop_button {
+	margin: 0;
+}
 
 touchkey:hover:active,
 touchkey[open="true"],

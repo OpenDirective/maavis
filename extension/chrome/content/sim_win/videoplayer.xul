@@ -12,9 +12,10 @@
                 class='dse' label="Do something else" accesskey='s' 
                 action="goHome" />
                 
-        <touchkey id="pause" row='1' col='2' rows='1' cols='1'
-                class='player_pause' label="Pause" accesskey='p' 
-                image='chrome://sim_win/skin/playerbuttons/pause.png' 
+        <togglekey id="pause" row='1' col='2' rows='1' cols='1'
+                class='player_pause' label="Pause" labelB='Play' accesskey='p' 
+                image='chrome://sim_win/skin/playerbuttons/pause.png'
+                imageB='chrome://sim_win/skin/playerbuttons/play.png'                
                 action="mediaPause" />
                 
         <touchkey id="pause" row='3' col='2' rows='1' cols='1'

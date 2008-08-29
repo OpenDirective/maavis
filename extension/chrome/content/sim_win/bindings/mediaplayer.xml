@@ -58,7 +58,17 @@
             // TODO prolly need a state machine if vids can take a while to start
             const vlc = mythis._vlc;
             if (vlc.input.state == 0) // idle
-                vlc.playlist.next(); // will repeat single item too
+            {
+                // hack but there seems no easy way, the API rather sucks
+                // if this cause audible glitches then we'll need to reset playlist
+                function loop()
+                {
+                  vlc.playlist.play();
+                  vlc.playlist.next(); // next loops when playing
+                } 
+                // loop if still idle after a short time
+                setTimeout(function(){if (vlc.input.state == 0) loop();}, 500); 
+            }
         }
             
 
@@ -68,6 +78,10 @@
    <property name="onPlayerReady"   
             onget="return this._readyFunc;// attrib converts everthing to a string"
             onset="this._readyFunc = val; return val;"/>
+
+
+   <property name="isPlaying" readonly="true"   
+            onget="return this._vlc.playlist.isPlaying;" />
 
     <method name='play'>
     <parameter name="mrl" />
@@ -89,7 +103,7 @@
             var item = vlc.playlist.add(mrl);
             vlc.playlist.playItem(item);
         }
-        this._poller = setInterval(this._pollState, 3000);
+        this._poller = setInterval(this._pollState, 4000);
         ]]>
     </body>
     </method>
@@ -106,7 +120,10 @@
    <method name='togglePause'>
      <body><![CDATA[
         // no need to close poller as it will see we are puased
-        this._vlc.playlist.togglePause();
+        if (this._vlc.input.state == 3) // playing
+            this._vlc.playlist.togglePause();
+        else if (this._vlc.input.state == 4) // paused
+            this._vlc.playlist.play();
         ]]>
     </body>
     </method>

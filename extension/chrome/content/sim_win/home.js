@@ -1,7 +1,7 @@
-var mainwindow = {};
-Components.utils.import("resource://modules/mainwindow.js", mainwindow);
+//var mainwindow = {};
+//Components.utils.import("resource://modules/mainwindow.js", mainwindow);
 
-var config;
+
 
 function loadPage()
 {

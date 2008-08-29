@@ -135,7 +135,6 @@
                     width = availableHeight * imageWidth / imageHeight;
                 }
                 
-                // fix size by removing flex (was needed to get size)
                 imageFrame.align='center';
                 imageFrame.pack='center';
 
@@ -220,7 +219,7 @@
            a command attribute would redirect the command events anyway.-->
         <!-- I'm assumong don't need to call base class methods -->
       <handler event="click" button="0" action="this._toggleState();"/>
-      <handler event="keypress" key=" " action="this._handleClick();"/>
+      <handler event="keypress" key=" " action="this._toggleState();"/>
     </handlers>
     
     </binding>
