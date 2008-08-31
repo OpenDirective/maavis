@@ -1,14 +1,10 @@
-var mainwindow = {};
-Components.utils.import("resource://modules/mainwindow.js", mainwindow);
-
-
 function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
     
-    const args = mainwindow.getProps();
+    const mrls = mainwindow.getProp("args")[0];
     var player = document.getElementById('player');
-    player.onPlayerReady = function(){ player.play(args[0]); };
+    player.onPlayerReady = function(){ player.play(mrls); };
 }
 
 window.addEventListener('load', loadPage, false);

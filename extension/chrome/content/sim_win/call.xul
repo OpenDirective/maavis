@@ -5,6 +5,7 @@
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html = "http://www.w3.org/1999/xhtml">
 
+    <script type="application/javascript" src="chrome://sim_win/content/page.js" />
     <script type="application/javascript" src="chrome://sim_win/content/call.js" />
 
     <touchpad  id="pad" flex='1' rows='5' cols='3'>

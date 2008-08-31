@@ -5,10 +5,11 @@
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html = "http://www.w3.org/1999/xhtml" width='800' height='600'>
 
+    <script type="application/javascript" src="chrome://sim_win/content/page.js" />
     <script type="application/javascript" src="chrome://sim_win/content/sim_win.js" />
 
     <vbox id='startpage'>
-        <description>Loading SIM WIN ....</description>
+        <description id='loading-screen'>Loading SIM WIN ....</description>
     </vbox>
 
 </window>

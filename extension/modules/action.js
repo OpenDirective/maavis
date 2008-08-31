@@ -1,14 +1,16 @@
+var EXPORTED_SYMBOLS = ["setAction", "Action"];
+
 var mainwindow = {};
 Components.utils.import("resource://modules/mainwindow.js", mainwindow);
-Components.utils.import("resource://modules/utils.js");
+var utils = {};
+Components.utils.import("resource://modules/utils.js", utils);
 
-var EXPORTED_SYMBOLS = ["setAction", "Action"];
 
 actions = {};
 
-function setAction(name, func, context)
+function setAction(name, func, contextSetter)
 {
-    actions[name] = {func:func, context:context};
+    actions[name] = {func:func, contextSetter:contextSetter};
 }
 
 function Action(str)
@@ -19,7 +21,7 @@ function Action(str)
     const action = ar[0];
     if (actions[action] === undefined)
     {
-        logit("Unknown action: '" + action + "'");
+        utils.logit("Unknown action: '" + action + "'");
     }
     else
     {
@@ -33,9 +35,9 @@ Action.prototype.execute = function()
     if (actions[this._action] !== undefined)
     { 
         const functor = actions[this._action];
-        if (functor.context !== undefined)
-        {
-            functor.func.apply(functor.context, this._args);
+        if (functor.contextSetter !== undefined)
+        { 
+            functor.func.apply(functor.contextSetter(), this._args);
         }
         else
         {

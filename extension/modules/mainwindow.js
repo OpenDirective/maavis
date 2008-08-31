@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["showWindow", "loadPage", "getWindow", "getDocument()", "getElementById", "setHome", "goHome", "setProps", "getProps", "alert", "logit"];
+var EXPORTED_SYMBOLS = ["showWindow", "loadPage", "setWindow", "getWindow", "getDocument()", "getElementById", "setProp", "getProp", "alert", "logit"];
 
 var winutils = {};
 Components.utils.import("resource://modules/winutils.js", winutils);
@@ -9,7 +9,7 @@ var _window = undefined;
 
 function showWindow(window, callback)
 {
-    _window = window;
+    setWindow(window);
     const bKiosked = Boolean(winutils.getWindowIntArgument(window, 0));
     if (bKiosked)
     {
@@ -31,6 +31,11 @@ function showWindow(window, callback)
     }
 }
 
+function setWindow(window)
+{
+  _window = window;
+}
+
 function getWindow(page)
 {
   return _window;
@@ -48,34 +53,22 @@ function getElementById(id)
 
 function loadPage(page)
 {
-    // NB this kills any global objects like timers
+    // NB this kills global objects like timers - a new page needs to call setWindow().
     _window.location.replace(page);
 //        const path = _window.document.location.pathname;
 //        _window.document.title = "SIM WIN - " + pa;
 }
 
-var _strHomeUrl;
-
-function setHome(strUrl)
-{ 
-    _strHomeUrl = strUrl;
-}
-
-function goHome()
-{ 
-    loadPage(_strHomeUrl);
-}
-
 var _props = {};
 
-function setProps(props)
+function setProp(name, value)
 {
-    _props = props;
+    _props[name] = value;
 }
 
-function getProps()
+function getProp(name)
 {
-    return _props;
+    return _props[name];
 }
 
 function alert(str)
