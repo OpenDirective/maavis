@@ -3,7 +3,7 @@
 <?xml-stylesheet href="chrome://sim_win/skin/sim_win.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        xmlns:html = "http://www.w3.org/1999/xhtml">
+        xmlns:html = "http://www.w3.org/1999/xhtml" id="wnd">
 
     <script type="application/javascript" src="chrome://sim_win/content/page.js" />
     <script type="application/javascript" src="chrome://sim_win/content/home.js" />

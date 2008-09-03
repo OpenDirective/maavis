@@ -17,7 +17,6 @@ private:
 
 protected:
   /* additional members */
-  nsString mName;
   DWORD mpid;
 };
 
@@ -28,33 +27,65 @@ ProcessManager::ProcessManager()
  : mpid(0)
 {
   /* member initializers and constructor code */
-  mName.Assign(NS_LITERAL_STRING("Process Manager"));
 }
 
 ProcessManager::~ProcessManager()
 {
 }
 
-/* attribute AString name; */
-NS_IMETHODIMP ProcessManager::GetName(nsAString & aName)
-{
-  aName.Assign(mName);
-  printf("ProcessManager::GetName\n");
-  return NS_OK;
-//  return NS_ERROR_NOT_IMPLEMENTED;
-}
-NS_IMETHODIMP ProcessManager::SetName(const nsAString & aName)
-{
-  mName.Assign(aName);
-  printf("ProcessManager::SetName\n");
-  return NS_OK;
-//  return NS_ERROR_NOT_IMPLEMENTED;
-}
-
 /* readonly attribute unsigned long pid; */
 NS_IMETHODIMP ProcessManager::GetPid(PRUint32 *aPid)
 {
     *aPid = mpid;
+    return NS_OK;
+}
+
+static void makeWindowTopmost(HWND hwnd)
+{
+    ::SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING);
+}
+
+static BOOL CALLBACK enumProc(HWND hwnd, LPARAM lParam)
+{
+    if (!IsWindowVisible(hwnd) || IsIconic(hwnd))
+        return TRUE;
+    
+    DWORD pid = 0;
+    (void) ::GetWindowThreadProcessId(hwnd, &pid);
+/*
+    char b[100];
+    ::GetWindowText(hwnd, b, 90);
+    printf("%Lu %Lu %s\n",(DWORD)lParam, pid, b);
+*/
+    if (pid ==  (DWORD)lParam)
+    {
+        makeWindowTopmost(hwnd);
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
+NS_IMETHODIMP ProcessManager::MakeMozWindowTopmost(const nsAString & wndName)
+{
+    char* strName = ToNewUTF8String(wndName); // free this later 
+    HWND hwnd = FindWindow("MozillaUIWindowClass", NULL);
+    NS_Free(strName);
+
+    if (!hwnd)
+        return NS_ERROR_FAILURE;
+
+    makeWindowTopmost(hwnd);
+    return NS_OK;
+}
+
+NS_IMETHODIMP ProcessManager::MakeTopmost()
+{
+    if (!mpid)
+        return NS_ERROR_FAILURE;
+    
+    EnumWindows(enumProc, mpid);
+    
     return NS_OK;
 }
 
@@ -94,10 +125,11 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRBool *_retval 
   CloseHandle( pi.hProcess );
   CloseHandle( pi.hThread );
   mpid = pi.dwProcessId;
-  
+
   *_retval = true;
   return NS_OK;
 }
+
 
 /* long stop (); */
 NS_IMETHODIMP ProcessManager::Stop(PRBool *_retval NS_OUTPARAM)

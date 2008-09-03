@@ -3,9 +3,10 @@
 <?xml-stylesheet href="chrome://sim_win/skin/sim_win.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        xmlns:html = "http://www.w3.org/1999/xhtml" onload="window.sizeToContent()">
+        xmlns:html = "http://www.w3.org/1999/xhtml" onload="window.sizeToContent()"
+        id="wnd">
 
-    <!--<script type="application/javascript" src="chrome://sim_win/content/stop.js" />-->
+    <script type="application/javascript" src="chrome://sim_win/content/stop.js" />
 
     <touchpad flex='1' rows='1' cols='1'>
         <touchkey id="call" row='0' col='0' rows='1' cols='1' 
