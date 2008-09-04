@@ -60,7 +60,8 @@ function bind(self, func, args)
 
 function runProcess(path, args, block)
 {
-    var process = Components.classes["@mozilla.org/process/util;1"].createInstance(Components.interfaces.nsIProcess);
+    var process = Components.classes["@mozilla.org/process/util;1"].
+        createInstance(Components.interfaces.nsIProcess);
     process.init(path);
     process.run(block, args, args.length);
 }
@@ -73,6 +74,13 @@ function exec(command)
     return pm;
 }
 
+function speak(what)
+{
+    var tts = Components.classes["@fullmeasure.co.uk/tts;1"].
+        createInstance(Components.interfaces.ITTS);
+    tts,speak(what);
+    return pm;
+}
 
 /* access to nave JSON */
 var _ijson = null;

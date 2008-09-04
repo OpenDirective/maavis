@@ -8,7 +8,7 @@
     <script type="application/javascript" src="chrome://sim_win/content/page.js" />
     <script type="application/javascript" src="chrome://sim_win/content/home.js" />
 
-    <touchpad id='aaa' flex='1' rows='2' cols='3'>
+    <touchpad id='aaa' flex='1' rows='3' cols='4'>
         <touchkey id="playAudio" row='0' col='0' rows='1' cols='1' 
                     class='top' label="Music" 
                     action="showPage|audioplayer.xul,file:///%User%Music/" accesskey='m' />
@@ -26,6 +26,9 @@
         <touchkey id="call" row='1' col='1' rows='1' cols='1' 
                     class='top' label="Run Something" 
                     action="progExec|hh.exe c:\program files\touchkit\userguide.chm" accesskey='c' />
+        <chatterkey id="call" row='2' col='2' rows='1' cols='1' 
+                    class='top' label="Say Something" spokenLabel="Zipper de do dah, zipper de day" speakOnLoad='true' 
+                    action="" accesskey='s' />
     </touchpad>
 
 </window>

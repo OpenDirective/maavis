@@ -11,6 +11,10 @@ togglekey{
 	-moz-binding: url('chrome://sim_win/content/bindings/touchpad.xml#togglekey');
 }
 
+chatterkey{
+	-moz-binding: url('chrome://sim_win/content/bindings/touchpad.xml#chatterkey');
+}
+
 videoplayer {
     -moz-binding: url('chrome://sim_win/content/bindings/mediaplayer.xml#videop');
 }

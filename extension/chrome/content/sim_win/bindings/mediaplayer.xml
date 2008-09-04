@@ -13,7 +13,7 @@
 
   <binding id="videop" display='xul:box'>
     <content>
-      <!--<broadcaster anonid="play_state" playing="false"/>-->
+      <broadcaster anonid="play_state" playing="false"/>
     </content>
     
     <resources>
@@ -26,7 +26,7 @@
         this._MAXVOL = 200
      
         //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
-         var mythis = this    
+        var mythis = this    
          function showImage()
          {
             var e = document.createElementNS("http://www.w3.org/1999/xhtml", 'embed');
@@ -84,8 +84,8 @@
             var item = vlc.playlist.add(mrl);
             vlc.playlist.playItem(item);
         }
-        const that = this;
-        this._poller = setInterval(function(){that._pollState();}, 4000);
+        
+        this._poller = setInterval(this._pollState, 4000);
         ]]>
     </body>
     </method>
@@ -93,7 +93,7 @@
    <method name='_pollState'>
     <body><![CDATA[
         // TODO prolly need a state machine if vids can take a while to start
-        const vlc = this._vlc;
+        const vlc = mythis._vlc;
         if (vlc.input.state == 0) // idle
         {
             // hack but there seems no easy way, the API rather sucks here

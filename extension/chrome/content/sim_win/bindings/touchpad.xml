@@ -224,6 +224,46 @@
     
     </binding>
 
+  <binding id="chatterkey" 
+           extends="chrome://sim_win/content/bindings/touchpad.xml#touchkey">
+
+    <implementation>
+        <constructor>
+            <![CDATA[
+            if (this.speakOnLoad)
+            {
+                var that = this;
+                window.setTimeout(function(){that.speak();}, 100);
+            }
+        ]]>
+        </constructor>
+
+    <property name="spokenLabel"
+            onget="return this.getAttribute('spokenLabel')"
+            onset="this.setAttribute('spokenLabel', val); return val;"/>
+                
+    <property name="speakOnLoad"
+            onget="return this.getAttribute('speakOnLoad')"
+            onset="this.setAttribute('speakOnLoad', val); return val;"/>
+                
+    <method name="speak">
+        <body>
+        <![CDATA[
+          const what = (this.spokenLabel) ? this.spokenLabel : this.label;
+          var tts = Components.classes["@fullmeasure.co.uk/tts;1"]
+                         .getService(Components.interfaces.ITTS);
+          tts.speak(what);
+        ]]>
+        </body>
+      </method>
+    </implementation>
+
+    <handlers>
+      <handler event="command" action="this.speak();"/>
+    </handlers>
+    
+    </binding>
+
    <binding id="touchpad">
     <resources>
       <stylesheet src="chrome://sim_win/skin/touchpad.css"/>
@@ -236,10 +276,10 @@
                  throw "XBL binding for <button type=\"touchpad\"/> must contain an element with anonid=\"stack\"";
             this._stack = stack;
             
-            const obj = this;
+            const that = this;
             function f()
             {
-                obj.layoutKeys(); // TODO we're fighting against gecko here so find a better way
+                that.layoutKeys(); // TODO we're fighting against gecko here so find a better way
             }
             window.addEventListener('load', function(){setTimeout(f, 1);}, false);
         ]]>
@@ -269,7 +309,7 @@
         <parameter name='key' />
         <body><![CDATA[
                 var size = this._getGridCellDimensions();
-                if (key.nodeName == "touchkey" || key.nodeName == "togglekey") // TODO do this better
+                if (key.nodeName == "touchkey" || key.nodeName == "togglekey" || key.nodeName == "chatterkey") // TODO do this better
                 {   
                     key.top = key.row * size.h;
                     key.left = key.col * size.w;
@@ -293,7 +333,7 @@
      <method name="_dumpKey">
         <parameter name='key' />
         <body><![CDATA[
-           alert(key.left +':'+key.top+'x'+key.width+':'+key.height);
+           alert(key.nodeName+': '+key.label+': '+key.left +':'+key.top+'x'+key.width+':'+key.height);
         ]]>
         </body>
       </method>
@@ -331,8 +371,6 @@
             for (var i = 0; i < keys.length; i++) 
             {
                 var key = keys[i];
-//                if (!key.nodeName != 'touchkey')
-//                     throw "XBL binding for <touchpad /> only expects <touchkey> children";
                 this._positionKey(key);
 //                this._dumpKey(key);
             };
