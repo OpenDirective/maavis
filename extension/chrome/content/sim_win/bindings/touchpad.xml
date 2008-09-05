@@ -230,6 +230,9 @@
     <implementation>
         <constructor>
             <![CDATA[
+          this._tts = Components.classes["@fullmeasure.co.uk/tts;1"]
+                         .getService(Components.interfaces.ITTS);
+
             if (this.speakOnLoad)
             {
                 var that = this;
@@ -250,9 +253,7 @@
         <body>
         <![CDATA[
           const what = (this.spokenLabel) ? this.spokenLabel : this.label;
-          var tts = Components.classes["@fullmeasure.co.uk/tts;1"]
-                         .getService(Components.interfaces.ITTS);
-          tts.speak(what);
+          this._tts.speak(what);
         ]]>
         </body>
       </method>
