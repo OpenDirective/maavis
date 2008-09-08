@@ -58,22 +58,6 @@ function bind(self, func, args)
     },
 */
 
-function runProcess(path, args, block)
-{
-    var process = Components.classes["@mozilla.org/process/util;1"].
-        createInstance(Components.interfaces.nsIProcess);
-    process.init(path);
-    process.run(block, args, args.length);
-}
-
-function exec(command)
-{
-    var pm = Components.classes["@senecac.on.ca/processmanager;1"].
-        createInstance(Components.interfaces.IProcessManager);
-    pm.start(command);
-    return pm;
-}
-
 function speak(what)
 {
     var tts = Components.classes["@fullmeasure.co.uk/tts;1"].
@@ -109,3 +93,5 @@ function isArray(obj)
 {
     return obj.constructor.toString().indexOf("Array") != -1;
 }
+
+// EOF

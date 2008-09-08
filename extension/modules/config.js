@@ -25,6 +25,10 @@ function writeConfig(configObj)
     file.writeStringToFile(strConfig);
 }
 
+function getConfigRoot()
+{
+}
+
 function getAppConfigFile()
 {
     const f = path.getAppDataDir();
@@ -107,6 +111,9 @@ function getUserConfig()
 
 function parseURI(str)
 {
+    if (!str)
+        return str;
+        
     str = str.replace(/%User%/gi, getUserDataPath());
     if (str.slice(0, 5).toLowerCase() == 'file:')
         str = str.replace(/\\/gi, '/'); 

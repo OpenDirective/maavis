@@ -12,6 +12,8 @@ const file = {};
 Components.utils.import("resource://modules/file.js", file);
 const action = {}
 Components.utils.import("resource://modules/action.js", action);
+const execute = {}
+Components.utils.import("resource://modules/execute.js", execute);
 
 var g_strHomeUrl;
 
@@ -50,91 +52,19 @@ function showPage(page /*...*/)
 
 function voipCall(vid /*...*/)
 {
-    this.mainwindow.alert("called: " + vid);
-    this.file.launchFile("C:\\boot.ini");
+    var skype = Components.classes["@fullmeasure.co.uk/skype;1"].
+        createInstance(Components.interfaces.ISkype);
+    window.alert(vid);
+    skype.call(vid);
 }
 
-
-// just a single process
-var g_proc = undefined;
-var g_poller = undefined;
-
-function pollProc()
-{
-    setTopmost();
-    if( g_proc && !g_proc.isRunning())
-    {
-        stopProcPoller();
-        restoreApp();
-    }
-}
-
-function restoreApp()
-{
-    g_proc = undefined;
-    stopper.close();
-    window.document.getElementById('wnd').setAttribute('collapsed', 'false');
-}
-
-function startProcPoller()
-{
-    if (!g_poller)
-    {
-        g_poller = window.setInterval( function(){ pollProc();}, 1000);
-    }
-}
-
-function stopProcPoller()
-{
-    if (g_poller)
-    {
-        window.clearInterval(g_poller);
-        g_poller = undefined;
-    }
-}
-
-var stopper = undefined;
-
-function killProc()
-{
-    if (!g_proc)
-        return;
-        
-    stopProcPoller();
-    g_proc.stop();
-    restoreApp();
- }   
-
-const stopWindowName = "Stop!";
-
-function setTopmost()
-{
-    g_proc.makeTopmost();
-    g_proc.makeMozWindowTopmost(stopWindowName);
-}
-
-function execProc(prog)
-{
-    if (g_proc)
-    {
-        utils.logit("A process is already running");
-        return;
-    }
-        
-    g_proc = utils.exec(prog);
-    startProcPoller();
-    stopper = window.open("chrome://sim_win/content/stop.xul", "stop", "chrome,top=0,left=0,titlebar=no,alwaysRaised" ); // can't be modal or interval not seen
-    window.document.getElementById('wnd').setAttribute('collapsed', 'true');
-    window.setTimeout(setTopmost, 1000); //alow everything to start up
-}
     
 var window = undefined;
 
-function setcontext()
+function setContext()
 {
-    // set things up so actions appear to run in the usual context for the current page
+    // set a [partial] global context for current page - need to use window eexplicitly
     window = mainwindow.getWindow();// so in scope chain
-    window.window = window;         // as the DOM does
     return window;                  // becomes this
 }
 
@@ -142,25 +72,26 @@ function loadActions(homePage)
 {
     setHome(homePage);
 
-    action.setAction('goHome', goHome, setcontext);
-    action.setAction('showPage', showPage, setcontext);
-    action.setAction('mediaPause', function(){ window.document.getElementById("player").togglePause()}, setcontext);
-    action.setAction('mediaRestart', function(){ window.document.getElementById("player").restart()}, setcontext);
-    action.setAction('mediaToggleMute', function(){ window.document.getElementById("player").toggleMute()}, setcontext);
-    action.setAction('mediaSetVolume', function(){ window.document.getElementById("player").setVolume()}, setcontext);
-    action.setAction('mediaLouder', function(){ window.document.getElementById("player").incVolume()}, setcontext);
-    action.setAction('mediaQuieter', function(){ window.document.getElementById("player").decVolume()}, setcontext);
-    action.setAction('mediaPrev', function(){ window.document.getElementById("player").prevItem()}, setcontext);
-    action.setAction('mediaNext', function(){ window.document.getElementById("player").nextItem()}, setcontext);
+    action.setAction('goHome', goHome, setContext);
+    action.setAction('showPage', showPage, setContext);
+    action.setAction('mediaPause', function(){ window.document.getElementById("player").togglePause()}, setContext);
+    action.setAction('mediaRestart', function(){ window.document.getElementById("player").restart()}, setContext);
+    action.setAction('mediaToggleMute', function(){ window.document.getElementById("player").toggleMute()}, setContext);
+    action.setAction('mediaSetVolume', function(){ window.document.getElementById("player").setVolume()}, setContext);
+    action.setAction('mediaLouder', function(){ window.document.getElementById("player").incVolume()}, setContext);
+    action.setAction('mediaQuieter', function(){ window.document.getElementById("player").decVolume()}, setContext);
+    action.setAction('mediaPrev', function(){ window.document.getElementById("player").prevItem()}, setContext);
+    action.setAction('mediaNext', function(){ window.document.getElementById("player").nextItem()}, setContext);
 
-    action.setAction('browseTo', function(page){ window.document.getElementById("browser").loadURI(page)}, setcontext);
-    action.setAction('browseBack', function(){ window.document.getElementById("browser").goBack()}, setcontext);
-    action.setAction('browseForward', function(){ window.document.getElementById("browser").goForward()}, setcontext);
-    action.setAction('browseReload', function(){ window.document.getElementById("browser").reload()}, setcontext);
+    action.setAction('browseTo', function(page){ window.document.getElementById("browser").loadURI(page)}, setContext);
+    action.setAction('browseBack', function(){ window.document.getElementById("browser").goBack()}, setContext);
+    action.setAction('browseForward', function(){ window.document.getElementById("browser").goForward()}, setContext);
+    action.setAction('browseReload', function(){ window.document.getElementById("browser").reload()}, setContext);
 
-    action.setAction('voipCall', voipCall, setcontext);
+    action.setAction('voipCall', voipCall, setContext);
 
-    action.setAction('progExec', execProc, setcontext);
-    action.setAction('progKill', killProc, setcontext);
+    action.setAction('progExec', execute.execProc, setContext);
+    action.setAction('progKill', execute.killProc, setContext);
 }
 
+// EOF
