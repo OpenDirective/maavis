@@ -7,3 +7,4 @@ content	sim_win	chrome/content/sim_win/skin sim_win skin chrome/skin/
 resource modules modules/
 content	svgtest	chrome/content/svgtest/
 
+content	outfox	chrome/content/outfox/

@@ -15,6 +15,8 @@ Components.utils.import("resource://modules/utils.js", utils);
 function readConfig(configFile)
 {
     const strConfig = file.readFileToString(configFile);
+    if ("" == strConfig)
+        return {};
     const configObj =  utils.fromJSON(strConfig);
     return configObj;
 }

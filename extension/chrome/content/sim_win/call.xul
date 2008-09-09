@@ -7,11 +7,15 @@
 
     <script type="application/javascript" src="chrome://sim_win/content/page.js" />
     <script type="application/javascript" src="chrome://sim_win/content/call.js" />
+  <script type="application/x-javascript" src="chrome://outfox/content/utils.js"/>
+  <script type="application/x-javascript" src="chrome://outfox/content/server.js"/>
 
+<vbox>
     <touchpad  id="pad" flex='1' rows='5' cols='3'>
         <touchkey id="dse" row='0' col='0' rows='1' cols='2'
                 class='dse' label="Do something else" accesskey='s' 
                 action="goHome" />
     </touchpad>
-
+    <button id="btn" label='click' />
+</vbox>
 </window>

@@ -66,14 +66,13 @@
 
         <method name="_setAction">
         <body><![CDATA[
-           if (this.hasAttribute('action'))
+           if (this.hasAttribute('action') && this.getAttribute("action"))
             { 
                 Components.utils.import("resource://modules/action.js");
                 const action = new Action(this.getAttribute('action'));
                 //var win = window;
                 //this.addEventListener('command', function(){ win.setTimeout(action.execute, 1);}, false);
                 this.addEventListener('command', function(){ action.execute();}, false);
-
             }
             ]]>
         </body>

@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getFile", "getAppDataDir", "fileToURI", "expandURI"];
+var EXPORTED_SYMBOLS = ["getFile", "getAppDataDir", "fileToURI", "expandURI", "getExtensionRootPath"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -47,19 +47,20 @@ function buildPath(root)
     return path;
 }
 
+const _EXTID = 'sim_win@fullmeasure.co.uk';  //same as id in install.rdf
 
-function _getExtensionPath(id)
+function getExtensionRootPath(id)
 {
-    id = id || utils._EXTID;
+    id = id || _EXTID;
     var cls = Components.classes["@mozilla.org/extensions/manager;1"];
     var service = cls.getService(Components.interfaces.nsIExtensionManager);
-    return service.getInstallLocation(id).ggetExtensionPathetItemLocation(id).path;
+    return service.getInstallLocation(id).getItemLocation(id).path;
 }
 
 function getInstallationPath()
 {
     // oh sodit lets assume / works in FF on Windows, its been there in windows since DOS and I won't be dealing with Drives
-    var id = utils._EXTID;
+    var id = _EXTID;
     var cls = Components.classes["@mozilla.org/extensions/manager;1"];
     var service = cls.getService(Components.interfaces.nsIExtensionManager);
     var path = service.getInstallLocation(id).getItemLocation(id).parent.path;

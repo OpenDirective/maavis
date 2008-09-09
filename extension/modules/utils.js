@@ -1,7 +1,5 @@
 var EXPORTED_SYMBOLS = ["logit", "runProcess", "exec", "toJSON", "fromJSON", "isArray"];
 
-const _EXTID = 'sim_win@fullmeasure.co.uk';  //same as id in install.rdf
-
 function logit()
 {
     var consoleService = Components.classes["@mozilla.org/consoleservice;1"]
@@ -85,6 +83,7 @@ function toJSON(obj)
 
 function fromJSON(text)
 {
+logit(text);
     return _getJson().decode(text);
 }
 
