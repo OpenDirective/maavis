@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["logit", "runProcess", "exec", "toJSON", "fromJSON", "isArray"];
+var EXPORTED_SYMBOLS = ["logit", "bind", "buildPath", "runProcess", "exec", "toJson", "fromJson", "isArray"];
 
 function logit()
 {
@@ -11,24 +11,26 @@ function logit()
     consoleService.logStringMessage(text);
 }
 
+function bind(self, func, args)
+{
+	if(typeof args == 'undefined') 
+    {
+        var f = function(){
+            func.apply(self, arguments);
+        }
+    } else
+    {
+        var f = function() {
+            var args_inner = Array.prototype.slice.call(arguments);
+            func.apply(self, args.concat(args_inner));
+        }
+    }
+    return f;
+}
+
 /*
 var ext_path: null,
  
-function bind(self, func, args)
-{
-	if(typeof args == 'undefined') {
-            var f = function() {
-		func.apply(self, arguments);
-            }
-	} else {
-            var f = function() {
-		var args_inner = Array.prototype.slice.call(arguments);
-		func.apply(self, args.concat(args_inner));
-            }
-	}
-        return f;
-    },
-
     classes: function(className) {
         return className.split(' ');
     },
@@ -56,6 +58,20 @@ function bind(self, func, args)
     },
 */
 
+function buildPath(root) {
+    var path = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
+    if(root == null) {
+        const simwinpath = {};
+        Components.utils.import("resource://modules/path.js", simwinpath);
+        root = simwinpath.getExtensionRootPath();
+    }
+    path.initWithPath(root);
+    for(var i=1; i < arguments.length; i++) {
+        path.append(arguments[i]);
+    }
+    return path;
+}
+
 function speak(what)
 {
     var tts = Components.classes["@fullmeasure.co.uk/tts;1"].
@@ -67,7 +83,7 @@ function speak(what)
 /* access to nave JSON */
 var _ijson = null;
 
-function _getJson()
+function _getJSON()
 {
     if(!_ijson)
     {
@@ -76,15 +92,14 @@ function _getJson()
     return _ijson;
 }
     
-function toJSON(obj)
+function toJson(obj)
 {
-    return _getJson().ijson.encode(obj);
+    return _getJSON().encode(obj);
 }
 
-function fromJSON(text)
+function fromJson(text)
 {
-logit(text);
-    return _getJson().decode(text);
+    return _getJSON().decode(text);
 }
 
 

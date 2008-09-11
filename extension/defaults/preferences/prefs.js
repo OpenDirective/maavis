@@ -5,6 +5,8 @@ pref("browser.search.update", false);
 pref("extensions.update.autoUpdateEnabled", false);
 pref("extensions.update.enabled", false);
 
+// remember to remove these for distribution
+// can not use and if expression here
 pref("javascript.options.showInConsole", true);
 pref("nglayout.debug.disable_xul_cache", true); 
 pref("browser.dom.window.dump.enabled", true); 

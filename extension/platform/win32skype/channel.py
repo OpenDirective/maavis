@@ -16,33 +16,45 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 '''
 from common.channel import ChannelBase
+import winGuiAuto as wga
 
 # only expect to create one of these (e.g a single channel)
 class ChannelController(ChannelBase):
     def __init__(self, ch_id):
         ChannelBase.__init__(self, ch_id)
         self.skype = Skype()  # most things just delegate to this
+        self.skype.setObserver(self);
 
     def _handleCommand(self, cmd):
         methodname = 'do_' + cmd.get('action')
         if hasattr(self, methodname):
-            method = getattr(self, methodname)
-            method(cmd)
+            #try:
+                method = getattr(self, methodname)
+                method(cmd)
+            #except (e):
+             #   print e.message
         else:
             ChannelBase._handleCommand(self, cmd) # really not much point
+
+    def do_loopback(self, cmd):
+        text = cmd.text or ""
+        self.observer.pushResponse( { "action": "loopback-response", "text": text } )
 
     def do_launch(self, cmd):
         self.skype.launch()
 
     def do_call(self, cmd):
-        who = cmd.get('who');
+        who = cmd.get('who')
         self.skype.call(who)
+        
+    def do_endcall(self, cmd):
+        self.skype.endCall()
 
-    def pushMsg(self):
-        msg = {}
-        msg['action'] = 'error'
-        msg['description'] = 'wibble'
-        self.observer.pushResponse(msg)
+    def do_answercall(self, cmd):
+        self.skype.answerCall()
+
+    def pushResponse(self, cmd):
+        self.observer.pushResponse(cmd)
         return
 
 
@@ -53,24 +65,36 @@ class Skype(object):
         self. CallStatus = 0
         self.CallIsFinished = set ([Skype4Py.clsFailed, Skype4Py.clsFinished, Skype4Py.clsMissed, Skype4Py.clsRefused, Skype4Py.clsBusy, Skype4Py.clsCancelled]);
         self.CallIncoming = set([Skype4Py.cltIncomingPSTN, Skype4Py.cltIncomingP2P]);
+        self._theCall = None
+        self.observer = None
+        
+    def setObserver(self, ob): # TODO this seems to be the fave pattern but could multiple inherit 
+        self.observer = ob
 
     def launch(self):
-        self.skype = Skype4Py.Skype()
-        self.skype.OnAttachmentStatus = self.OnAttach
-        self.skype.OnCallStatus = self.OnCall
+        try:
+            self.skype = Skype4Py.Skype()
+            self.skype.OnAttachmentStatus = self.OnAttach
+            self.skype.OnCallStatus = self.OnCall
+            #self.skype.OnCallVideoReceiveStatusChanged = self.OnCallVideoReceive
+            #self.skype.OnCallVideoSendStatusChanged = self.OnCallVideoSend
+            #self.skype.OnCallVideoStatusChanged = self.OnCallVideo
+            
+            # Starting Skype if it's not running already..
+            if not self.skype.Client.IsRunning:
+                print 'Starting Skype..'
+                self.skype.Client.Start()
 
-        # Starting Skype if it's not running already..
-        if not self.skype.Client.IsRunning:
-            print 'Starting Skype..'
-            self.skype.Client.Start()
-
-        # Attatching to Skype..
-        print 'Connecting to Skype..'
-        self.skype.Attach()
-
+            # Attatching to Skype..
+            print 'Connecting to Skype..'
+            self.skype.Attach()
+            self.skype.ChangeUserStatus(Skype4Py.cusOnline)
+        except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
+            print e
+            
         #skype.SilentMode = 'ON';
-        self.skype.Client.Focus()
-        self.skype.Client.Minimize()
+#        self.skype.Client.Focus()
+#        self.skype.Client.WindowState = Skype4Py.wndHidden;
 
     def AttachmentStatusText(self, status):
        return self.skype.Convert.AttachmentStatusToText(status)
@@ -78,31 +102,79 @@ class Skype(object):
     def CallStatusText(self, status):
         return self.skype.Convert.CallStatusToText(status)
 
-    def OnCall(self, call, status):
-        self.CallStatus = status
-        print 'Call status: ' + self.CallStatusText(status)
+    def OnCallVideoSend(self, call, status):
+        print 'Video Send status: ' + status
+    def OnCallVideoReceive(self, call, status):
+        print 'Video Receive status: ' + status
+    def OnCallVideo(self, call, status):
+        print 'Video status: ' + status
+
+    def pushCallStatus(self, status, call):
+        self.observer.pushResponse( { "action": "call-status", "status": status, "partner": call.PartnerHandle } )
         
-        if status == Skype4Py.clsRinging and ( call.Type in self.CallIncoming):
-            print 'Answering Call from ' + call.PartnerHandle
-            call.Answer(); 
+    def pushSkypeStatus(xelf, status):
+        self.observer.pushResponse( { "action": "skype-status", "status": status } )
+        
+    def OnCall(self, call, status):
+        try:
+            self.CallStatus = status
+            print 'Call status: ' + self.CallStatusText(status)
             
+            if status == Skype4Py.clsRinging and ( call.Type in self.CallIncoming):
+                self.pushCallStatus("incoming", call )
+                
+            elif status == Skype4Py.clsInProgress:
+                print call.PartnerHandle
+                try:
+                    hwndSkype = wga.findTopWindow(wantedClass="tSkMainForm.UnicodeClass")
+                    hwndVideo = wga.findControl(hwndSkype, wantedClass="tSkLocalVideoControl")
+                    hwndButtons = wga.findControls(hwndVideo, wantedClass="tButtonWithText")
+                    wga._sendMouseMessage(hwndButtons[0])
+                    #print wga.dumpWindow(hwndButtons[0])
+                except wga.WinGuiAutoError:
+                    print "wnd not found"
+                call.StartVideoReceive();
+                call.StartVideoSend();
+                self.skype.Client.WindowState = Skype4Py.wndMaximized;
+                self.pushCallStatus("inprogress", call )
+
+            elif status == Skype4Py.clsFinished:
+                self.skype.Client.WindowState = Skype4Py.wndHidden;
+                self.pushCallStatus("finished", call )
+        except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
+            print e
+
     def OnAttach(self, status):
-        print 'API attachment status: ' + self.AttachmentStatusText(status)
-        if status == Skype4Py.apiAttachAvailable:
-            self.skype.Attach()
-
-    # Creating Skype object and assigning event handlers..
+        try:
+            print 'API attachment status: ' + self.AttachmentStatusText(status)
+            if status == Skype4Py.apiAttachAvailable:
+                self.skype.Attach()
+            elif status == Skype4Py.apiAttachSuccess:
+                self.skype.Client.WindowState = Skype4Py.wndHidden;
+        except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
+            print e
+        
     def call(self, who):
+        try:
+            print 'Calling ' + who + '...'
+            self.skype.PlaceCall(who)
+        except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
+            print e
 
-        # Checking if what we got from command line parameter is present in our contact list
-        Found = False
-        for F in self.skype.Friends:
-            if F.Handle == who:
-                Found = True
-                print 'Calling ' + F.Handle + '..'
-                print 'Calling ' + F.Handle + '..'
-                self.skype.PlaceCall(who)
-                break
-
-        if not Found:
-            print 'Call target not found in contact list'
+    def endCall(self):
+        # assume only 1 call
+        try:
+            self.skype.ActiveCalls[0].Finish()
+        except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
+            print e
+        except IndexError:
+            pass
+        
+    def answerCall(self):
+        try:
+            self.skype.ActiveCalls[0].Answer()
+        except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
+            print e
+        except IndexError:
+            pass
+ 

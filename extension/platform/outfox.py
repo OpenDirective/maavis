@@ -63,7 +63,6 @@ class Outfox(object):
         dec = simplejson.loads(json)
         page_id = dec['page_id']
         cmd = dec['cmd']
-
         # check if the command is a destroy
         if cmd.get('action') == 'shutdown':
             try:
@@ -85,7 +84,7 @@ class Outfox(object):
                 self.pages[page_id] = page
             # let the page controller dispatch the message
             page.pushRequest(cmd)
-
+            
     def pushResponse(self, page_id, cmd):
         # encode as json
         msg = simplejson.dumps({'page_id' : page_id, 'cmd' : cmd})

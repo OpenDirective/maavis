@@ -27,7 +27,7 @@
                     class='top' label="Run Something" 
                     action="progExec|hh.exe c:\program files\touchkit\userguide.chm" accesskey='c' />
         <chatterkey id="call" row='2' col='2' rows='1' cols='1' 
-                    class='top' label="Say Something" spokenLabel="Zipper de do dah, zipper de day" speakOnLoad='true' 
+                    class='top' label="Say Something" spokenLabel="Zipper dee do dah, zipper dee day" speakOnLoad='true' 
                     action="" accesskey='s' />
     </touchpad>
 

@@ -39,6 +39,7 @@ class JSONServer(asynchat.async_chat, object):
     def sendMessage(self, msg):
         # add delimiter to message
         self.push(msg+DELIMITER)
+        print "Tx: " + msg
 
     def handle_connect(self):
         pass
@@ -65,6 +66,12 @@ class JSONServer(asynchat.async_chat, object):
         
     def found_terminator(self):
         msg = ''.join(self.in_buff)
-        print msg
+        print "Rx: " + msg
         self.in_buff = []
-        self.observer.pushRequest(msg)
+        try:
+            self.observer.pushRequest(msg)
+        except asyncore.ExitNow:
+            raise
+        except:
+            import traceback
+            traceback.print_exc()

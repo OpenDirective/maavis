@@ -1,3 +1,8 @@
+var EXPORTED_SYMBOLS = ["serverProxy"];
+
+var utils = {};
+Components.utils.import("resource://modules/utils.js", utils);
+
 /*
  * Copyright (c) 2008 Carolina Computer Assistive Technology
  *
@@ -14,11 +19,12 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  * */
 const DELIMITER = '\3';
-utils.declare('outfox.ServerProxy', null, {
+serverProxy=
+{
     constructor: function() {
-        this.socket = null;
-        this.in_str = null;
-        this.out_str = null;
+    this.socket = null;
+    this.in_str = null;
+    this.out_str = null;
 	this.observers = {};
 	this.in_buff = '';
 	this.out_buff = [];
@@ -109,7 +115,9 @@ utils.declare('outfox.ServerProxy', null, {
             this._server_p = execute.exec( prog + " " + args);
         } catch(e) {
 	    // set the failure flag so all future observers receive the error
+        
     	    this.failed = '{"action" : "failed-init", "description" : "Outfox failed to initialize."}';
+            utils.logit(e);
         }
     },
 
@@ -148,7 +156,7 @@ utils.declare('outfox.ServerProxy', null, {
 	
 	// include page id and null character delimiter
 	var msg = '{"page_id" : '+page_id+', "cmd" : '+json+'}';
-    logit("Tx: " + msg);
+    utils.logit("Tx: " + msg);
     msg += DELIMITER;
     var size = msg.length;
 	var written = 0;
@@ -253,7 +261,7 @@ utils.declare('outfox.ServerProxy', null, {
 		// convert utf-8 to unicode
 		msg = this.codec.ConvertToUnicode(msg) + this.codec.Finish();
                 // @todo: could use a hack to avoid decode/encode of json
-        logit("Rx: " + msg);
+        utils.logit("Rx: " + msg);
         var dec = utils.fromJson(msg);
 		// dispatch remaining json to observer for the given page id
 		this._notify(dec.page_id, utils.toJson(dec.cmd));
@@ -266,4 +274,4 @@ utils.declare('outfox.ServerProxy', null, {
 	}
         //logit('ServerProxy: read data');
     }
-});
+}

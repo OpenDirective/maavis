@@ -7,9 +7,8 @@
 
     <script type="application/javascript" src="chrome://sim_win/content/page.js" />
     <script type="application/javascript" src="chrome://sim_win/content/sim_win.js" />
-
     <vbox id='startpage'>
-        <description id='loading-screen'>Loading SIM WIN ....</description>
+        <description id='loading-screen'>Maavis is warming up, please wait....</description>
     </vbox>
 
 </window>

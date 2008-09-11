@@ -14,6 +14,8 @@ const action = {}
 Components.utils.import("resource://modules/action.js", action);
 const execute = {}
 Components.utils.import("resource://modules/execute.js", execute);
+const skype = {}
+Components.utils.import("resource://modules/skype.js", skype);
 
 var g_strHomeUrl;
 
@@ -49,15 +51,6 @@ function showPage(page /*...*/)
     mainwindow.loadPage(fpage);
 }
 
-
-function voipCall(vid /*...*/)
-{
-    var skype = Components.classes["@fullmeasure.co.uk/skype;1"].
-        createInstance(Components.interfaces.ISkype);
-    window.alert(vid);
-    skype.call(vid);
-}
-
     
 var window = undefined;
 
@@ -88,7 +81,9 @@ function loadActions(homePage)
     action.setAction('browseForward', function(){ window.document.getElementById("browser").goForward()}, setContext);
     action.setAction('browseReload', function(){ window.document.getElementById("browser").reload()}, setContext);
 
-    action.setAction('voipCall', voipCall, setContext);
+    action.setAction('voipCall', function(vid){ if (skype.isAvailable) skype.call(vid); }, setContext);
+    action.setAction('voipAnswerCall', function(){ if (skype.isAvailable) skype.answerCall(); }, setContext);
+    action.setAction('voipEndCall', function(){ if (skype.isAvailable) skype.endCall(); }, setContext);
 
     action.setAction('progExec', execute.execProc, setContext);
     action.setAction('progKill', execute.killProc, setContext);
