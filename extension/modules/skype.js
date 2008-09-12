@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["init", "shutdown", "isAvailable", "call", "endCall", "answerCall", "addCallStatusObserver"];
+var EXPORTED_SYMBOLS = ["init", "shutdown", "isAvailable", "call", "endCall", "answerCall", "setCallStatusObserver"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -24,7 +24,7 @@ function isAvailable()
     return _isAvailable;
 }
 
-function addCallStatusObserver(ob)
+function setCallStatusObserver(ob)
 {
     _csobserver=ob;
 }
@@ -67,6 +67,6 @@ function _onResponse(json) {
     if (cmd.action == 'call-status')
     {
         if (_csobserver)
-            _csobserver(cmd.status);
+            _csobserver(cmd.status, cmd.partner);
     }
 }

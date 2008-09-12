@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getUserConfig", "getUserContacts"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getUserConfig", "getUserContacts"];
 
 var file = {};
 Components.utils.import("resource://modules/file.js", file);
@@ -11,6 +11,11 @@ Components.utils.import("resource://modules/utils.js", utils);
 // dojo data will give us a better api for the long term 
 
 // TODO exception handling
+
+function getPageUrl(page)
+{
+    return "chrome://sim_win/content/" + page;
+}
 
 function readConfig(configFile)
 {
@@ -124,6 +129,7 @@ function parseURI(str)
 
 function getUserContacts()
 {
+    return [{vid: "stepxxxhenaleehome"}];
     return g_currentUserConfig.contacts;
 }
 

@@ -12,6 +12,7 @@ function loadPage()
     var contacts = config.getUserContacts();
     //contacts = [{name: "steve", photo: null, VOIP: "stephenaleehome"}];
     //contacts.forEach(addContactPad);
+
 }
 
 window.addEventListener('load', loadPage, false);

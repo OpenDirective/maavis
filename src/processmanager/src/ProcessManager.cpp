@@ -69,7 +69,7 @@ static BOOL CALLBACK enumProc(HWND hwnd, LPARAM lParam)
 NS_IMETHODIMP ProcessManager::MakeMozWindowTopmost(const nsAString & wndName)
 {
     char* strName = ToNewUTF8String(wndName); // free this later 
-    HWND hwnd = FindWindow("MozillaUIWindowClass", NULL);
+    HWND hwnd = FindWindow("MozillaUIWindowClass", strName);
     NS_Free(strName);
 
     if (!hwnd)
@@ -92,6 +92,9 @@ NS_IMETHODIMP ProcessManager::MakeTopmost()
 /* long start (in AString filename); */
 NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRBool *_retval NS_OUTPARAM)
 {
+  if (mpid)     // single process allowed - nsIProcess was unclear on this
+    return NS_ERROR_FAILURE;
+
   // code to start a process
   STARTUPINFO si;
   PROCESS_INFORMATION pi;
@@ -124,6 +127,7 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRBool *_retval 
 
   CloseHandle( pi.hProcess );
   CloseHandle( pi.hThread );
+
   mpid = pi.dwProcessId;
 
   *_retval = true;
@@ -138,6 +142,8 @@ NS_IMETHODIMP ProcessManager::Stop(PRBool *_retval NS_OUTPARAM)
 {
   if (!mpid)
     return NS_ERROR_FAILURE;
+
+  mpid = 0; // assume dead whatever happens
   
   HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, false, mpid);
   if (!hProcess)
@@ -156,7 +162,6 @@ NS_IMETHODIMP ProcessManager::Stop(PRBool *_retval NS_OUTPARAM)
     return NS_OK;
   }
   
-  mpid = 0; // this is debatable
   *_retval = (br != 0);
   return NS_OK;
 }

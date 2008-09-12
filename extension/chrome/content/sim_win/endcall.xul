@@ -6,12 +6,12 @@
         xmlns:html = "http://www.w3.org/1999/xhtml"
         >
 
-    <script type="application/javascript" src="chrome://sim_win/content/stop.js" />
+    <script type="application/javascript" src="chrome://sim_win/content/endcall.js" />
 
     <touchpad flex='1' rows='1' cols='1'>
         <touchkey id="call" row='0' col='0' rows='1' cols='1' 
-                    class='stop_button' label="Stop" 
-                    action="progKill" accesskey='s' />
+                    class='stop_button' label="End Call" 
+                    action="voipEndCall" accesskey='e' />
     </touchpad>
 
 </window>

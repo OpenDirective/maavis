@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["exec", "execProc", "killProc" ];
+var EXPORTED_SYMBOLS = ["exec", "execSkype", "killSkype", "setProcessRunningUI", "restoreUI", "execProc", "killProc", "stopWindowName" ];
 
 const mainwindow = {};
 Components.utils.import("resource://modules/mainwindow.js", mainwindow);
@@ -19,7 +19,7 @@ function runProcess(path, args, block)
 }
 
 function exec(command)
-// James Boston's improved runner (with tweaks form me)
+// James Boston's improved runner (with tweaks from me)
 {
     var pm = Components.classes["@senecac.on.ca/processmanager;1"].
         createInstance(Components.interfaces.IProcessManager);
@@ -27,26 +27,19 @@ function exec(command)
     return pm;
 }
 
-
 // just a single process
-var g_proc = undefined;
+const g_pm = Components.classes["@senecac.on.ca/processmanager;1"].
+        createInstance(Components.interfaces.IProcessManager);
 var g_poller = undefined;
+var c_chkProc = null;
 
 function pollProc()
 {
     setTopmost();
-    if( g_proc && !g_proc.isRunning())
+    if( g_chkProc && !g_pm.isRunning())
     {
-        stopProcPoller();
-        restoreApp();
+        restoreUI();
     }
-}
-
-function restoreApp()
-{
-    g_proc = undefined;
-    stopper.close();
-    window.document.getElementById('wnd').setAttribute('collapsed', 'false');
 }
 
 function startProcPoller()
@@ -66,24 +59,36 @@ function stopProcPoller()
     }
 }
 
-var stopper = undefined;
-
-function killProc()
+function setContentVisibility(isVis)
 {
-    if (!g_proc)
-        return;
-        
+    const v = (isVis) ?  'false' : 'true';
+    window.document.getElementsByTagName('window')[0].setAttribute('collapsed', v);
+}
+
+var g_stopper = undefined;
+
+function setProcessRunningUI(page)
+{
+    g_stopper = window.open(page, stopWindowName, "chrome,top=0,left=0,titlebar=no,alwaysRaised" ); // can't be modal or interval not seen
+    startProcPoller();
+    setContentVisibility(false);
+    window.setTimeout(setTopmost, 1000); //alow everything to start up
+}
+
+function restoreUI()
+{
     stopProcPoller();
-    g_proc.stop();
-    restoreApp();
- }   
+    g_stopper.close();
+    setContentVisibility(true);
+}
 
 const stopWindowName = "Stop!";
 
 function setTopmost()
 {
-    g_proc.makeTopmost();
-    g_proc.makeMozWindowTopmost(stopWindowName);
+    if (g_pm.isRunning())
+        g_pm.makeTopmost();
+    g_pm.makeMozWindowTopmost(stopWindowName); // as set by document.title or window title=
 }
 
 var window = undefined;
@@ -98,17 +103,39 @@ function execProc(prog)
 {
     setContext();
     
-    if (g_proc)
+    if (g_pm.isRunning())
     {
         utils.logit("A process is already running");
         return;
     }
-        
-    g_proc = exec(prog);
-    startProcPoller();
-    stopper = window.open("chrome://sim_win/content/stop.xul", "stop", "chrome,top=0,left=0,titlebar=no,alwaysRaised" ); // can't be modal or interval not seen
-    window.document.getElementById('wnd').setAttribute('collapsed', 'true');
-    window.setTimeout(setTopmost, 1000); //alow everything to start up
+
+    g_pm.start(prog)
+
+    g_chkProc = true; // messy
+    setProcessRunningUI(config.getPageUrl("stop.xul"));
 }
+
+function killProc()
+{
+    setContext();
+    stopProcPoller();
+    if (g_pm.isRunning())
+        g_pm.stop();
+    restoreUI();
+}   
+
+function execSkype()
+{
+    setContext();
+    g_chkProc = false; // messy
+    setProcessRunningUI(config.getPageUrl("endcall.xul"));
+}
+
+function killSkype()
+{
+    setContext();
+    restoreUI();
+}
+
 
 // EOF

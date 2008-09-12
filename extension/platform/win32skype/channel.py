@@ -16,7 +16,6 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 '''
 from common.channel import ChannelBase
-import winGuiAuto as wga
 
 # only expect to create one of these (e.g a single channel)
 class ChannelController(ChannelBase):
@@ -59,6 +58,7 @@ class ChannelController(ChannelBase):
 
 
 import Skype4Py
+import winGuiAuto as wga
 
 class Skype(object):
     def __init__(self):
@@ -76,9 +76,9 @@ class Skype(object):
             self.skype = Skype4Py.Skype()
             self.skype.OnAttachmentStatus = self.OnAttach
             self.skype.OnCallStatus = self.OnCall
-            #self.skype.OnCallVideoReceiveStatusChanged = self.OnCallVideoReceive
-            #self.skype.OnCallVideoSendStatusChanged = self.OnCallVideoSend
-            #self.skype.OnCallVideoStatusChanged = self.OnCallVideo
+            self.skype.OnCallVideoReceiveStatusChanged = self.OnCallVideoReceive
+            self.skype.OnCallVideoSendStatusChanged = self.OnCallVideoSend
+            self.skype.OnCallVideoStatusChanged = self.OnCallVideo
             
             # Starting Skype if it's not running already..
             if not self.skype.Client.IsRunning:
@@ -92,9 +92,7 @@ class Skype(object):
         except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
             print e
             
-        #skype.SilentMode = 'ON';
-#        self.skype.Client.Focus()
-#        self.skype.Client.WindowState = Skype4Py.wndHidden;
+        #skype.SilentMode = 'ON'; // seems to kill all notifications as well as stop UI alerts
 
     def AttachmentStatusText(self, status):
        return self.skype.Convert.AttachmentStatusToText(status)
@@ -106,15 +104,50 @@ class Skype(object):
         print 'Video Send status: ' + status
     def OnCallVideoReceive(self, call, status):
         print 'Video Receive status: ' + status
+        if status == Skype4Py.vssRunning:
+            self.maximizeVideo()
     def OnCallVideo(self, call, status):
         print 'Video status: ' + status
+        if status == Skype4Py.vssRunning:
+            self.maximizeVideo()
 
     def pushCallStatus(self, status, call):
         self.observer.pushResponse( { "action": "call-status", "status": status, "partner": call.PartnerHandle } )
         
     def pushSkypeStatus(xelf, status):
         self.observer.pushResponse( { "action": "skype-status", "status": status } )
+
+    def hideSkype(self):
+        self.skype.Client.WindowState = Skype4Py.wndHidden;
+
+    def showSkype(self):
+        self.skype.Client.WindowState = Skype4Py.wndMaximized;
         
+    def maximizeVideo(self):
+        try:
+            #import time
+            #time.sleep(1)
+            hwndSkype = wga.findTopWindow(wantedClass="tSkMainForm.UnicodeClass")
+            while True:
+                try:
+                    hwndVideo = wga.findControl(hwndSkype, wantedClass="tSkLocalVideoControl")
+                    break;
+                except wga.WinGuiAutoError:
+                    pass
+            wga.mouseClick(hwndVideo, "left")   # may not be necessary
+            while True:
+                try:
+                    hwndButtons = wga.findControls(hwndVideo, wantedClass="tButtonWithText")
+                    if  len(hwndButtons) > 0:
+                        break    
+                except wga.WinGuiAutoError:
+                    pass
+            wga.mouseClick(hwndButtons[0], "left")
+        except :
+            import traceback
+            print traceback.print_exc()
+            pass
+
     def OnCall(self, call, status):
         try:
             self.CallStatus = status
@@ -125,22 +158,16 @@ class Skype(object):
                 
             elif status == Skype4Py.clsInProgress:
                 print call.PartnerHandle
-                try:
-                    hwndSkype = wga.findTopWindow(wantedClass="tSkMainForm.UnicodeClass")
-                    hwndVideo = wga.findControl(hwndSkype, wantedClass="tSkLocalVideoControl")
-                    hwndButtons = wga.findControls(hwndVideo, wantedClass="tButtonWithText")
-                    wga._sendMouseMessage(hwndButtons[0])
-                    #print wga.dumpWindow(hwndButtons[0])
-                except wga.WinGuiAutoError:
-                    print "wnd not found"
-                call.StartVideoReceive();
-                call.StartVideoSend();
-                self.skype.Client.WindowState = Skype4Py.wndMaximized;
-                self.pushCallStatus("inprogress", call )
+                call.StartVideoReceive()
+                call.StartVideoSend()
+                self.showSkype()
+                self.pushCallStatus("inprogress", call)
 
-            elif status == Skype4Py.clsFinished:
-                self.skype.Client.WindowState = Skype4Py.wndHidden;
-                self.pushCallStatus("finished", call )
+            else:
+                self.hideSkype()
+                if status in self.CallIsFinished:
+                    self.pushCallStatus("finished", call )
+                
         except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
             print e
 
@@ -150,7 +177,7 @@ class Skype(object):
             if status == Skype4Py.apiAttachAvailable:
                 self.skype.Attach()
             elif status == Skype4Py.apiAttachSuccess:
-                self.skype.Client.WindowState = Skype4Py.wndHidden;
+                self.hideSkype();
         except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
             print e
         

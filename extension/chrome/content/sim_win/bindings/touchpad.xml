@@ -24,7 +24,9 @@
             this._label_box = document.getAnonymousElementByAttribute(this, 'anonid', 'label-box');
             if (!this._label_box)
                  throw "XBL binding for <button type=\"touchkey\"/> must contain an element with anonid=\"label-box\"";
- 
+
+            this.obLabel = document.getAnonymousElementByAttribute(this, 'anonid', 'label');
+
             this._setLabel();
             this._setAction();
             
@@ -53,7 +55,17 @@
                 ]]>
            </setter>
         </property>
-                
+
+        <property name="label"
+                onget="return this.getAttribute('label')">
+            <setter><![CDATA[
+                this.setAttribute('label', val);
+                this._setLabel();
+                return val;
+                ]]>
+           </setter>
+        </property>
+
         <property name="cols"
                 onget="return this.getAttribute('cols')" >
             <setter><![CDATA[
@@ -94,7 +106,7 @@
         <body><![CDATA[
             // set the text of the label so it is wrapped
             // TODO prolly want to set/get property+attrib as well
-            var label = document.getAnonymousElementByAttribute(this, 'anonid', 'label');
+            var label = this.obLabel;
             if (!label)
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
             var text = document.createTextNode(this.getAttribute('label')); 

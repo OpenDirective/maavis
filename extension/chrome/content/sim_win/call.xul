@@ -8,14 +8,16 @@
     <script type="application/javascript" src="chrome://sim_win/content/page.js" />
     <script type="application/javascript" src="chrome://sim_win/content/call.js" />
 
-<vbox>
     <touchpad  id="pad" flex='1' rows='5' cols='3'>
         <touchkey id="dse" row='0' col='0' rows='1' cols='2'
                 class='dse' label="Do something else" accesskey='s' 
                 action="goHome" />
-        <touchkey id="call" row='1' col='0' rows='1' cols='1' 
+        <touchkey id="call" row='2' col='0' rows='2' cols='1' 
                     class='top' label="Call" 
                     action="voipCall|stephenaleehome" accesskey='c' />
+        <touchkey id="answerCall" row='2' col='1' rows='2' cols='1' 
+                    class='top' label="Answer Call"
+                    action="voipAnswerCall" accesskey='c' />
     </touchpad>
-</vbox>
+
 </window>

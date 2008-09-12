@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["loadActions", "showPage", "goHome", "stopWindowName" ];
+var EXPORTED_SYMBOLS = ["loadActions", "showPage", "setHome", "goHome", "stopWindowName" ];
 
 const mainwindow = {};
 Components.utils.import("resource://modules/mainwindow.js", mainwindow);
@@ -47,24 +47,23 @@ function showPage(page /*...*/)
     }
     mainwindow.setProp("args", args); // pass args to new window
    
-    const fpage = "chrome://sim_win/content/" + page;
+    const fpage = config.getPageUrl(page);
     mainwindow.loadPage(fpage);
 }
 
     
 var window = undefined;
 
+const that = this;
 function setContext()
 {
     // set a [partial] global context for current page - need to use window eexplicitly
     window = mainwindow.getWindow();// so in scope chain
-    return window;                  // becomes this
+    return that;                  // becomes this
 }
 
-function loadActions(homePage)
+function loadActions()
 {
-    setHome(homePage);
-
     action.setAction('goHome', goHome, setContext);
     action.setAction('showPage', showPage, setContext);
     action.setAction('mediaPause', function(){ window.document.getElementById("player").togglePause()}, setContext);
