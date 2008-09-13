@@ -22,13 +22,13 @@ function readConfig(configFile)
     const strConfig = file.readFileToString(configFile);
     if ("" == strConfig)
         return {};
-    const configObj =  utils.fromJSON(strConfig);
+    const configObj =  utils.fromJson(strConfig);
     return configObj;
 }
 
 function writeConfig(configObj)
 {
-    const strConfig = utils.toJSON(configObj);
+    const strConfig = utils.toJson(configObj);
     file.writeStringToFile(strConfig);
 }
 
