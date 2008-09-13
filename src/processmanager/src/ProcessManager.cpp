@@ -143,9 +143,10 @@ NS_IMETHODIMP ProcessManager::Stop(PRBool *_retval NS_OUTPARAM)
   if (!mpid)
     return NS_ERROR_FAILURE;
 
+  const DWORD pid(mpid);
   mpid = 0; // assume dead whatever happens
   
-  HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, false, mpid);
+  HANDLE hProcess = OpenProcess(PROCESS_TERMINATE, false, pid);
   if (!hProcess)
   {
     *_retval = false;
