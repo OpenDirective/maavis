@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<bindings xmlns="http://www.mozilla.org/xbl"
+    xmlns:xbl="http://www.mozilla.org/xbl"
+    xmlns:html = "http://www.w3.org/1999/xhtml"
+    xmlns:xul  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    xmlns:svg  = "http://www.w3.org/2000/svg"
+    xmlns:xlink= "http://www.w3.org/1999/xlink">
+
+<script>
+</script>
+
+  <binding id="slideshow" display='xul:box'>
+    <content>
+       <xul:vbox anonid='box' class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
+                align="stretch" pack="center" orient="vertical" flex="1">
+            <html:img anonid='img1' flex='1' />
+        </xul:vbox> 
+      </content>
+
+<!--        <xul:touchkey anonid='key' class="box-inherit image-box" xbl:inherits="align,dir,pack,orient,image,image-scale"
+                align="stretch" flex="1">
+        </xul:touchkey> -->
+    
+    <resources>
+      <stylesheet src="chrome://maavis/skin/slideshow.css"/>
+    </resources>
+
+    <implementation>
+     <constructor><![CDATA[
+        this._item = null;
+        this._poller = null;
+        this._playlist = [];
+        
+        //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
+        var mythis = this    
+        function showImage()
+        {
+            if (mythis._readyFunc)
+            {
+                setTimeout(mythis._readyFunc, 1);
+            }
+        }
+        setTimeout(showImage, 100); // so layout completes without image
+        ]]>
+     </constructor> 
+
+   <property name="onPlayerReady"   
+            onget="return this._readyFunc;// attrib converts everthing to a string"
+            onset="this._readyFunc = val; return val;"/>
+
+   <property name="isPlaying" readonly="true"   
+            onget="return (this._poller != null);" />
+
+   <method name='play'>
+    <parameter name="mrl" />
+    <body><![CDATA[
+        this._playlist = [];
+        Components.utils.import("resource://modules/utils.js");
+        if (isArray(mrl))
+        {
+            const that = this;
+            function addToPlaylist(amrl)
+            {
+               that._playlist.push(amrl);
+            }
+            mrl.forEach(addToPlaylist);
+        }
+        else
+        {
+            var item = this._playlist.push(mrl);
+        }
+        
+        this._startPlaying();
+        ]]>
+    </body>
+    </method>
+
+   <method name='_pollState'>
+    <body><![CDATA[
+        if (this._item == null) 
+            this.item = 0;
+        this._item += 1;
+        if (this._item == this._playlist.length)
+            this._item = 0;
+
+        const img = document.getAnonymousElementByAttribute(this, 'anonid', 'img1');
+        img.src = this._playlist[this._item];
+        ]]>
+    </body>
+    </method>
+
+    <method name='_startPlaying'>
+    <body><![CDATA[
+        const prevState = (this._poller != null);
+        if (!this._poller)
+        {
+            const that = this;
+            this._poller = setInterval(function(){that._pollState();}, 4000);
+        }
+        this._pollState();
+        return prevState;
+        ]]>
+    </body>
+    </method>
+            
+   <method name='_stopPlaying'>
+    <body><![CDATA[
+        const prevState = (this._poller != null);
+        if (this._poller)
+        {
+            clearInterval(this._poller);
+            this._poller = null;
+        }
+        return prevState;
+        ]]>
+    </body>
+    </method>
+            
+   <method name='stop'>
+     <body><![CDATA[
+        this.stopPlaying();
+        ]]>
+    </body>
+    </method>
+ 
+   <method name='togglePause'>
+     <body><![CDATA[
+        if (this._poller)
+        {
+            this._stopPlaying();
+        }
+        else
+        {
+            this._startPlaying();
+        }
+        ]]>
+    </body>
+    </method>
+ 
+   <method name='restart'>
+    <body><![CDATA[
+        this._stopPlaying();
+        this._item = null;
+        this._startPlaying();
+        ]]>
+    </body>
+    </method>
+  
+  <method name='prevItem'>
+    <body><![CDATA[ // TODO sort out interaction with poller
+        const wasPlaying = this._stopPlaying();
+        this._item -= 1;
+        if (this._item < 0)
+            this._item = this._playlist.length-1;
+//        if (wasPlaying)
+//            this.startPlaying();
+        ]]>
+    </body>
+    </method>
+
+  <method name='nextItem'>
+    <body><![CDATA[
+        const wasPlaying = this._stopPlaying();
+        this._pollState();
+//        if (wasPlaying)
+//            this.startPlaying();
+        ]]>
+    </body>
+    </method>
+
+  </implementation>
+
+  </binding>
+  
+</bindings>
+

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html = "http://www.w3.org/1999/xhtml" width='1016' height='692'>
+
+    <script type="application/javascript" src="chrome://maavis/content/page.js" />
+    <script type="application/javascript" src="chrome://maavis/content/slideshow.js" />
+
+    <touchpad flex='1' rows='5' cols='5'>
+        <touchkey id="dse" row='0' col='0' rows='1' cols='3'
+                class='dse' label="Do something else" accesskey='s' 
+                action="goHome" />
+                
+        <slideshow id="player" row='1' col='1' rows='3' cols='3' />
+        
+        <touchkey id="prev" row='4' col='1' rows='1' cols='1'
+                class='player_prev' label="Back" accesskey='b' 
+                image='chrome://maavis/skin/playerbuttons/back.png' 
+                action="mediaPrev" />
+        <togglekey id="pause" row='4' col='2' rows='1' cols='1'
+                class='player_pause' label='Pause' labelB="Play" accesskey='p' 
+                image='chrome://maavis/skin/playerbuttons/pause.png' 
+                imageB='chrome://maavis/skin/playerbuttons/play.png' 
+                action="mediaPause" />
+        <touchkey id="next" row='4' col='3' rows='1' cols='1'
+                class='player_next' label='Next' accesskey='n' 
+                image='chrome://maavis/skin/playerbuttons/forward.png' 
+                action="mediaNext" />
+    </touchpad>
+
+</window>

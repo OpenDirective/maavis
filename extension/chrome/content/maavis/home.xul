@@ -26,6 +26,10 @@
         <touchkey id="call" row='1' col='1' rows='1' cols='1' 
                     class='top' label="Run Something" 
                     action="progExec|hh.exe c:\program files\touchkit\userguide.chm" accesskey='c' />
+        <touchkey id="call" row='1' col='2' rows='1' cols='1' 
+                    class='top' label="Photos" 
+                    action="showPage|slideshow.xul,file:///%User%Photos/Flowers/" accesskey='c' />
+
         <chatterkey id="call" row='2' col='2' rows='1' cols='1' 
                     class='top' label="Say Something" spokenLabel="Zipper dee do dah, zipper dee day" speakOnLoad='true' 
                     action="" accesskey='s' />

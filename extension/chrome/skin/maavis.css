@@ -23,6 +23,10 @@ webbrowser {
     -moz-binding: url('chrome://maavis/content/bindings/browser.xml#browser');
 }
 
+slideshow{
+    -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slideshow');
+}
+
 .dse
 {
   color: green;
