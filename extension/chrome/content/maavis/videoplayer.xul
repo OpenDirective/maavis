@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xml-stylesheet href="chrome://sim_win/skin/sim_win.css" type="text/css"?>
+<?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html = "http://www.w3.org/1999/xhtml">
 
-    <script type="application/javascript" src="chrome://sim_win/content/page.js" />
-    <script type="application/javascript" src="chrome://sim_win/content/videoplayer.js" />
+    <script type="application/javascript" src="chrome://maavis/content/page.js" />
+    <script type="application/javascript" src="chrome://maavis/content/videoplayer.js" />
 
     <touchpad flex='1' rows='5' cols='3'>
         <touchkey id="dse" row='0' col='0' rows='1' cols='2'
@@ -15,17 +15,17 @@
                 
         <togglekey id="pause" row='1' col='2' rows='1' cols='1'
                 class='player_pause' label="Pause" labelB='Play' accesskey='p' 
-                image='chrome://sim_win/skin/playerbuttons/pause.png'
-                imageB='chrome://sim_win/skin/playerbuttons/play.png'                
+                image='chrome://maavis/skin/playerbuttons/pause.png'
+                imageB='chrome://maavis/skin/playerbuttons/play.png'                
                 action="mediaPause" />
                 
         <touchkey id="pause" row='3' col='2' rows='1' cols='1'
                 class='player_incvol' label="Louder" accesskey='m' 
-                image='chrome://sim_win/skin/playerbuttons/louder.png' 
+                image='chrome://maavis/skin/playerbuttons/louder.png' 
                 action="mediaLouder" />
         <touchkey id="pause" row='4' col='2' rows='1' cols='1'
                 class='player_incvol' label="Quieter" accesskey='q' 
-                image='chrome://sim_win/skin/playerbuttons/quieter.png' 
+                image='chrome://maavis/skin/playerbuttons/quieter.png' 
                 action="mediaQuieter" />
                 
         <videoplayer id='player' row='1' col='0' rows='4' cols='2' />

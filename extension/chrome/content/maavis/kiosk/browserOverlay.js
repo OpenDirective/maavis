@@ -1,4 +1,4 @@
-const _defaultHomePage = 'chrome://sim_win/content/sim_win.xul'
+const _defaultHomePage = 'chrome://maavis/content/maavis.xul'
 
 function kioskDoNothing()
 {
@@ -34,12 +34,12 @@ function kioskStartup()
     getService(Components.interfaces.nsIPrefBranch);
     
     // options from command line
-    var bNoKiosk = prefs.getBoolPref("sim_win.commandline.nokiosk");
-    var strHomePage = prefs.getCharPref("sim_win.commandline.homepage");
+    var bNoKiosk = prefs.getBoolPref("maavis.commandline.nokiosk");
+    var strHomePage = prefs.getCharPref("maavis.commandline.homepage");
 
     if (!bNoKiosk)
     {
-        const strKioskOverlay = 'chrome://sim_win/content/kiosk/browserOverlay2.xul';
+        const strKioskOverlay = 'chrome://maavis/content/kiosk/browserOverlay2.xul';
         window.addEventListener("load", function foo() {
                 document.loadOverlay(strKioskOverlay, null);
             }, true);

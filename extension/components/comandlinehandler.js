@@ -8,15 +8,15 @@ const nsIFactory            = Components.interfaces.nsIFactory;
 const nsIModule             = Components.interfaces.nsIModule;
 const nsIWindowWatcher      = Components.interfaces.nsIWindowWatcher;
 
-const CHROME_URI = "chrome://sim_win/content/sim_win.xul"; 
+const CHROME_URI = "chrome://maavis/content/maavis.xul"; 
 
-const clh_contractID = "@mozilla.org/commandlinehandler/general-startup;1?type=sim_win";
+const clh_contractID = "@mozilla.org/commandlinehandler/general-startup;1?type=maavis";
 
 const clh_CID = Components.ID("{412d63b0-639a-11dd-ad8b-0800200c9a66}");
 
 // category names are sorted alphabetically. Typical command-line handlers use a
 // category that begins with the letter "m".
-const clh_category = "m-sim_win";
+const clh_category = "m-maavis";
 
 function logit()
 {
@@ -51,7 +51,7 @@ function openWindow(aChromeURISpec, bKiosked)
                               .createInstance(Components.interfaces.nsIDialogParamBlock);
     params.SetInt(0, bKiosked);
   
-    ww.openWindow(null, aChromeURISpec, "sim_win",
+    ww.openWindow(null, aChromeURISpec, "maavis",
                     strFeatures,
                     params );
 }
@@ -82,7 +82,7 @@ const myAppHandler = {
     var uristr = '';
 
     var bNoKiosk = cmdLine.handleFlag("nokiosk", false);
-    prefs.setBoolPref("sim_win.commandline.nokiosk", bNoKiosk);
+    prefs.setBoolPref("maavis.commandline.nokiosk", bNoKiosk);
 
     try {
       uristr = cmdLine.handleFlagWithParam("xulpage", false);
@@ -100,7 +100,7 @@ const myAppHandler = {
         // TODO: handle -url and -chrome instead
       uristr = cmdLine.handleFlagWithParam("homepage", false);
       uristr = (uristr) ? uristr : '';
-      prefs.setCharPref("sim_win.commandline.homepage", uristr);
+      prefs.setCharPref("maavis.commandline.homepage", uristr);
     }
     catch (e) {
       Components.utils.reportError("incorrect parameter passed to -homepage on the command line.");

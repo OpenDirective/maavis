@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xml-stylesheet href="chrome://sim_win/skin/sim_win.css" type="text/css"?>
+<?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html = "http://www.w3.org/1999/xhtml" width='1016' height='692'>
 
-    <script type="application/javascript" src="chrome://sim_win/content/page.js" />
-    <script type="application/javascript" src="chrome://sim_win/content/videoplayer.js" />
+    <script type="application/javascript" src="chrome://maavis/content/page.js" />
+    <script type="application/javascript" src="chrome://maavis/content/videoplayer.js" />
 
     <videoplayer id='player' invisible="true" />
     
@@ -17,25 +17,25 @@
                 
         <touchkey id="prev" row='2' col='1' rows='1' cols='1'
                 class='player_prev' label="Play prev" accesskey='v' 
-                image='chrome://sim_win/skin/playerbuttons/back.png' 
+                image='chrome://maavis/skin/playerbuttons/back.png' 
                 action="mediaPrev" />
         <togglekey id="pause" row='2' col='2' rows='1' cols='1'
                 class='player_pause' label='Pause' labelB="Play" accesskey='p' 
-                image='chrome://sim_win/skin/playerbuttons/pause.png' 
-                imageB='chrome://sim_win/skin/playerbuttons/play.png' 
+                image='chrome://maavis/skin/playerbuttons/pause.png' 
+                imageB='chrome://maavis/skin/playerbuttons/play.png' 
                 action="mediaPause" />
         <touchkey id="next" row='2' col='3' rows='1' cols='1'
                 class='player_next' label="Play next" accesskey='p' 
-                image='chrome://sim_win/skin/playerbuttons/forward.png' 
+                image='chrome://maavis/skin/playerbuttons/forward.png' 
                 action="mediaNext" />
                 
         <touchkey id="pause" row='4' col='1' rows='1' cols='1'
                 class='player_incvol' label="Quieter" accesskey='q' 
-                image='chrome://sim_win/skin/playerbuttons/quieter.png' 
+                image='chrome://maavis/skin/playerbuttons/quieter.png' 
                 action="mediaQuieter" />
         <touchkey id="pause" row='4' col='2' rows='1' cols='1'
                 class='player_incvol' label="Louder" accesskey='m' 
-                image='chrome://sim_win/skin/playerbuttons/louder.png' 
+                image='chrome://maavis/skin/playerbuttons/louder.png' 
                 action="mediaLouder" />
     </touchpad>
 

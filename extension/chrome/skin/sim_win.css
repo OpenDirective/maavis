@@ -1,26 +1,26 @@
 touchpad
 {
-	-moz-binding: url("chrome://sim_win/content/bindings/touchpad.xml#touchpad");
+	-moz-binding: url("chrome://maavis/content/bindings/touchpad.xml#touchpad");
 }
 
 touchkey{
-	-moz-binding: url('chrome://sim_win/content/bindings/touchpad.xml#touchkey');
+	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#touchkey');
 }
 
 togglekey{
-	-moz-binding: url('chrome://sim_win/content/bindings/touchpad.xml#togglekey');
+	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#togglekey');
 }
 
 chatterkey{
-	-moz-binding: url('chrome://sim_win/content/bindings/touchpad.xml#chatterkey');
+	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#chatterkey');
 }
 
 videoplayer {
-    -moz-binding: url('chrome://sim_win/content/bindings/mediaplayer.xml#videop');
+    -moz-binding: url('chrome://maavis/content/bindings/mediaplayer.xml#videop');
 }
 
 webbrowser {
-    -moz-binding: url('chrome://sim_win/content/bindings/browser.xml#browser');
+    -moz-binding: url('chrome://maavis/content/bindings/browser.xml#browser');
 }
 
 .dse

@@ -14,7 +14,7 @@ Components.utils.import("resource://modules/utils.js", utils);
 
 function getPageUrl(page)
 {
-    return "chrome://sim_win/content/" + page;
+    return "chrome://maavis/content/" + page;
 }
 
 function readConfig(configFile)

@@ -17,7 +17,7 @@
     </content>
     
     <resources>
-      <stylesheet src="chrome://sim_win/skin/mediaplayer.css"/>
+      <stylesheet src="chrome://maavis/skin/mediaplayer.css"/>
     </resources>
 
     <implementation>

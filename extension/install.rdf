@@ -5,11 +5,11 @@ xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 
 	<Description about="urn:mozilla:install-manifest">
 
-		<em:id>sim_win@fullmeasure.co.uk</em:id>
+		<em:id>maavis@fullmeasure.co.uk</em:id>
 		<em:version>0.1.0</em:version>
 		<em:type>2</em:type>
-		<em:name>SIM WIN</em:name>
-		<em:description>SIM WIN - simple access to computer and communications</em:description>
+		<em:name>Maavis</em:name>
+		<em:description>Maavis - simple access to computer and communications</em:description>
 		<em:creator>Steve Lee</em:creator>
 		<em:targetApplication>
 			<Description>

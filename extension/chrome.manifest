@@ -1,8 +1,8 @@
-content	kiosk	chrome/content/sim_win/kiosk/
+content	kiosk	chrome/content/maavis/kiosk/
 overlay	chrome://browser/content/browser.xul	chrome://kiosk/content/browserOverlay.xul
 overlay	chrome://mozapps/content/xpinstall/xpinstallConfirm.xul	chrome://kiosk/content/xpinstallConfirmOverlay.xul
 overlay	chrome://mozapps/content/downloads/unknownContentType.xul	chrome://kiosk/content/unknownContentTypeOverlay.xul
 
-content	sim_win	chrome/content/sim_win/skin sim_win skin chrome/skin/
+content	maavis	chrome/content/maavis/skin maavis skin chrome/skin/
 resource modules modules/
 content	svgtest	chrome/content/svgtest/

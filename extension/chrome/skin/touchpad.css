@@ -113,7 +113,7 @@ touchkey[disabled="true"] > .touchkey-box {
 
 /* doesn't work yet */
 touchkey .touchkey-image {
-  list-style-image: url("chrome://sim_win/skin/playerbuttons/pause.png");
+  list-style-image: url("chrome://maavis/skin/playerbuttons/pause.png");
 }
 
 /** {border:solid;}*/

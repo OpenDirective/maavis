@@ -13,7 +13,7 @@
   <binding id="touchkey" display="xul:button" 
            extends="chrome://global/content/bindings/button.xml#button-base">
     <resources>
-      <stylesheet src="chrome://sim_win/skin/touchpad.css"/>
+      <stylesheet src="chrome://maavis/skin/touchpad.css"/>
     </resources>
 
     <implementation>
@@ -195,7 +195,7 @@
 
 
   <binding id="togglekey" 
-           extends="chrome://sim_win/content/bindings/touchpad.xml#touchkey">
+           extends="chrome://maavis/content/bindings/touchpad.xml#touchkey">
 
     <implementation>
         <constructor>
@@ -236,7 +236,7 @@
     </binding>
 
   <binding id="chatterkey" 
-           extends="chrome://sim_win/content/bindings/touchpad.xml#touchkey">
+           extends="chrome://maavis/content/bindings/touchpad.xml#touchkey">
 
     <implementation>
         <constructor>
@@ -278,7 +278,7 @@
 
    <binding id="touchpad">
     <resources>
-      <stylesheet src="chrome://sim_win/skin/touchpad.css"/>
+      <stylesheet src="chrome://maavis/skin/touchpad.css"/>
     </resources>
 
     <implementation>

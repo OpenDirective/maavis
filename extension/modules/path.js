@@ -18,7 +18,7 @@ function getAppDataDir()
                          .getService(Components.interfaces.nsIProperties)
                          .get("AppRegD", Components.interfaces.nsIFile);
     var simwinAppDir = dirAppData.parent.parent;
-    simwinAppDir.append("SIM_WIN");
+    simwinAppDir.append("maavis");
     return simwinAppDir;
     }
 
@@ -47,7 +47,7 @@ function buildPath(root)
     return path;
 }
 
-const _EXTID = 'sim_win@fullmeasure.co.uk';  //same as id in install.rdf
+const _EXTID = 'maavis@fullmeasure.co.uk';  //same as id in install.rdf
 
 function getExtensionRootPath(id)
 {
