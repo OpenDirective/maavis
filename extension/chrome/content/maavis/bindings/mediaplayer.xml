@@ -85,7 +85,8 @@
             vlc.playlist.playItem(item);
         }
         
-        this._poller = setInterval(this._pollState, 4000);
+        const that = this;
+        this._poller = setInterval(function(){that._pollState();}, 4000);
         ]]>
     </body>
     </method>
@@ -93,7 +94,7 @@
    <method name='_pollState'>
     <body><![CDATA[
         // TODO prolly need a state machine if vids can take a while to start
-        const vlc = mythis._vlc;
+        const vlc = this._vlc;
         if (vlc.input.state == 0) // idle
         {
             // hack but there seems no easy way, the API rather sucks here
