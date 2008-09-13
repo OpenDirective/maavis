@@ -22,13 +22,13 @@ function readConfig(configFile)
     const strConfig = file.readFileToString(configFile);
     if ("" == strConfig)
         return {};
-    const configObj =  utils.fromJson(strConfig);
+    const configObj =  utils.fromJSON(strConfig);
     return configObj;
 }
 
 function writeConfig(configObj)
 {
-    const strConfig = utils.toJson(configObj);
+    const strConfig = utils.toJSON(configObj);
     file.writeStringToFile(strConfig);
 }
 
@@ -129,7 +129,7 @@ function parseURI(str)
 
 function getUserContacts()
 {
-//    return [{vid: "stepxxxhenaleehome"}];
+    return [{vid: "stephenaleehome"}];
     return g_currentUserConfig.contacts;
 }
 

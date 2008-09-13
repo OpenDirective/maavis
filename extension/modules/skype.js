@@ -10,12 +10,29 @@ const _id = 0;
 var _csobserver = null;
 var _isAvailable = false;
 
+
+function _checkInstalled()
+{
+    const wrk = Components.classes["@mozilla.org/windows-registry-key;1"]
+                        .createInstance(Components.interfaces.nsIWindowsRegKey);
+    wrk.open(wrk.ROOT_KEY_CURRENT_USER,
+             "SOFTWARE\\Skype\\Phone",
+             wrk.ACCESS_READ);
+    const bInstalled = wrk.hasValue("SkypePath");
+    wrk.close();
+    return bInstalled
+}
+
 function init()
 {
+    if (!_checkInstalled())
+        return;
+        
     _proxy = server.serverProxy;
     _proxy.constructor(); // TODO sort this out - couldn't use declare as it used window
     _proxy.addObserver(_id, utils.bind(this, _onResponse));
-    _sendRequest('{"action": "launch"}'); //TODO need a statemachine to track success/failure/shutdown
+    _sendRequest('{"action": "launch"}');
+    //TODO need a statemachine to track success/failure/shutdown
     _isAvailable = true;
 }
 
@@ -31,6 +48,9 @@ function setCallStatusObserver(ob)
 
 function shutdown()
 {
+    if (!_isAvailable)
+        return;
+        
     _proxy.removeObserver(_id);
     _proxy.send(_id, '{"action" : "shutdown"}');
     _proxy.shutdown();
@@ -38,15 +58,27 @@ function shutdown()
     _isAvailable = false;
 }
 
-function call(who) {
+function call(who)
+{
+    if (!_isAvailable)
+        return;
+        
     _sendRequest( { action: "call", who: who } );
 }
 
-function endCall() {
+function endCall()
+{
+    if (!_isAvailable)
+        return;
+        
     _sendRequest( { action: "endcall"} );
 }
 
-function answerCall() {
+function answerCall() 
+{
+    if (!_isAvailable)
+        return;
+        
     _sendRequest( { action: "answercall"} );
 }
  

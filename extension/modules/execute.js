@@ -116,11 +116,12 @@ function execProc(prog)
 }
 
 function killProc()
-{
-    setContext();
+{   setContext();
     stopProcPoller();
     if (g_pm.isRunning())
+    {
         g_pm.stop();
+    }
     restoreUI();
 }   
 

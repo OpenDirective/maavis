@@ -10,7 +10,7 @@
 
     <touchpad flex='1' rows='1' cols='1'>
         <touchkey id="call" row='0' col='0' rows='1' cols='1' 
-                    class='stop_button' label="Stop" 
+                    class='stop_button' label="Finish" 
                     action="progKill" accesskey='s' />
     </touchpad>
 
