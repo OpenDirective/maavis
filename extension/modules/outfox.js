@@ -110,8 +110,18 @@ serverProxy=
         const execute = {};
         Components.utils.import("resource://modules/execute.js", execute);
         try {
-            const prog = "c:\\python25\\python.exe";
-            const args = utils.buildPath(null, 'platform', 'outfox.py').path + " " + port;
+            const useSource = false; // use the python source or the py2exe dist
+            var args, prog;
+            if (useSource)
+            {
+                prog = "python.exe";
+                args = utils.buildPath(null, 'platform', 'outfox.py').path + " " + port;
+            }
+            else
+            {
+                prog = utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').path; // renamed a use gets prompted by skype first time
+                args = port;
+            }
             this._server_p = execute.exec( prog + " " + args);
         } catch(e) {
 	    // set the failure flag so all future observers receive the error

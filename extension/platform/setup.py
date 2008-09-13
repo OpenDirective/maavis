@@ -34,37 +34,32 @@ excludes = [
     'bz2',
     '_ssl',
     '_hashlib',
-    'pygame.cdrom', 
-    'pygame.draw', 
-    'pygame.key',
-    'pygame.mouse',
-    'pygame.sprite',
-    'pygame.surface',
-    'pygame.mask',
-    'pygame.pixelarray',
-    'pygame.overlay',
-    'pygame.time',
-    'pygame.transform'
-    'pygame.font',
-    'pygame.sysfont',
-    'pygame.movie',
-    'pygame.movieext',
-    'pygame.scrap',
-    'pygame.surfarray',
-    'pygame.numpyarray',
-    'pygame.image',
-    'pygame.imagext'
     ]
-typelibs = [('{C866CA3A-32F7-11D2-9602-00C04F8EE628}', 0, 5, 0)]
-packages = ['encodings', 'win32']
+packages = ['encodings', 'win32skype', 'Skype4Py']
+#includes = ['Skype4Py.API.ICommand']
 
-setup(console=["outfox.py"],
-      version='0.1.1',
+maavis_skype_server = {
+    # for the versioninfo resources
+    "version" : "0.1.0",
+    "company_name" : "Fullmeasure",
+    "copyright" : "Copyright 2008 Fullmeasure",
+    "name" : "Maavis Skype Server",
+    "description" : "Maavis Skype Server",
+
+    "script" : "outfox.py",
+    "dest_base" :"MaavisSkypeServer"   # .exe name
+}
+
+setup(name='Outfox for Skype',
+      version='0.1.0',
+      description='Mavis skype server. Based on  Outfox server from CCAT',
+      author='Steve Lee, CCAT',
+      console=[maavis_skype_server],
       options={"py2exe": {"compressed": 1,
                           'optimize': 2,
                           'excludes' : excludes,
+#                          'includes' : includes,
                           'dll_excludes': dll_excludes,
-                          'typelibs': typelibs,
                           'packages': packages
                           }}
 )

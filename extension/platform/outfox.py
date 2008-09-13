@@ -92,13 +92,13 @@ class Outfox(object):
         self.server.sendMessage(msg)
 
     def _findModule(self):
-        if sys.platform == 'darwin':
-            pkg = 'osx'
-        elif sys.platform == 'win32':
+        pkg = 'win32skype'
+#        if sys.platform == 'darwin':
+#            pkg = 'osx'
+#        elif sys.platform == 'win32':
             #pkg = 'win32'
-            pkg = 'win32skype'
-        else:
-            pkg = 'nix'
+#        else:
+#            pkg = 'nix'
         module = None
         try:
             module = __import__(pkg)

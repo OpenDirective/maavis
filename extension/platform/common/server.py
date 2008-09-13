@@ -21,6 +21,7 @@ import socket
 
 DELIMITER = '\3'
 
+
 class JSONServer(asynchat.async_chat, object):
     def __init__(self, port):
         asynchat.async_chat.__init__(self)
@@ -50,7 +51,9 @@ class JSONServer(asynchat.async_chat, object):
         self.observer.shutdown()
 
     def handle_expt(self):
-        asynchat.async_chat.handle_expt(self)
+        import traceback
+        traceback.print_exc()
+        #asynchat.async_chat.handle_expt(self)
         # close the socket so we can quit
         self.close()
         self.observer.shutdown()
