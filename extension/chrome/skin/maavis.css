@@ -27,6 +27,11 @@ slideshow{
     -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slideshow');
 }
 
+slide{
+    -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slide');
+}
+
+
 .dse
 {
   color: green;
@@ -35,4 +40,8 @@ slideshow{
 .stop
 {
 	color: red;
+}
+
+slideshow
+{
 }

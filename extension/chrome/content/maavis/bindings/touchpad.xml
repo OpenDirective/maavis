@@ -331,6 +331,21 @@
                     key._setImage();
                     key._setLabel();
                 }
+                else if (key.nodeName == "slide")
+                {   
+                    key.setAttribute('top', key.getAttribute('row') * size.h);
+                    key.setAttribute('left', key.getAttribute('col') * size.w);
+                    key.setAttribute('height', key.getAttribute('rows') * size.h);
+                    key.setAttribute('width', key.getAttribute('cols') * size.w);
+                    key.scaleImage();
+                }
+                else if (key.nodeName == "slideshow")
+                {   
+                    key.setAttribute('top', key.getAttribute('row') * size.h);
+                    key.setAttribute('left', key.getAttribute('col') * size.w);
+                    key.setAttribute('height', key.getAttribute('rows') * size.h);
+                    key.setAttribute('width', key.getAttribute('cols') * size.w);
+                }
                 else
                 {
                     key.setAttribute('top', key.getAttribute('row') * size.h);

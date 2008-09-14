@@ -13,7 +13,7 @@
                 class='dse' label="Do something else" accesskey='s' 
                 action="goHome" />
                 
-        <slideshow id="player" row='1' col='1' rows='3' cols='3' />
+        <slideshow id="player" row='1' col='1' rows='3' cols='3'/>
         
         <touchkey id="prev" row='4' col='1' rows='1' cols='1'
                 class='player_prev' label="Back" accesskey='b' 

@@ -11,16 +11,9 @@
 
   <binding id="slideshow" display='xul:box'>
     <content>
-       <xul:vbox anonid='box' class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
-                align="stretch" pack="center" orient="vertical" flex="1">
-            <html:img anonid='img1' flex='1' />
-        </xul:vbox> 
-      </content>
+       <xul:slide anonid='img1' flex='1' xbl:inherits="top,left,width,height"/>
+    </content>
 
-<!--        <xul:touchkey anonid='key' class="box-inherit image-box" xbl:inherits="align,dir,pack,orient,image,image-scale"
-                align="stretch" flex="1">
-        </xul:touchkey> -->
-    
     <resources>
       <stylesheet src="chrome://maavis/skin/slideshow.css"/>
     </resources>
@@ -51,6 +44,10 @@
    <property name="isPlaying" readonly="true"   
             onget="return (this._poller != null);" />
 
+    <property name="rate"
+            onget="return this.getAttribute('rate')"
+            onset="this.setAttribute('rate', val); return val;"/>
+
    <method name='play'>
     <parameter name="mrl" />
     <body><![CDATA[
@@ -75,16 +72,35 @@
     </body>
     </method>
 
-   <method name='_pollState'>
+   <method name='_showNext'>
+    <parameter name="back"/>
     <body><![CDATA[
         if (this._item == null) 
             this.item = 0;
-        this._item += 1;
-        if (this._item == this._playlist.length)
-            this._item = 0;
+        if (back)
+        {
+            this._item -= 1;
+            if (this._item < 0)
+                this._item = this._playlist.length-1;
+        }
+        else
+        {
+            this._item += 1;
+            if (this._item == this._playlist.length)
+                this._item = 0;
+        }
+        this._showCurrent()
+        ]]>
+    </body>
+    </method>
 
+   <method name='_showCurrent'>
+    <body><![CDATA[
+        if (this._item == null) 
+            return;
+            
         const img = document.getAnonymousElementByAttribute(this, 'anonid', 'img1');
-        img.src = this._playlist[this._item];
+        img.image = this._playlist[this._item];
         ]]>
     </body>
     </method>
@@ -95,9 +111,11 @@
         if (!this._poller)
         {
             const that = this;
-            this._poller = setInterval(function(){that._pollState();}, 4000);
+            const rate = (this.rate == "") ? 5 : this.rate;
+            const msrate = rate * 1000;
+            this._poller = setInterval(function(){that._showNext();}, msrate);
         }
-        this._pollState();
+        this._showNext();   // show first
         return prevState;
         ]]>
     </body>
@@ -149,9 +167,7 @@
   <method name='prevItem'>
     <body><![CDATA[ // TODO sort out interaction with poller
         const wasPlaying = this._stopPlaying();
-        this._item -= 1;
-        if (this._item < 0)
-            this._item = this._playlist.length-1;
+        this._showNext(back=true);
 //        if (wasPlaying)
 //            this.startPlaying();
         ]]>
@@ -161,7 +177,7 @@
   <method name='nextItem'>
     <body><![CDATA[
         const wasPlaying = this._stopPlaying();
-        this._pollState();
+        this._showNext();
 //        if (wasPlaying)
 //            this.startPlaying();
         ]]>
@@ -171,6 +187,90 @@
   </implementation>
 
   </binding>
-  
+
+  <binding id="slide" display='xul:box'>
+    <content>
+      <xul:vbox anonid='image-frame' flex='1' />
+    </content>
+
+    <resources>
+      <stylesheet src="chrome://maavis/skin/slideshow.css"/>
+    </resources>
+
+    <implementation>
+    
+    <property name="image"
+            onget="return this.getAttribute('image')"
+            onset="this.setAttribute('image', val); this.scaleImage(); return val;"/>
+
+    <property name="image-scale"
+            onget="return this.getAttribute('image-scale')"
+            onset="this.setAttribute('image-scale', val); return val;"/>
+
+    <constructor><![CDATA[
+        ]]>
+     </constructor> 
+
+      <method name="scaleImage">
+        <body><![CDATA[
+          const scale = (!isNaN(this.image-scale)) ? this.image-scale : 1; // TODO why Nan and not empty string?
+          const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
+          if (!imageFrame)
+            throw "XBL binding for <type=\"slide\"/> binding must contain an element with anonid=\"image-frame\"";
+          var src = this.getAttribute('image');
+          if (src)
+          {
+              var config = {};
+              Components.utils.import("resource://modules/config.js", config);
+              src = config.parseURI(src); // TODO review bad design having this here
+              
+              function setImageSizez()
+              {
+                // resize to fit keeping aspect ratio
+                const imageWidth = this.naturalWidth;
+                const imageHeight = this.naturalHeight;
+                const availableWidth = imageFrame.boxObject.width; // note could also use getComputedStyle
+                const availableHeight = imageFrame.boxObject.height;
+                var width = availableWidth;
+                var height = availableWidth * imageHeight / imageWidth;
+                if (height > availableHeight)
+                {
+                    height = availableHeight;
+                    width = availableHeight * imageWidth / imageHeight;
+                }
+                
+                imageFrame.align='center';
+                imageFrame.pack='center';
+
+                function setImageSize()
+                {
+                    // add child image (xul:image) not HTML to avoid display problems
+                    var i = document.createElement('image');
+                    i.setAttribute('class', 'touchkey-image');
+                    i.setAttribute('src', src);
+                    i.width = width * scale;
+                    i.height = height * scale;
+                    if (imageFrame.firstChild)
+                      imageFrame.replaceChild(i, imageFrame.firstChild);
+                    else
+                      imageFrame.appendChild(i);
+                }
+                  
+                setTimeout(setImageSize, 1); // seem to need this as well
+              }
+              
+              // create a temp HTML img which includes the actual image size so we can keep aspect ratio
+              var i = document.createElementNS("http://www.w3.org/1999/xhtml", 'img');
+              i.setAttribute('src', src);
+              i.onload = setImageSizez;
+            }
+        ]]>
+        </body>
+      </method>
+
+  </implementation>
+
+  </binding>
+ 
 </bindings>
 
