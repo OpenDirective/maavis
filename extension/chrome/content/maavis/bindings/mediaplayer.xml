@@ -13,7 +13,6 @@
 
   <binding id="videop" display='xul:box'>
     <content>
-      <broadcaster anonid="play_state" playing="false"/>
     </content>
     
     <resources>
@@ -25,6 +24,8 @@
         this._MINVOL = 0;
         this._MAXVOL = 200
      
+        this._setBroadcaster();
+        
         //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
         var mythis = this    
          function showImage()
@@ -62,7 +63,33 @@
 
 
    <property name="isPlaying" readonly="true"   
-            onget="return this._vlc.playlist.isPlaying;" />
+            onget="return (this._vlc.playlist.isPlaying) ? 'true' : 'false';" />
+
+   <method name='_setBroadcaster'>
+    <body><![CDATA[
+        const broadcasterId = this.id+'_bc';
+        if (document.getElementById(broadcasterId) == undefined) // TODO: only one, destructor
+        {
+            const bc = document.createElement("broadcaster");
+            bc.setAttribute("isPlaying", "false");
+            bc.id = broadcasterId;
+            this.appendChild(bc);
+            this.bc = bc;
+        }
+        else
+            this.bc = document.getElementById(broadcasterId);
+        
+        ]]>
+    </body>
+    </method>
+
+   <method name='_broadcast'>
+    <parameter name="playing" />
+    <body><![CDATA[
+        this.bc.setAttribute("isPlaying", playing);
+        ]]>
+    </body>
+    </method>
 
    <method name='play'>
     <parameter name="mrl" />
@@ -87,6 +114,7 @@
         
         const that = this;
         this._poller = setInterval(function(){that._pollState();}, 4000);
+        this._broadcast("true");
         ]]>
     </body>
     </method>
@@ -117,6 +145,7 @@
         if (this._poller)
             clearInterval(this._poller);
         this._vlc.playlist.stop();
+        this._broadcast("false");
         ]]>
     </body>
     </method>
@@ -125,9 +154,15 @@
      <body><![CDATA[
         // no need to close poller as it will see we are paused
         if (this._vlc.input.state == 3) // playing
+        {
             this._vlc.playlist.togglePause();
+            this._broadcast("false");
+        }
         else if (this._vlc.input.state == 4) // paused
+        {
             this._vlc.playlist.play();
+            this._broadcast("true");
+        }
         ]]>
     </body>
     </method>
@@ -180,7 +215,7 @@
   <method name='changeVolume'>
     <parameter name="upDown" />
     <body><![CDATA[
-        const VOLSTEPS = 8;
+        const VOLSTEPS = 7;
         const VOLSTEP = Math.floor(this._MAXVOL / VOLSTEPS);
         const delta =  (upDown > 0) ? VOLSTEP : (upDown < 0) ? -VOLSTEP : 0;
         var newVol = this._vlc.audio.volume + delta

@@ -86,6 +86,8 @@ function loadActions()
 
     action.setAction('progExec', execute.execProc, setContext);
     action.setAction('progKill', execute.killProc, setContext);
+
+    action.setAction('logout', function(){window.alert('quit');}, setContext);
 }
 
 // EOF

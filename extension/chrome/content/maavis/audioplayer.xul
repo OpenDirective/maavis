@@ -23,7 +23,7 @@
                 class='player_pause' label='Pause' labelB="Play" accesskey='p' 
                 image='chrome://maavis/skin/playerbuttons/pause.png' 
                 imageB='chrome://maavis/skin/playerbuttons/play.png' 
-                action="mediaPause" />
+                action="mediaPause" autoToggle='false' watch='player.isPlaying' />
         <touchkey id="next" row='2' col='3' rows='1' cols='1'
                 class='player_next' label="Play next" accesskey='p' 
                 image='chrome://maavis/skin/playerbuttons/forward.png' 

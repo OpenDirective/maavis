@@ -23,6 +23,8 @@
         this._item = null;
         this._poller = null;
         this._playlist = [];
+
+        this._setBroadcaster();
         
         //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
         var mythis = this    
@@ -42,11 +44,37 @@
             onset="this._readyFunc = val; return val;"/>
 
    <property name="isPlaying" readonly="true"   
-            onget="return (this._poller != null);" />
+            onget="return (this._poller != null) ? 'true' : 'false';" />
 
     <property name="rate"
             onget="return this.getAttribute('rate')"
             onset="this.setAttribute('rate', val); return val;"/>
+
+   <method name='_setBroadcaster'>
+    <body><![CDATA[
+        const broadcasterId = this.id+'_bc';
+        if (document.getElementById(broadcasterId) == undefined) // TODO: only one, destructor
+        {
+            const bc = document.createElement("broadcaster");
+            bc.setAttribute("isPlaying", "false");
+            bc.id = broadcasterId;
+            this.parentNode.appendChild(bc);
+            this.bc = bc;
+        }
+        else
+            this.bc = document.getElementById(broadcasterId);
+        
+        ]]>
+    </body>
+    </method>
+
+   <method name='_broadcast'>
+    <parameter name="playing" />
+    <body><![CDATA[
+        this.bc.setAttribute("isPlaying", playing);
+        ]]>
+    </body>
+    </method>
 
    <method name='play'>
     <parameter name="mrl" />
@@ -116,6 +144,7 @@
             this._poller = setInterval(function(){that._showNext();}, msrate);
         }
         this._showNext();   // show first
+        this._broadcast("true");
         return prevState;
         ]]>
     </body>
@@ -129,6 +158,7 @@
             clearInterval(this._poller);
             this._poller = null;
         }
+        this._broadcast("false");
         return prevState;
         ]]>
     </body>

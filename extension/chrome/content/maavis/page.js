@@ -18,9 +18,10 @@ const page =
     _enableAnswerCall: function (enable, text)
     {
         enable = enable || false;
-        const ac = document.getElementById("answerCall");
-        if (ac)
+        var ac = document.getElementsByClassName("answer");
+        if (ac.length && ac[0])
         {
+            ac = ac[0];
             ac.setAttribute("disabled", enable ? "false" : "true");
             if (enable)
             {

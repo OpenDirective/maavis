@@ -1,0 +1,33 @@
+touchpad
+{
+	-moz-binding: url("chrome://maavis/content/bindings/touchpad.xml#touchpad");
+}
+
+touchkey{
+	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#touchkey');
+}
+
+togglekey{
+	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#togglekey');
+}
+
+chatterkey{
+	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#chatterkey');
+}
+
+videoplayer {
+    -moz-binding: url('chrome://maavis/content/bindings/mediaplayer.xml#videop');
+}
+
+webbrowser {
+    -moz-binding: url('chrome://maavis/content/bindings/browser.xml#browser');
+}
+
+slideshow{
+    -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slideshow');
+}
+
+slide{
+    -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slide');
+}
+

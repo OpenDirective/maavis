@@ -1,10 +1,8 @@
 slide {
-  margin: 5px;
+  margin: 8px;
 }
 
 slideshow {
   margin: 0;
-  -moz-outline: red solid 0px;
-  -moz-outline-radius: 10%;
 }
 

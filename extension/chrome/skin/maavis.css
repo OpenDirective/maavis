@@ -1,47 +1,69 @@
-touchpad
-{
-	-moz-binding: url("chrome://maavis/content/bindings/touchpad.xml#touchpad");
-}
-
-touchkey{
-	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#touchkey');
-}
-
-togglekey{
-	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#togglekey');
-}
-
-chatterkey{
-	-moz-binding: url('chrome://maavis/content/bindings/touchpad.xml#chatterkey');
-}
-
-videoplayer {
-    -moz-binding: url('chrome://maavis/content/bindings/mediaplayer.xml#videop');
-}
-
-webbrowser {
-    -moz-binding: url('chrome://maavis/content/bindings/browser.xml#browser');
-}
-
-slideshow{
-    -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slideshow');
-}
-
-slide{
-    -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slide');
-}
-
-
-.dse
-{
-  color: green;
-}
-
-.stop
-{
-	color: red;
-}
+@import url("bindings.css");
+@import url("chrome://global/skin/");
 
 slideshow
 {
+}
+
+touchkey,
+togglekey,
+chatterkey
+{
+  color: white;
+  background-color: blue;
+  border-color: darkblue;
+  -moz-border-radius: 15px;
+  margin:5px;
+}
+
+window
+{
+	border: 0px;
+	background: lightgoldenrodyellow;
+}
+
+window.transient
+{
+	background: transparent;
+}
+
+touchkey.stop_button
+{
+  color: white;
+  background-color: red;
+  border-color: darkred;
+  font-size: 36pt;
+}
+
+touchkey.otherthings
+{
+  color: white;
+  background-color: green;
+  border-color: darkgreen;
+}
+
+touchkey.quit
+{
+  color: white;
+  background-color: red;
+  border-color: darkred;
+}
+
+touchkey.answer
+{
+  color: white;
+  background-color: orange;
+  border-color: darkorange;
+}
+
+chatterkey.message
+{
+  color: yellow;
+  background-color: lightblue;
+  border-color: darkblue;
+}
+
+touchkey[disabled="true"],
+touchkey[disabled="true"]:hover:active {
+  color: GrayText;
 }

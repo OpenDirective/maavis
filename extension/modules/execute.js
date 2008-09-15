@@ -38,6 +38,7 @@ function pollProc()
     setTopmost();
     if( g_chkProc && !g_pm.isRunning())
     {
+        g_pm.stop();
         restoreUI();
     }
 }

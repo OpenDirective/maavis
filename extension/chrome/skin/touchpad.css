@@ -1,35 +1,30 @@
 touchpad {
-  background-color: lightgrey;
+  background-color: transparent;
 }
 
 touchkey,
-togglekey {
-/*  -moz-appearance: button;*/
-  margin: 5px 5px 5px 5px;
- /* min-width: 6.3em;*/
-  border: 3px solid;
-/*  -moz-border-top-colors: transparent ThreeDHighlight ThreeDLightShadow;
-  -moz-border-right-colors: transparent ThreeDDarkShadow ThreeDShadow;
-  -moz-border-bottom-colors: transparent ThreeDDarkShadow ThreeDShadow;
-  -moz-border-left-colors: transparent ThreeDHighlight ThreeDLightShadow;
-  background-color: ThreeDFace;
-  color: ButtonText;*/
-  border-color: blue;
+togglekey,
+chatterkey {
+  margin: 1px;
+  border: 4px solid;
+  border-color: darkblue;
   color: blue;
-  background-color: pink;
+  background-color: white;
 }
 
 .touchkey-box {
   -moz-appearance: button-focus;
-  border: 1px solid transparent;
-  padding-top: 1px;
-  padding-bottom: 2px;
+  border: 0px solid transparent;
+  padding: 0px;
+  margin: 3px;
   -moz-padding-start: 3px;
   -moz-padding-end: 4px;
 }
 
 .touchkey-image {
-  margin-right: 2px;
+  border: 0px solid transparent;
+  padding: 0px;
+  margin: 0px;
 }
 
 .touchkey-text {
@@ -97,10 +92,6 @@ touchkey[checked="true"] > .touchkey-box {
 
 touchkey[disabled="true"],
 touchkey[disabled="true"]:hover:active {
-  -moz-border-top-colors: transparent ThreeDHighlight ThreeDLightShadow !important;
-  -moz-border-right-colors: transparent ThreeDDarkShadow ThreeDShadow !important;
-  -moz-border-bottom-colors: transparent ThreeDDarkShadow ThreeDShadow !important;
-  -moz-border-left-colors: transparent ThreeDHighlight ThreeDLightShadow !important;
   color: GrayText;
 }
 

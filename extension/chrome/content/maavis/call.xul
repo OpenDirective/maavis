@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -16,7 +15,7 @@
                     class='top' label="Call" 
                     action="voipCall|stephenaleehome" accesskey='c' />
         <touchkey id="answerCall" row='2' col='1' rows='2' cols='1' 
-                    class='top' label="Answer Call"
+                    class='answer' label="Answer Call"
                     action="voipAnswerCall" accesskey='c' />
     </touchpad>
 
