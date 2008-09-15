@@ -288,7 +288,7 @@
           this._tts = Components.classes["@fullmeasure.co.uk/tts;1"]
                          .getService(Components.interfaces.ITTS);
 
-            if (this.speakOnLoad)
+            if (this.speakOnLoad == "true")
             {
                 var that = this;
                 window.setTimeout(function(){that.speak();}, 100);
@@ -397,10 +397,10 @@
                 }
                 else
                 {
-                    key.setAttribute('top', key.getAttribute('row') * size.h);
-                    key.setAttribute('left', key.getAttribute('col') * size.w);
-                    key.setAttribute('height', (key.getAttribute('rows') * size.h) - vmargin);
-                    key.setAttribute('width', (key.getAttribute('cols') * size.w) - hmargin);
+                    key.setAttribute('top', key.getAttribute('row') * size.v);
+                    key.setAttribute('left', key.getAttribute('col') * size.h);
+                    key.setAttribute('height', (key.getAttribute('rows') * size.v) - vmargin);
+                    key.setAttribute('width', (key.getAttribute('cols') * size.h) - hmargin);
                 }
         ]]>
         </body>

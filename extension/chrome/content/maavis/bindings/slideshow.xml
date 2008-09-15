@@ -77,23 +77,27 @@
     </method>
 
    <method name='play'>
-    <parameter name="mrl" />
+    <parameter name="args" />
     <body><![CDATA[
         this._playlist = [];
         Components.utils.import("resource://modules/utils.js");
-        if (isArray(mrl))
+        const that = this;
+        function addToPlaylist(mrl)
         {
-            const that = this;
-            function addToPlaylist(amrl)
+            if (isArray(mrl))
             {
-               that._playlist.push(amrl);
+                function addToPlaylist(amrl)
+                {
+                   that._playlist.push(amrl);
+                }
+                mrl.forEach(addToPlaylist);
             }
-            mrl.forEach(addToPlaylist);
+            else
+            {
+                var item = that._playlist.push(mrl);
+            }
         }
-        else
-        {
-            var item = this._playlist.push(mrl);
-        }
+        args.forEach(addToPlaylist);
         
         this._startPlaying();
         ]]>

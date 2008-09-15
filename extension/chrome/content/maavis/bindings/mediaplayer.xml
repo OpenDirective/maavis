@@ -92,25 +92,29 @@
     </method>
 
    <method name='play'>
-    <parameter name="mrl" />
+    <parameter name="args" />
     <body><![CDATA[
         const vlc = this._vlc;
         vlc.playlist.clear();
         Components.utils.import("resource://modules/utils.js");
-        if (isArray(mrl))
+        function addToPlaylist(mrl)
         {
-            function addToPlaylist(amrl)
+            if (isArray(mrl))
             {
-               vlc.playlist.add(amrl);
+                function addToPlaylist(amrl)
+                {
+                   vlc.playlist.add(amrl);
+                }
+                mrl.forEach(addToPlaylist);
+                vlc.playlist.play(); // first I hope
             }
-            mrl.forEach(addToPlaylist);
-            vlc.playlist.play(); // first I hope
+            else
+            {
+                var item = vlc.playlist.add(mrl);
+                vlc.playlist.playItem(item);
+            }
         }
-        else
-        {
-            var item = vlc.playlist.add(mrl);
-            vlc.playlist.playItem(item);
-        }
+        args.forEach(addToPlaylist);
         
         const that = this;
         this._poller = setInterval(function(){that._pollState();}, 4000);

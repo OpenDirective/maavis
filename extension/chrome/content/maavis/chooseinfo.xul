@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html = "http://www.w3.org/1999/xhtml">
+
+    <script type="application/javascript" src="chrome://maavis/content/page.js" />
+    <script type="application/javascript" src="chrome://maavis/content/home.js" />
+
+    <touchpad flex='1' rows='10' cols='10'>
+        <chatterkey row='0' col='0' rows='1' cols='10'
+                class='message'
+                label="Touch the topic you want to read" speakOnLoad='true'/>
+                
+        <touchkey row='1' col='6' rows='1' cols='4'
+                class='otherthings' label="Other things to do" accesskey='o' 
+                action="goHome" />
+
+        <touchkey row='2' col='6' rows='1' cols='2'
+                class='answer' label="Answer" accesskey='a' 
+                action="voipAnswerCall" />
+        <touchkey row='2' col='8' rows='1' cols='2'
+                class='quit' label="Bye" accesskey='l' 
+                action="logout" />
+                
+        <touchkey row='1' col='0' rows='4' cols='3'
+                class='choice' label="Health information" accesskey='f'
+                action="showPage|browser.xul,http://www.nhsdirect.nhs.uk/" />
+        <touchkey row='1' col='3' rows='4' cols='3'
+                class='choice' label="Newspaper" accesskey='c' 
+                action="showPage|browser.xul,http://www.thepaperboy.com/uk/" />
+        <touchkey row='5' col='0' rows='4' cols='3'
+                class='choice' label="Advocacy" accesskey='c' 
+                action="showPage|browser.xul,http://www.opaal.org.uk/" />
+        <touchkey row='5' col='3' rows='4' cols='3'
+                class='choice' label="British Museum" accesskey='c' 
+                action="showPage|browser.xul,http://www.britishmuseum.org/"
+                                                />
+
+    </touchpad>
+
+</window>

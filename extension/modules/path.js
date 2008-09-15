@@ -70,10 +70,17 @@ function getInstallationPath()
 
 function expandURI(strURI, arURIs)
 {
-    const ios = Components.classes["@mozilla.org/network/io-service;1"]
-                        .getService(Components.interfaces.nsIIOService);
-    const URI = ios.newURI(strURI, null, null);
-    const fileURI = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+    try {
+        const ios = Components.classes["@mozilla.org/network/io-service;1"]
+                            .getService(Components.interfaces.nsIIOService);
+        const URI = ios.newURI(strURI, null, null);
+        const fileURI = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+        }
+    catch(err)
+    {
+        // not a file
+        return false;
+    }
               
     if (!fileURI.isDirectory())
     {

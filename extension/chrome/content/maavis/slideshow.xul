@@ -9,21 +9,23 @@
 
     <touchpad flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
-                label="Touch the album you want to look at" speakOnLoad='true'/>
+                class='message' 
+                label="Watch Slideshow" speakOnLoad='false'/>
+                
         <touchkey row='1' col='6' rows='1' cols='4'
-                class='otherthings' label="Other things to do ..." accesskey='o' 
-                action="goHome" />
+                class='goback' label="More Photos" accesskey='o' 
+                action="showPage|choosephoto.xul" />
 
         <touchkey row='2' col='6' rows='1' cols='2'
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
         <touchkey row='2' col='8' rows='1' cols='2'
-                class='quit' label="Quit" accesskey='l' 
+                class='quit' label="Bye" accesskey='l' 
                 action="logout" />
                 
         <togglekey id="pause" row='6' col='6' rows='2' cols='2'
-                class='player_pause' label='Stop' labelB="Play" accesskey='p' 
-                image='chrome://maavis/skin/playerbuttons/stop.png' 
+                class='player_pause' label='Pause' labelB="Play" accesskey='p' 
+                image='chrome://maavis/skin/playerbuttons/pause.png' 
                 imageB='chrome://maavis/skin/playerbuttons/play.png' 
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
         <touchkey id="prev" row='8' col='6' rows='2' cols='2'

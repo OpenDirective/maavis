@@ -10,6 +10,8 @@ chatterkey {
   border-color: darkblue;
   color: blue;
   background-color: white;
+  font-size: 35px;
+
 }
 
 .touchkey-box {
@@ -30,7 +32,6 @@ chatterkey {
 .touchkey-text {
   margin: 3px !important;
   text-align: center;
-  font-size: 28pt;
 }
 
 

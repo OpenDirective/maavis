@@ -20,6 +20,7 @@ window
 {
 	border: 0px;
 	background: lightgoldenrodyellow;
+	font-family: Verdana;
 }
 
 window.transient
@@ -32,10 +33,11 @@ touchkey.stop_button
   color: white;
   background-color: red;
   border-color: darkred;
-  font-size: 36pt;
+  font-size: 48px;
 }
 
-touchkey.otherthings
+touchkey.otherthings,
+touchkey.goback
 {
   color: white;
   background-color: green;
@@ -58,7 +60,7 @@ touchkey.answer
 
 chatterkey.message
 {
-  color: yellow;
+  color: Darkblue;
   background-color: lightblue;
   border-color: darkblue;
 }

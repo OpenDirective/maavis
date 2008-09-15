@@ -1,8 +1,12 @@
 function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
-    
-    var row = 1;
+ 
+    const url = mainwindow.getProp("args")[0];
+    var browser = document.getElementById('browser');
+    browser.setAttribute("src", url);
+ 
+/*    var row = 1;
     function addPad(item)
     {
        const pad = mainwindow.getElementById("pad");
@@ -11,7 +15,9 @@ function loadPage()
     
     var items = config.getUserConfig().web;
     items.forEach(addPad);
-    
+*/
+
+
 }
 
 window.addEventListener('load', loadPage, false);

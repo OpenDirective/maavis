@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -8,20 +7,42 @@
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
     <script type="application/javascript" src="chrome://maavis/content/browser.js" />
 
-        <touchpad id="pad" flex='1' rows='5' cols='4'>
-       <touchkey id="dse" row='0' col='0' rows='1' cols='3'
-                class='dse' label="Do something else" accesskey='s' 
-                action="goHome" />
-            <browser id="browser" row='1' col='0' rows='4' cols='3' src="http://news.bbc.co.uk/" autoscroll="true" type="content" />
- <!--           
-            <touchkey id="news" row='1' col='3' rows='1' cols='1' 
-                        class='top' label="Beeb" action="browseTo|http://news.bbc.co.uk" accesskey='b' />
-            <touchkey id="news" row='2' col='3' rows='1' cols='1' 
-                        class='top' label="last.fm" action="browseTo|http://www.last.fm/listen/globaltags/oldies" accesskey='f' />-->
-            <touchkey id="news" row='3' col='3' rows='1' cols='1' 
-                        class='top' label="Back" action="browseBack" accesskey='k' />
-            <touchkey id="news" row='4' col='3' rows='1' cols='1' 
-                        class='top' label="Refresh" action="browseReload" accesskey='b' />
-        </touchpad>
+    <touchpad id="pad" flex='1' rows='10' cols='10'>
+
+        <chatterkey row='0' col='0' rows='1' cols='10'
+                class='message' 
+                label="Read Information" speakOnLoad='false'/>
+                
+        <touchkey row='1' col='8' rows='1' cols='2'
+                class='goback' label="More Info" accesskey='o' 
+                action="showPage|chooseinfo.xul" />
+
+        <touchkey row='2' col='8' rows='1' cols='2'
+                class='answer' label="Answer" accesskey='a' 
+                action="voipAnswerCall" />
+        <touchkey row='3' col='8' rows='1' cols='2'
+                class='quit' label="Bye" accesskey='l' 
+                action="logout" />
+                
+        <browser id="browser" row='1' col='0' rows='8' cols='8' autoscroll="false" type="content" style="margin:6px;"/>
+           
+        <touchkey id="news" row='9' col='0' rows='1' cols='2' 
+                    class='top' label="Smaller" onclick="document.getElementById('browser').markupDocumentViewer.fullZoom-=.5;" accesskey='k'/>
+        <touchkey id="news" row='9' col='2' rows='1' cols='2' 
+                    class='top' label="Bigger" onclick="document.getElementById('browser').markupDocumentViewer.fullZoom+=.5;" accesskey='k'/>
+
+        <touchkey id="scrollU" row='9' col='4' rows='1' cols='1' 
+                    class='top' label="U" onclick="document.getElementById('browser').contentWindow.scrollBy(0, window.innerHeight)" accesskey='u'/>
+        <touchkey id="scrollD" row='9' col='5' rows='1' cols='1' 
+                    class='top' label="D" onclick="document.getElementById('browser').contentWindow.scrollBy(0, -window.innerHeight);" accesskey='d'/>
+        <touchkey id="scrollL" row='9' col='6' rows='1' cols='1' 
+                    class='top' label="L" onclick="document.getElementById('browser').contentWindow.scrollBy(window.innerWidth, 0);" accesskey='l'/>
+        <touchkey id="scrollR" row='9' col='7' rows='1' cols='1' 
+                    class='top' label="R" onclick="document.getElementById('browser').contentWindow.scrollBy(-window.innerWidth, 0);" accesskey='r'/>
+
+
+        <touchkey id="news" row='9' col='8' rows='1' cols='2' 
+                    class='top' label="Back" action="browseBack" accesskey='k'/>
+    </touchpad>
 
 </window>

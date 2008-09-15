@@ -2,7 +2,7 @@ function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
     
-    const mrls = mainwindow.getProp("args")[0];
+    const mrls = mainwindow.getProp("args");
     var player = document.getElementById('player');
     player.onPlayerReady = function(){ player.play(mrls); };
 }
