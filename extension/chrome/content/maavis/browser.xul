@@ -19,10 +19,7 @@
 
         <touchkey row='2' col='8' rows='1' cols='2'
                 class='answer' label="Answer" accesskey='a' 
-                action="showPage|answer.xul" />
-        <touchkey row='3' col='8' rows='1' cols='2'
-                class='quit' label="Bye" accesskey='l' 
-                action="logout" />
+                action="voipAnswerCall" />
                 
         <browser id="browser" row='1' col='0' rows='8' cols='8' autoscroll="false" type="content" style="margin:6px;"/>
            

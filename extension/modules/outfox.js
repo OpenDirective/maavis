@@ -119,6 +119,7 @@ serverProxy=
             }
             else
             {
+//               prog = 'cmd /c start "wnd" '+ utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').path; // renamed a use gets prompted by skype first time
                 prog = utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').path; // renamed a use gets prompted by skype first time
                 args = port;
             }

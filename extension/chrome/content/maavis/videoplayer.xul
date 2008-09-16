@@ -18,7 +18,7 @@
 
         <touchkey row='2' col='6' rows='2' cols='4'
                 class='answer' label="Answer" accesskey='a' 
-                action="showPage|answer.xul" />
+                action="voipAnswerCall" />
 
         <togglekey id="pause" row='6' col='6' rows='2' cols='2'
                 class='player_pause' label='Pause' labelB="Play" accesskey='p' 

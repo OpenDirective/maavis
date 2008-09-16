@@ -130,7 +130,8 @@ function execSkype()
 {
     setContext();
     g_chkProc = false; // messy
-    setProcessRunningUI(config.getPageUrl("endcall.xul"));
+//    setProcessRunningUI(config.getPageUrl("incall.xul"));
+    setProcessRunningUI(config.getPageUrl("incall.xul"));
 }
 
 function killSkype()

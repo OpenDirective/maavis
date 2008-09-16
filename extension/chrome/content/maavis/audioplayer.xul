@@ -10,33 +10,42 @@
 
     <videoplayer id='player' invisible="true" />
     
-    <touchpad flex='1' rows='5' cols='5'>
-        <touchkey id="dse" row='0' col='0' rows='1' cols='3'
-                class='dse' label="Do something else" accesskey='s' 
-                action="goHome" />
+    <touchpad flex='1' rows='10' cols='10'>
+        <chatterkey row='0' col='0' rows='1' cols='10'
+                class='message' 
+                label="Listen to Music" speakOnLoad='false'/>
                 
-        <touchkey id="prev" row='2' col='1' rows='1' cols='1'
-                class='player_prev' label="Play prev" accesskey='v' 
-                image='chrome://maavis/skin/playerbuttons/back.png' 
-                action="mediaPrev" />
-        <togglekey id="pause" row='2' col='2' rows='1' cols='1'
+         <touchkey row='1' col='6' rows='1' cols='4'
+                class='goback' label="More Music" accesskey='o' 
+                action="showPage|choosemusic.xul" />
+
+        <touchkey row='2' col='6' rows='2' cols='4'
+                class='answer' label="Answer" accesskey='a' 
+                action="voipAnswerCall" />
+
+        <togglekey id="pause" row='5' col='6' rows='2' cols='2'
                 class='player_pause' label='Pause' labelB="Play" accesskey='p' 
                 image='chrome://maavis/skin/playerbuttons/pause.png' 
                 imageB='chrome://maavis/skin/playerbuttons/play.png' 
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
-        <touchkey id="next" row='2' col='3' rows='1' cols='1'
+        <touchkey id="next" row='5' col='8' rows='2' cols='2'
                 class='player_next' label="Play next" accesskey='p' 
                 image='chrome://maavis/skin/playerbuttons/forward.png' 
                 action="mediaNext" />
                 
-        <touchkey id="pause" row='4' col='1' rows='1' cols='1'
+        <touchkey id="pause" row='7' col='6' rows='1' cols='4'
+                class='player_mute' label="Mute" accesskey='m' 
+                image='chrome://maavis/skin/playerbuttons/mute.png' 
+                action="mediaToggleMute" />
+        <touchkey id="pause" row='8' col='6' rows='1' cols='4'
                 class='player_incvol' label="Quieter" accesskey='q' 
                 image='chrome://maavis/skin/playerbuttons/quieter.png' 
                 action="mediaQuieter" />
-        <touchkey id="pause" row='4' col='2' rows='1' cols='1'
+        <touchkey id="pause" row='9' col='6' rows='1' cols='4'
                 class='player_incvol' label="Louder" accesskey='m' 
                 image='chrome://maavis/skin/playerbuttons/louder.png' 
                 action="mediaLouder" />
+
     </touchpad>
 
 </window>

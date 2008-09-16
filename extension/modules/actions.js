@@ -93,16 +93,16 @@ function loadActions()
     action.setAction('browseBack', function(){ window.document.getElementById("browser").goBack()}, setContext);
     action.setAction('browseForward', function(){ window.document.getElementById("browser").goForward()}, setContext);
     action.setAction('browseReload', function(){ window.document.getElementById("browser").reload()}, setContext);
-    action.setAction('browseZoomIn', function(){ window.document.getElementById('browser').markupDocumentViewer.fullZoom += .5;}, setContext);
-    action.setAction('browseZoomOut', function(){ window.document.getElementById('browser').markupDocumentViewer.fullZoom -= .5;}, setContext);
-    action.setAction('browseScrollUp', function(){ window.document.getElementById('browser').contentWindow.scrollBy(0, -window.innerHeight);}, setContext);
-    action.setAction('browseScrollDown', function(){ window.document.getElementById('browser').contentWindow.scrollBy(0, window.innerHeight);}, setContext);
-    action.setAction('browseScrollLeft', function(){ window.document.getElementById('browser').contentWindow.scrollBy(-window.innerWidth, 0);}, setContext);
-    action.setAction('browseScrollRight', function(){ window.document.getElementById('browser').contentWindow.scrollBy(window.innerWidth, 0);}, setContext);
+    action.setAction('browseZoomIn', function(){ window.document.getElementById('browser').markupDocumentViewer.fullZoom += .3;}, setContext);
+    action.setAction('browseZoomOut', function(){ window.document.getElementById('browser').markupDocumentViewer.fullZoom -= .3;}, setContext);
+    action.setAction('browseScrollUp', function(){ window.document.getElementById('browser').contentWindow.scrollBy(0, -window.innerHeight*.75);}, setContext);
+    action.setAction('browseScrollDown', function(){ window.document.getElementById('browser').contentWindow.scrollBy(0, window.innerHeight*.75);}, setContext);
+    action.setAction('browseScrollLeft', function(){ window.document.getElementById('browser').contentWindow.scrollBy(-window.innerWidth*.75, 0);}, setContext);
+    action.setAction('browseScrollRight', function(){ window.document.getElementById('browser').contentWindow.scrollBy(window.innerWidth*.75, 0);}, setContext);
 
     action.setAction('voipCall', function(vid){ if (skype.isAvailable) skype.call(vid); }, setContext);
     action.setAction('voipAnswerCall', function(){ if (skype.isAvailable) skype.answerCall(); }, setContext);
-    action.setAction('voipEndCall', function(){ if (skype.isAvailable) skype.endCall(); showPage(arguments[0]); }, setContext);
+    action.setAction('voipEndCall', function(){ if (skype.isAvailable) skype.endCall(); }, setContext);
 
     action.setAction('progExec', execute.execProc, setContext);
     action.setAction('progKill', execute.killProc, setContext);

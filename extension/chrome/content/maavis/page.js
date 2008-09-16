@@ -42,7 +42,7 @@ const page =
         var execute = {};
         Components.utils.import("resource://modules/execute.js", execute);
         
-        //this._enableAnswerCall(false);
+        this._enableAnswerCall(false);
         const that = this;
         
         if (skype.isAvailable())
@@ -69,6 +69,11 @@ const page =
                     if (contact.length != 0)
                     {
                         that._enableAnswerCall(true, partner);
+                        const player = document.getElementById("player");
+                        if (player && player.isPlaying() == 'true')
+                        {
+                           player.togglePause();
+                        }
                     }
                     else
                     {
