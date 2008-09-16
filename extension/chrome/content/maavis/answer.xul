@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html = "http://www.w3.org/1999/xhtml" class='transient'>
+
+    <script type="application/javascript" src="chrome://maavis/content/page.js" />
+    <script type="application/javascript" src="chrome://maavis/content/home.js" />
+
+    <touchpad  id="pad" flex='1' rows='10' cols='10'>
+        <touchkey row='0' col='7' rows='3' cols='2'
+                class='answer callbutton' label="Hang up" image="file:///%User%Images/hangup.jpeg" accesskey='a' 
+                action="voipEndCall|call.xul" />
+
+        <touchkey id="pause" row='8' col='6' rows='2' cols='2'
+                class='player_incvol callbutton' label="Quieter" accesskey='q' 
+                image='chrome://maavis/skin/playerbuttons/quieter.png' 
+                action="mediaQuieter" />
+        <touchkey id="pause" row='8' col='8' rows='2' cols='2'
+                class='player_incvol callbutton' label="Louder" accesskey='m' 
+                image='chrome://maavis/skin/playerbuttons/louder.png' 
+                action="mediaLouder" />
+
+    </touchpad>
+
+</window>

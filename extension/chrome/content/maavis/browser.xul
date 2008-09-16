@@ -19,7 +19,7 @@
 
         <touchkey row='2' col='8' rows='1' cols='2'
                 class='answer' label="Answer" accesskey='a' 
-                action="voipAnswerCall" />
+                action="showPage|answer.xul" />
         <touchkey row='3' col='8' rows='1' cols='2'
                 class='quit' label="Bye" accesskey='l' 
                 action="logout" />
@@ -27,18 +27,18 @@
         <browser id="browser" row='1' col='0' rows='8' cols='8' autoscroll="false" type="content" style="margin:6px;"/>
            
         <touchkey id="news" row='9' col='0' rows='1' cols='2' 
-                    class='top' label="Smaller" onclick="document.getElementById('browser').markupDocumentViewer.fullZoom-=.5;" accesskey='k'/>
+                    class='top' label="Smaller" action="browseZoomOut" accesskey='s'/>
         <touchkey id="news" row='9' col='2' rows='1' cols='2' 
-                    class='top' label="Bigger" onclick="document.getElementById('browser').markupDocumentViewer.fullZoom+=.5;" accesskey='k'/>
+                    class='top' label="Bigger" action="browseZoomIn" accesskey='l'/>
 
         <touchkey id="scrollU" row='9' col='4' rows='1' cols='1' 
-                    class='top' label="U" onclick="document.getElementById('browser').contentWindow.scrollBy(0, window.innerHeight)" accesskey='u'/>
+                    class='top' label="U" action="browseScrollUp" accesskey='u'/>
         <touchkey id="scrollD" row='9' col='5' rows='1' cols='1' 
-                    class='top' label="D" onclick="document.getElementById('browser').contentWindow.scrollBy(0, -window.innerHeight);" accesskey='d'/>
+                    class='top' label="D" action="browseScrollDown" accesskey='d'/>
         <touchkey id="scrollL" row='9' col='6' rows='1' cols='1' 
-                    class='top' label="L" onclick="document.getElementById('browser').contentWindow.scrollBy(window.innerWidth, 0);" accesskey='l'/>
+                    class='top' label="L" action="browseScrollLeft" accesskey='l'/>
         <touchkey id="scrollR" row='9' col='7' rows='1' cols='1' 
-                    class='top' label="R" onclick="document.getElementById('browser').contentWindow.scrollBy(-window.innerWidth, 0);" accesskey='r'/>
+                    class='top' label="R" action="browseScrollRight" accesskey='r'/>
 
 
         <touchkey id="news" row='9' col='8' rows='1' cols='2' 

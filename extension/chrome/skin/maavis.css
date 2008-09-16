@@ -28,6 +28,11 @@ window.transient
 	background: transparent;
 }
 
+touchkey.callbutton
+{
+	sopacity: 0.75;
+}
+
 touchkey.stop_button
 {
   color: white;
