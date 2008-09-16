@@ -5,7 +5,7 @@
         xmlns:html = "http://www.w3.org/1999/xhtml" class='transient'>
 
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
-    <script type="application/javascript" src="chrome://maavis/content/home.js" />
+    <script type="application/javascript" src="chrome://maavis/content/incall.js" />
 
     <touchpad  id="pad" flex='1' rows='10' cols='10'>
         <touchkey row='0' col='7' rows='3' cols='2'

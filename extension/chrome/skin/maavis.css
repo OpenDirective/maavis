@@ -10,9 +10,9 @@ togglekey,
 chatterkey
 {
   color: white;
-  background-color: blue;
+  background-color: #2C7DCF;
   border-color: darkblue;
-  -moz-border-radius: 15px;
+  -moz-border-radius: 20px;
   margin:5px;
 }
 
@@ -23,14 +23,23 @@ window
 	font-family: Verdana;
 }
 
+/*
 window.transient
 {
-	background: transparent;
+	backgsround: transparent;
 }
+*/
+
+window.splash
+{
+	background: white;
+	font-size: larger;
+}
+
 
 touchkey.callbutton
 {
-	sopacity: 0.75;
+	opacity: 0.75;
 }
 
 touchkey.stop_button
@@ -45,7 +54,7 @@ touchkey.otherthings,
 touchkey.goback
 {
   color: white;
-  background-color: green;
+  background-color: rgb(139,190,64);
   border-color: darkgreen;
 }
 
@@ -59,7 +68,7 @@ touchkey.quit
 touchkey.answer
 {
   color: white;
-  background-color: orange;
+  background-color: rgb(246,116,27);
   border-color: darkorange;
 }
 

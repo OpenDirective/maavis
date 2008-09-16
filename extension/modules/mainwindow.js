@@ -7,7 +7,7 @@ Components.utils.import("resource://modules/utils.js", utils);
 
 var _window = undefined;
 
-function showWindow(window, callback)
+function showWindow(window, callback, splashtime)
 {
     setWindow(window);
     const bKiosked = Boolean(winutils.getWindowIntArgument(window, 0));
@@ -22,7 +22,7 @@ function showWindow(window, callback)
                 callback(mwindow);// NOTE: there may be a fullscreen event we could use
             }
         }
-        window.setTimeout(func, 500); // must be async to work and cover Windows task bar
+        window.setTimeout(func, splashtime * 1000); // must be async to work and cover Windows task bar
     }
     else
     {

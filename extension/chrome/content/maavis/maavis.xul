@@ -3,13 +3,17 @@
 <?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
-        xmlns:html = "http://www.w3.org/1999/xhtml" width='800' height='600'>
+        xmlns:html = "http://www.w3.org/1999/xhtml" class='splash'>
 
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
     <script type="application/javascript" src="chrome://maavis/content/maavis.js" />
     
-    <vbox id='startpage'>
-        <description id='loading-screen'>Maavis is warming up, please wait....</description>
+    <vbox id='startpage' flex="1" pack="center" align="center">
+        <spacer flex="1" minheight="25px"/>
+        <image src="chrome://maavis/skin/Maavis.jpg" />
+        <spacer flex="1" minheight="10px"/>
+        <description flex="1" >Maavis is warming up, please wait...</description>
+        <spacer flex="1" />
     </vbox>
 
 </window>
