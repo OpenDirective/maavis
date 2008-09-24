@@ -9,7 +9,7 @@
 
     <touchpad  id="pad" flex='1' rows='10' cols='10'>
         <touchkey row='0' col='7' rows='3' cols='2'
-                class='answer callbutton' label="Hang up" image="file:///%User%Images/hangup.jpeg" accesskey='a' 
+                class='answer callbutton' label="Hang up" image="file:///%User%/Images/hangup.jpeg" accesskey='a' 
                 action="voipEndCall|call.xul" />
 
         <touchkey id="pause" row='8' col='6' rows='2' cols='2'

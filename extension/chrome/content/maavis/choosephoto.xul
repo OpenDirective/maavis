@@ -5,47 +5,20 @@
         xmlns:html = "http://www.w3.org/1999/xhtml">
 
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
-    <script type="application/javascript" src="chrome://maavis/content/home.js" />
+    <script type="application/javascript" src="chrome://maavis/content/choosephoto.js" />
 
-    <touchpad flex='1' rows='10' cols='10'>
+    <touchpad id="pad" flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
                 label="Touch the album you want to look at" speakOnLoad='true'/>
                 
-        <touchkey row='1' col='6' rows='1' cols='4'
+        <touchkey row='1' col='6' rows='2' cols='4'
                 class='otherthings' label="Other things to do" accesskey='o' 
                 action="goHome" />
 
-        <touchkey row='2' col='6' rows='2' cols='4'
+        <touchkey row='3' col='6' rows='2' cols='4'
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
-                
-        <touchkey row='1' col='0' rows='4' cols='3'
-                class='choice' label="Flowers" accesskey='f'
-                image="file:///%User%Photos/Flowers/4.bmp" image-scale="0.8"
-                action="showPage|slideshow.xul,file:///%User%Photos/Flowers/" />
-        <touchkey row='1' col='3' rows='4' cols='3'
-                class='choice' label="Cats and Dogs" accesskey='c' 
-                image="file:///%User%Photos/Cats and Dogs/1.bmp" image-scale="0.8"
-                action="showPage|slideshow.xul,file:///%User%Photos/Cats and Dogs/" />
-        <touchkey row='5' col='0' rows='4' cols='3'
-                class='choice' label="Places" accesskey='c' 
-                image="file:///%User%Photos/Places/London.bmp" image-scale="0.8"
-                action="showPage|slideshow.xul,file:///%User%Photos/Places/" />
-        <touchkey row='5' col='3' rows='4' cols='3'
-                class='choice' label="Events" accesskey='c' 
-                image="http://www.bbc.co.uk/scotland/music/images/gallery/tattoo/image01.jpg
-                " image-scale="0.8"
-                action="showPage|slideshow.xul,
-            http://www.bbc.co.uk/scotland/music/images/gallery/tattoo/image01.jpg,
-            http://farm2.static.flickr.com/1162/1360193748_a56d8cc994.jpg,
-            http://www.telegraph.co.uk/telegraph/multimedia/archive/00788/opening_ceremony208_788181c.jpg,
-            http://www.bjorky.com/content/liveearth/760466065_1d31100b29_b.jpg,
-            http://static.flickr.com/119/300397006_a187670890.jpg,
-            http://4getmenotuk.com/assets/images/Horse-racing-3.jpg,
-            http://graphics8.nytimes.com/images/2005/07/06/sports/london.583.1.jpg"
-                                                />
-
     </touchpad>
 
 </window>

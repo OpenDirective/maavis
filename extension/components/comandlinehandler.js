@@ -37,7 +37,7 @@ function logit()
  * Opens a chrome window.
  * @param aChromeURISpec a string specifying the URI of the window to open.
  */
-function openWindow(aChromeURISpec, bKiosked)
+function openWindow(aChromeURISpec, bKiosked, bConfig)
 {
     // TODO seems we always get a chrome window whatever is specified here
     // would like to have status bar so cn get at firebug in debug
@@ -50,6 +50,7 @@ function openWindow(aChromeURISpec, bKiosked)
     const params = Components.classes["@mozilla.org/embedcomp/dialogparam;1"]
                               .createInstance(Components.interfaces.nsIDialogParamBlock);
     params.SetInt(0, bKiosked);
+    params.SetInt(1, bConfig);
   
     ww.openWindow(null, aChromeURISpec, "maavis",
                     strFeatures,
@@ -87,7 +88,7 @@ const myAppHandler = {
     try {
       uristr = cmdLine.handleFlagWithParam("xulpage", false);
       if (uristr) {
-        openWindow(uristr, !bNoKiosk);
+        openWindow(uristr, !bNoKiosk, false);
         cmdLine.preventDefault = true;
         return;
       }
@@ -105,11 +106,12 @@ const myAppHandler = {
     catch (e) {
       Components.utils.reportError("incorrect parameter passed to -homepage on the command line.");
     }
-    
+
     // default is to open sim win in a chrome window
     if (!uristr)
     {
-        openWindow(CHROME_URI, !bNoKiosk);
+        var bConfig = cmdLine.handleFlag("config", false);
+        openWindow(CHROME_URI, !bNoKiosk, bConfig);
         cmdLine.preventDefault = true;
     }
     

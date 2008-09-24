@@ -1,7 +1,12 @@
-var EXPORTED_SYMBOLS = ["getFile", "getAppDataDir", "fileToURI", "expandURI", "getExtensionRootPath"];
+var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "expandURI", "expandTypes", "getExtensionRootPath"];
+
+const THUMBFILENAME = "Thumbnail";
+const LINKFILENAME = "links.txt";
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
+const file = {};
+Components.utils.import("resource://modules/file.js", file);
 
 function getFile(path)
 {
@@ -11,7 +16,7 @@ function getFile(path)
     return file;
 }
 
-function getAppDataDir()
+/*function getAppDataDir()
 {
     // bit of a cludge but can't seem to use %appdata%
     const dirAppData = Components.classes["@mozilla.org/file/directory_service;1"]
@@ -20,6 +25,16 @@ function getAppDataDir()
     var simwinAppDir = dirAppData.parent.parent;
     simwinAppDir.append("maavis");
     return simwinAppDir;
+    }
+*/
+
+function getUserDocsDir()
+{
+    // bit of a cludge but can't seem to use %appdata%
+    const dirUserDocs = Components.classes["@mozilla.org/file/directory_service;1"]
+                         .getService(Components.interfaces.nsIProperties)
+                         .get("Pers", Components.interfaces.nsIFile);
+    return dirUserDocs;
     }
 
 function fileToURI(file)
@@ -32,6 +47,15 @@ function fileToURI(file)
     const URL = ios.newFileURI(file);
     
     return URL.spec;
+}
+
+function URIToFile(strURI)
+{
+    const ios = Components.classes["@mozilla.org/network/io-service;1"]
+                        .getService(Components.interfaces.nsIIOService);
+    const URI = ios.newURI(strURI, null, null);
+    const fileURI = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+    return fileURI;
 }
 
 function buildPath(root)
@@ -68,8 +92,27 @@ function getInstallationPath()
     return path + '/';
 }
 
-function expandURI(strURI, arURIs)
+function _getThumbnailFile( dir )
 {
+    var thumbnail = null;
+    var items = dir.directoryEntries;
+    while (items.hasMoreElements())
+    {
+        var diritem = items.getNext().QueryInterface(Components.interfaces.nsIFile);
+        if (diritem.isFile && diritem.leafName.slice(0,-4).toLowerCase() 
+                                    == THUMBFILENAME.toLowerCase())
+        {
+            return diritem;
+        }
+    }
+}
+
+const expandTypes = { EXP_FILES: 0, EXP_DIRS: 1 };
+function expandURI(strURI, arURIs, type, max )
+{
+    type = type || expandTypes.EXP_FILES;
+    max = max || 0;
+    
     try {
         const ios = Components.classes["@mozilla.org/network/io-service;1"]
                             .getService(Components.interfaces.nsIIOService);
@@ -81,21 +124,59 @@ function expandURI(strURI, arURIs)
         // not a file
         return false;
     }
-              
     if (!fileURI.isDirectory())
     {
         return false;
     }
 
-    const file = {};
-    Components.utils.import("resource://modules/file.js", file);
-    var files = file.getDirFiles(fileURI);
+    function addFileURI(fileAdd)
+    {
     
-    arURIs.length = 0;
-    function addFileURI(file)
-    { 
-        arURIs.push(fileToURI(file));
+         if (!fileAdd.isReadable() || fileAdd.isSpecial() || fileAdd.isHidden()
+                 || fileAdd.isExecutable() )
+         {
+            return;
+         }
+     
+        if ((type == expandTypes.EXP_FILES) &&
+                (!max || arURIs.length < max) && 
+                fileAdd.isFile())
+        {
+            var itemz = {};
+            if (fileAdd.leafName.toLowerCase() == LINKFILENAME.toLowerCase())
+            {
+                const URIs = file.readFileLines(fileAdd);
+                function addURI(URI)
+                {
+                    itemz = { URI: URI, thumbURI: null };
+                    arURIs.push( itemz );
+                }
+                URIs.forEach(addURI);
+            }
+            else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase())
+            {
+                //skip
+            }
+            else
+            {
+                itemz = { URI: fileToURI(fileAdd), thumbURI: null };
+                arURIs.push( itemz );
+            }
+        }
+        else if ((type == expandTypes.EXP_DIRS) &&   
+                    (!max || arURIs.length < (1 + max)) && 
+                    fileAdd.isDirectory())
+        {
+            // look for thumb
+            const thumbfile = _getThumbnailFile(fileAdd);
+            const item = { URI: fileToURI(fileAdd), 
+                            thumbURI: ((thumbfile) ? fileToURI(thumbfile) : null) };
+            arURIs.push( item );
+        }
     }
+
+    arURIs.length = 0;
+    var files = file.getDirFiles(fileURI);
     files.forEach(addFileURI);
     
     return true;

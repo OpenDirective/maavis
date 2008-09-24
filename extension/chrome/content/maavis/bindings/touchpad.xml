@@ -245,7 +245,6 @@
      <method name="_toggleState">
         <body>
         <![CDATA[
-        alert('ho');
           if (!this.disabled) 
           {
             this.state = (this.state == 'a') ? 'b' : 'a';
@@ -291,7 +290,15 @@
             if (this.speakOnLoad == "true")
             {
                 var that = this;
-                window.setTimeout(function(){that.speak();}, 100);
+                function speak()
+                {   if (that.speakOnLoad == "true")
+                    {
+                    //ensure speaks after display of new page
+                    window.setTimeout(function(){that.speak();}, 800);
+                    }
+                }
+                window.addEventListener('load', speak, false);
+
             }
         ]]>
         </constructor>
@@ -421,6 +428,7 @@
         <parameter name='cols' />
         <parameter name='label' />
         <parameter name='image' />
+        <parameter name='image_scale' />
         <parameter name='action' />
         <body><![CDATA[
            var key = document.createElement("touchkey");
@@ -432,6 +440,10 @@
            if (image)
            {
              key.setAttribute("image", image);
+           }
+           if (image_scale)
+           {
+             key.setAttribute("image-scale", image_scale);
            }
            key.setAttribute("action", action);
            this._stack.appendChild(key);

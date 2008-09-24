@@ -14,17 +14,14 @@ chatterkey {
 }
 
 .touchkey-box {
-  -moz-appearance: button-focus;
   border: 0px solid transparent;
   padding: 0px;
   margin: 3px;
-  -moz-padding-start: 3px;
-  -moz-padding-end: 4px;
 }
 
 .touchkey-image {
   border: 0px solid transparent;
-  padding: 0px;
+  padding: 5px;
   margin: 0px;
 }
 

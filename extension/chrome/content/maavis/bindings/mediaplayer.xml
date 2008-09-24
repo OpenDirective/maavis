@@ -50,7 +50,7 @@
             
             if (mythis._readyFunc)
             {
-                setTimeout(mythis._readyFunc, 1);
+                setTimeout(mythis._readyFunc, 500);
             }
          }
          setTimeout(showImage, 100); // so layout completes without image
@@ -61,9 +61,11 @@
             onget="return this._readyFunc;// attrib converts everthing to a string"
             onset="this._readyFunc = val; return val;"/>
 
-
    <property name="isPlaying" readonly="true"   
             onget="return (this._vlc.playlist.isPlaying) ? 'true' : 'false';" />
+
+   <property name="isMuted" readonly="true"   
+            onget="return (this._vlc.playlist.isMuted) ? 'true' : 'false';" />
 
    <method name='_setBroadcaster'>
     <body><![CDATA[
@@ -72,8 +74,9 @@
         {
             const bc = document.createElement("broadcaster");
             bc.setAttribute("isPlaying", "false");
+            bc.setAttribute("isMuted", "false");
             bc.id = broadcasterId;
-            this.appendChild(bc);
+            this.parentNode.appendChild(bc);
             this.bc = bc;
         }
         else
@@ -84,9 +87,10 @@
     </method>
 
    <method name='_broadcast'>
-    <parameter name="playing" />
+    <parameter name="what" />
+    <parameter name="value" />
     <body><![CDATA[
-        this.bc.setAttribute("isPlaying", playing);
+        this.bc.setAttribute(what, value);
         ]]>
     </body>
     </method>
@@ -111,14 +115,14 @@
             else
             {
                 var item = vlc.playlist.add(mrl);
-                vlc.playlist.playItem(item);
             }
         }
         args.forEach(addToPlaylist);
+        vlc.playlist.play();
         
         const that = this;
         this._poller = setInterval(function(){that._pollState();}, 4000);
-        this._broadcast("true");
+        this._broadcast("isPlaying", "true");
         ]]>
     </body>
     </method>
@@ -149,7 +153,7 @@
         if (this._poller)
             clearInterval(this._poller);
         this._vlc.playlist.stop();
-        this._broadcast("false");
+        this._broadcast("isPlaying", "false");
         ]]>
     </body>
     </method>
@@ -160,12 +164,12 @@
         if (this._vlc.input.state == 3) // playing
         {
             this._vlc.playlist.togglePause();
-            this._broadcast("false");
+            this._broadcast("isPlaying", "false");
         }
         else if (this._vlc.input.state == 4) // paused
         {
             this._vlc.playlist.play();
-            this._broadcast("true");
+            this._broadcast("isPlaying", "true");
         }
         ]]>
     </body>
@@ -198,6 +202,7 @@
   <method name='toggleMute'>
      <body><![CDATA[
         this._vlc.audio.mute = !this._vlc.audio.mute;
+        this._broadcast("isMuted", (this._vlc.audio.mute) ? "true" : "false");
         ]]>
     </body>
     </method>

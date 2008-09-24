@@ -19,6 +19,10 @@ videoplayer {
     -moz-binding: url('chrome://maavis/content/bindings/mediaplayer.xml#videop');
 }
 
+audioplayer {
+    -moz-binding: url('chrome://maavis/content/bindings/mediaplayer.xml#videop');
+}
+
 webbrowser {
     -moz-binding: url('chrome://maavis/content/bindings/browser.xml#browser');
 }

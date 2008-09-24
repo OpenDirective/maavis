@@ -24,9 +24,8 @@ touchkey,
 togglekey,
 chatterkey
 {
-  color: white;
-  background-color: #2C7DCF;
-  border-color: darkblue;
+  color: black;
+  background-color: white;
   -moz-border-radius: 30px;
   margin:5px;
   border: 4px solid;
@@ -36,35 +35,23 @@ chatterkey
 touchkey.otherthings,
 touchkey.goback
 {
-  color: white;
-  background-color: rgb(139,190,64);
-  border-color: darkgreen;
 }
 
 touchkey.quit
 {
-  color: white;
-  background-color: red;
-  border-color: darkred;
 }
 
 touchkey.answer
 {
-  color: white;
-  background-color: rgb(246,116,27);
-  border-color: darkorange;
 }
 
 chatterkey.message
 {
-  color: Darkblue;
-  background-color: lightblue;
-  border-color: darkblue;
 }
 
 touchkey[disabled="true"],
 touchkey[disabled="true"]:hover:active {
-  color: rgb(246,116,27);
+  color: white;
 }
 
 touchkey.callbutton
@@ -72,23 +59,16 @@ touchkey.callbutton
 	opacity: 0.75;
 }
 
-touchkey.endcallbutton
-{
-  color: white;
-  background-color: red;
-  border-color: white;
-}
-
 touchkey.mediatrack
 {
-  border-color: #2C7DCF;
-  color: lightgrey;
+  border-color: black;
+  color: darkgrey;
 }
 
 hbox.config_desc
 {
-  color: white;
-  background-color: #2C7DCF;
+  color: black;
+  background-color: white;
   margin:5px;
   border: 0;
   font-size: 35px;

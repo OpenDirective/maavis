@@ -12,10 +12,10 @@
                 class='message'
                 label="Touch the activity you want to do" speakOnLoad='true'/>
                 
-        <touchkey row='1' col='6' rows='1' cols='4'
-                class='quit' label="Bye Maavis" accesskey='l' 
+        <touchkey id="quit" row='1' col='6' rows='2' cols='4'
+                class='quit' label="Bye Maavis" accesskey='b' 
                 action="logout" />
-        <touchkey row='2' col='6' rows='2' cols='4'
+        <touchkey row='3' col='6' rows='2' cols='4'
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
                 

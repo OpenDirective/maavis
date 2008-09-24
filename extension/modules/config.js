@@ -1,4 +1,6 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getUserConfig", "getUserContacts"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getcontactDetails", "getUserConfig", "getUserContacts"];
+
+//TODO clean up this file
 
 var file = {};
 Components.utils.import("resource://modules/file.js", file);
@@ -32,33 +34,31 @@ function writeConfig(configObj)
     file.writeStringToFile(strConfig);
 }
 
-function getConfigRoot()
+function getMaavisDataDir()
 {
+    const dir = path.getUserDocsDir();
+    dir.append('Maavis Media');
+    return dir;
+}
+
+function getUserDataDir(user)
+{ //TODO - process user
+    var dir = getMaavisDataDir();
+    dir.append('Users');
+    dir.append('Default');
+    return dir;
 }
 
 function getAppConfigFile()
 {
-    const f = path.getAppDataDir();
+    var f = getMaavisDataDir();
     f.append("config.json");
     return f;
 }
 
-function getUserDataPath()
-{
-    return getUserDataDir(g_currentUser).path +  "\\";
-}
-
-function getUserDataDir(user)
-{
-    const dir = path.getAppDataDir();
-    dir.append('Users');
-    dir.append(user);
-    return dir;
-}
-
 function getUserConfigFile()
 {
-    const f = path.getAppDataDir();
+    var f = getMaavisDataDir();
     f.append("users.json");
     return f;
 }
@@ -76,8 +76,8 @@ function getAppConfig()
 }
 
 var g_allUserConfig = undefined;
-var g_currentUser = 'Guest';
-var g_currentUserConfig = {name: "Guest"};
+var g_currentUser = 'Default';
+var g_currentUserConfig = {name: "Default"};
 
 function getUsers()
 {
@@ -120,16 +120,54 @@ function parseURI(str)
 {
     if (!str)
         return str;
-        
-    str = str.replace(/%User%/gi, getUserDataPath());
+            str = str.replace(/%User%/gi, getUserDataDir().path);
     if (str.slice(0, 5).toLowerCase() == 'file:')
         str = str.replace(/\\/gi, '/'); 
     return str;
 }
 
-function getUserContacts()
+function getContactDetails(str)
 {
-    return [{vid: "stephenaleehome"}];
-    return g_currentUserConfig.contacts;
+    contact = {};
+    try
+    {   
+        const name = str.split('-');
+        contact.name = utils.trim(name[0]);
+        contact.vid = utils.trim(name[1]);
+    }
+    catch(e)
+    {
+    }
+    return contact;
 }
 
+function getUserContacts()
+{
+    const contactsDir = getUserDataDir();
+    contactsDir.append('Contacts');
+    const contactsURI = path.fileToURI(contactsDir);
+    var arItems=[];
+    const b = path.expandURI(contactsURI, arItems, path.expandTypes.EXP_FILES, 5);
+    var contacts = [];
+    function addContact(item)
+    {
+            try
+            {
+                const ios = Components.classes["@mozilla.org/network/io-service;1"]
+                                    .getService(Components.interfaces.nsIIOService);
+                const URI = ios.newURI(item.URI, null, null);
+                const file = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+            }
+            catch(err)
+            {
+                throw (err);
+                return;
+            }
+//TODO sort out thisduplications and toing an fro between nsiFile and path
+        contacts.push(getContactDetails(file.leafName.slice(0, -4)));
+    }
+    arItems.forEach(addContact);
+    return contacts;
+}
+
+// EOF

@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getDirFiles", "writeStringToFile", "readFileToString", "launchFile"];
+var EXPORTED_SYMBOLS = ["getDirFiles", "writeStringToFile", "readFileToString", "readFileLines", "launchFile"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -9,7 +9,7 @@ function readFileToString(file)
 {
     // this is ASCII only
     try
-    {
+    { 
         var data = "";
         var fstream = Components.classes["@mozilla.org/network/file-input-stream;1"]
                                 .createInstance(Components.interfaces.nsIFileInputStream);
@@ -77,4 +77,34 @@ function launchFile(path)
                  .createInstance(Components.interfaces.nsILocalFile);
     file.initWithPath(path);
     file.launch();
+}
+
+function readFileLines(file)
+{
+    var fis = Components.classes["@mozilla.org/network/file-input-stream;1"]
+                            .createInstance(Components.interfaces.nsIFileInputStream);
+    fis.init(file, -1, 0, 0);
+
+    var charset = /* Need to find out what the character encoding is. Using UTF-8 for this example: */ "UTF-8";
+    var is = Components.classes["@mozilla.org/intl/converter-input-stream;1"]
+                       .createInstance(Components.interfaces.nsIConverterInputStream);
+    is.init(fis, charset, 1024, 0xFFFD);
+
+    lines = [];
+    if (is instanceof Components.interfaces.nsIUnicharLineInputStream) {
+      var line = {};
+      var cont;
+      do {
+        cont = is.readLine(line);
+//        if (cont)
+        {
+            strLine = utils.trim(line.value);
+            if (strLine.length)
+                lines.push(strLine);
+        }
+      } while (cont);
+    }
+    is.close();
+    fis.close();
+    return lines;
 }

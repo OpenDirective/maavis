@@ -26,8 +26,17 @@ function showWindow(window, callback, splashtime)
     }
     else
     {
-        if (callback)
-            callback(window);
+        // TODO set window size 
+        var mwindow = window;
+        function func()
+        {
+            winutils.setWindowFullscreen(mwindow);
+            if (callback)
+            {
+                callback(mwindow);// NOTE: there may be a fullscreen event we could use
+            }
+        }
+        window.setTimeout(func, 1); // must be async to work and cover Windows task bar
     }
 }
 

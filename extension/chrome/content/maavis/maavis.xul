@@ -7,13 +7,22 @@
 
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
     <script type="application/javascript" src="chrome://maavis/content/maavis.js" />
-    
-    <vbox id='startpage' flex="1" pack="center" align="center">
-        <spacer flex="1" minheight="25px"/>
+
+    <vbox flex="5" align="center">
+        <spacer flex="10" minheight="25px"/>
         <image src="chrome://maavis/skin/Maavis.jpg" />
         <spacer flex="1" minheight="10px"/>
-        <description flex="1" >Maavis is warming up, please wait...</description>
+        <description id="promptMaavis" flex="1" >Maavis is warming up...</description>
+        <description id="promptSettings" collapsed="true" flex="1" >Maavis Settings is warming up...</description>
+        <spacer flex="6" />
+    </vbox>
+    <vbox flex="1" align='center'>
+        <hbox flex="5" align="center">
+            <image src="chrome://maavis/skin/University Logo.jpg" />
+            <image src="chrome://maavis/skin/ERDF Logo.jpg" />
+        </hbox>
         <spacer flex="1" />
+        <description>Maavis is Copyright (C) 2008 The University of Sheffield and developed by Full Measure.</description>
     </vbox>
 
 </window>

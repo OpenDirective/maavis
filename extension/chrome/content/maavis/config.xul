@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://maavis/skin/maavis.css" type="text/css"?>
+
+<window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        xmlns:html = "http://www.w3.org/1999/xhtml">
+
+    <script type="application/javascript" src="chrome://maavis/content/page.js" />
+    <script type="application/javascript" src="chrome://maavis/content/config.js" />
+
+    <touchpad flex='1' rows='10' cols='10'>
+        <chatterkey row='0' col='0' rows='1' cols='10'
+                class='message'
+                label="Choose Maavis settings" spokenLabel="Choose Mayvis settings" speakOnLoad='true'/>
+                
+        <touchkey id='quit' row='1' col='6' rows='2' cols='4'
+                class='quit' label="Bye Settings" accesskey='l' 
+                action="logout" />
+
+        <togglekey id="theme_btn" row='4' col='2' rows='2' cols='6'
+                class='config_btn' label='Choose colour' labelB="Choose black and white" accesskey='t' 
+                action="configToggleColour" autoToggle='false' />
+
+        <togglekey id="speech_btn" row='6' col='2' rows='2' cols='6'
+                class='config_btn' label='Choose speak page titles' labelB="Choose no speech" accesskey='s' 
+                action="configToggleSpeech" autoToggle='false' />
+<!--
+        <hbox class="config_desc" pack="center" align="center" row='6' col='1' rows='2' cols='4'>
+            <description >Complexity:</description>
+        </hbox>
+        <togglekey id="complexity_btn" row='6' col='5' rows='2' cols='4'
+                class="config_btn" label='Full' labelB="Basic" accesskey='t' 
+                action="configToggleComplexity" autoToggle='false' />
+-->
+    </touchpad>
+
+</window>

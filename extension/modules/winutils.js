@@ -6,7 +6,7 @@ function getWindowIntArgument(window, index)
     if ("arguments" in window && 
         window.arguments[0] instanceof Components.interfaces.nsIDialogParamBlock)
     {
-        arg = window.arguments[0].GetInt(0);
+        arg = window.arguments[0].GetInt(index);
     }
     return arg;
 }

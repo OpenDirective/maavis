@@ -13,13 +13,20 @@ var _isAvailable = false;
 
 function _checkInstalled()
 {
-    const wrk = Components.classes["@mozilla.org/windows-registry-key;1"]
-                        .createInstance(Components.interfaces.nsIWindowsRegKey);
-    wrk.open(wrk.ROOT_KEY_CURRENT_USER,
-             "SOFTWARE\\Skype\\Phone",
-             wrk.ACCESS_READ);
-    const bInstalled = wrk.hasValue("SkypePath");
-    wrk.close();
+    var bInstalled = false;
+    try
+    {
+        const wrk = Components.classes["@mozilla.org/windows-registry-key;1"]
+                            .createInstance(Components.interfaces.nsIWindowsRegKey);
+        wrk.open(wrk.ROOT_KEY_CURRENT_USER,
+                 "SOFTWARE\\Skype\\Phone",
+                 wrk.ACCESS_READ);
+        bInstalled = wrk.hasValue("SkypePath");
+        wrk.close();
+    }
+    catch(e)
+    {
+    }
     return bInstalled
 }
 

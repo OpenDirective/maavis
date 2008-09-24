@@ -4,9 +4,9 @@ function loadPage()
     const pad = mainwindow.getElementById("pad");
     function mkItem( item )
     {
-        item.action = 'showPage|audioplayer.xul,'+item.URI;
+        item.action = 'showPage|slideshow.xul,' + item.URI;
     }
-    page.addFolderKeys(pad, "file:///%User%/Music/", bDirs=true, mkItem);
+    page.addFolderKeys(pad, "file:///%User%/Photos/", bDirs=true, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);

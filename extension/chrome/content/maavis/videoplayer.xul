@@ -12,31 +12,31 @@
                 class='message' 
                 label="Watch Video" speakOnLoad='false'/>
                 
-         <touchkey row='1' col='6' rows='1' cols='4'
-                class='goback' label="More Videos" accesskey='o' 
+         <touchkey row='1' col='7' rows='1' cols='3'
+                class='goback' label="Change Videos" accesskey='o' 
                 action="showPage|choosevideo.xul" />
 
-        <touchkey row='2' col='6' rows='2' cols='4'
+        <touchkey row='2' col='7' rows='2' cols='3'
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
 
-        <togglekey id="pause" row='6' col='6' rows='2' cols='2'
+        <togglekey id="pause" row='4' col='7' rows='2' cols='3'
                 class='player_pause' label='Pause' labelB="Play" accesskey='p' 
                 image='chrome://maavis/skin/playerbuttons/pause.png' 
-                imageB='chrome://maavis/skin/playerbuttons/play.png' 
+                imageB='chrome://maavis/skin/playerbuttons/play.png'
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
 
-        <touchkey id="pause" row='8' col='6' rows='2' cols='2'
-                class='player_incvol' label="Quieter" accesskey='q' 
-                image='chrome://maavis/skin/playerbuttons/quieter.png' 
-                action="mediaQuieter" />
-        <touchkey id="pause" row='8' col='8' rows='2' cols='2'
+        <touchkey id="louder" row='8' col='7' rows='2' cols='3'
                 class='player_incvol' label="Louder" accesskey='m' 
                 image='chrome://maavis/skin/playerbuttons/louder.png' 
-                action="mediaLouder" />
-
+                action="masterVolumeLouder" />
               
-        <videoplayer id='player' row='2' col='0' rows='7' cols='6' />
+        <touchkey id="quieter" row='6' col='7' rows='2' cols='3'
+                class='player_incvol' label="Quieter" accesskey='q' 
+                image='chrome://maavis/skin/playerbuttons/quieter.png' 
+                action="masterVolumeQuieter" />
+                
+        <videoplayer id='player' row='1' col='0' rows='9' cols='7' />
     </touchpad>
 
 </window>

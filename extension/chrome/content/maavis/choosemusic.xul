@@ -12,33 +12,14 @@
                 class='message'
                 label="Choose the music you want to hear" speakOnLoad='true'/>
                 
-        <touchkey row='1' col='6' rows='1' cols='4'
+        <touchkey row='1' col='6' rows='2' cols='4'
                 class='otherthings' label="Other things to do" accesskey='o' 
                 action="goHome" />
 
-        <touchkey row='2' col='6' rows='2' cols='4'
+        <touchkey row='3' col='6' rows='2' cols='4'
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
-                
-        <togglekey id="pause" row='4' col='6' rows='1' cols='4'
-                class='player_pause' label='List of all music' accesskey='a' 
-                action="" />
-        <touchkey id="prev" row='5' col='6' rows='1' cols='4'
-                class='player_prev' label="List of Artists" accesskey='m' 
-                action="" />
-                
-        <togglekey id="pause" row='6' col='6' rows='1' cols='4'
-                class='player_pause' label='Add track to play' accesskey='a' 
-                action="" />
-        <touchkey id="prev" row='7' col='6' rows='1' cols='4'
-                class='player_prev' label="Change music to play" accesskey='m' 
-                action="" />
-                
-        <touchkey id="next" row='8' col='6' rows='2' cols='4'
-                class='player_next' label='Play' accesskey='n' 
-                image='chrome://maavis/skin/playerbuttons/play.png' 
-                action="showPage|audioplayer.xul" />
-
+               
     </touchpad>
 
 </window>

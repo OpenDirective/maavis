@@ -11,7 +11,7 @@
 
   <binding id="slideshow" display='xul:box'>
     <content>
-       <xul:slide anonid='img1' flex='1' xbl:inherits="top,left,width,height"/>
+       <xul:slide class="slide" anonid='img1' flex='1' xbl:inherits="top,left,width,height"/>
     </content>
 
     <resources>
@@ -108,7 +108,7 @@
     <parameter name="back"/>
     <body><![CDATA[
         if (this._item == null) 
-            this.item = 0;
+            this._item = -1;
         if (back)
         {
             this._item -= 1;

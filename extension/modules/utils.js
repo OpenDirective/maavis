@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["logit", "bind", "buildPath", "runProcess", "exec", "toJson", "fromJson", "isArray"];
+var EXPORTED_SYMBOLS = ["logit", "bind", "trim", "buildPath", "runProcess", "exec", "toJson", "fromJson", "isArray"];
 
 function logit()
 {
@@ -9,6 +9,12 @@ function logit()
     text += arguments[i] + ' ';
     }
     consoleService.logStringMessage(text);
+}
+
+
+function trim(str)
+{
+    return str.replace(/^\s*|\s*$/,"");
 }
 
 function bind(self, func, args)
