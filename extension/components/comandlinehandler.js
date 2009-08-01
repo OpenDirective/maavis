@@ -107,10 +107,17 @@ const myAppHandler = {
       Components.utils.reportError("incorrect parameter passed to -homepage on the command line.");
     }
 
-    // default is to open sim win in a chrome window
+    var bConfig = cmdLine.handleFlag("config", false);
     if (!uristr)
     {
-        var bConfig = cmdLine.handleFlag("config", false);
+	// TODO pass a parameters
+	prefs.setCharPref("maavis.commandline.maavispage", (bConfig) ? 'config.xul' : 'maavis.xul');
+    }
+    
+    // default is to open sim win in a chrome window
+    prefs.setBoolPref("maavis.commandline.config", bConfig);
+    if (!bNoKiosk && !uristr)
+    {
         openWindow(CHROME_URI, !bNoKiosk, bConfig);
         cmdLine.preventDefault = true;
     }

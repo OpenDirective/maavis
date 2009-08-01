@@ -15,7 +15,7 @@ function setWindowFullscreen(window)
 {
     window.moveTo(0, 0);
     window.resizeTo(window.screen.width, window.screen.height);
-    function f (){ window.fullScreen = true; }
-    window.setTimeout(f, 1);   // lose border
+    //function f (){ window.fullScreen = true; }
+    //window.setTimeout(f, 1);   // lose border
 }
 

@@ -11,32 +11,24 @@ function showWindow(window, callback, splashtime)
 {
     setWindow(window);
     const bKiosked = Boolean(winutils.getWindowIntArgument(window, 0));
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"].
+    getService(Components.interfaces.nsIPrefBranch);
+    var mwindow = window;
     if (bKiosked)
     {
-        var mwindow = window;
+	function func()
+	{
+	     winutils.setWindowFullscreen(mwindow);
+	}
+	window.setTimeout(func, 1); // must be async to work and cover Windows task bar
+    }
+    if (callback)
+    {
         function func()
         {
-            winutils.setWindowFullscreen(mwindow);
-            if (callback)
-            {
-                callback(mwindow);// NOTE: there may be a fullscreen event we could use
-            }
+           callback(mwindow);// NOTE: there may be a fullscreen event we could use
         }
         window.setTimeout(func, splashtime * 1000); // must be async to work and cover Windows task bar
-    }
-    else
-    {
-        // TODO set window size 
-        var mwindow = window;
-        function func()
-        {
-            winutils.setWindowFullscreen(mwindow);
-            if (callback)
-            {
-                callback(mwindow);// NOTE: there may be a fullscreen event we could use
-            }
-        }
-        window.setTimeout(func, 1); // must be async to work and cover Windows task bar
     }
 }
 

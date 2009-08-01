@@ -1,4 +1,5 @@
-const _defaultHomePage = 'chrome://maavis/content/maavis.xul'
+const pagePath = 'chrome://maavis/content/';
+const _defaultHomePage = pagePath + 'maavis.xul';
 
 function kioskDoNothing()
 {
@@ -36,13 +37,19 @@ function kioskStartup()
     // options from command line
     var bNoKiosk = prefs.getBoolPref("maavis.commandline.nokiosk");
     var strHomePage = prefs.getCharPref("maavis.commandline.homepage");
+    var strMaavisPage = prefs.getCharPref("maavis.commandline.maavispage");
 
     if (!bNoKiosk)
     {
-        const strKioskOverlay = 'chrome://maavis/content/kiosk/browserOverlay2.xul';
-        window.addEventListener("load", function foo() {
-                document.loadOverlay(strKioskOverlay, null);
+       window.addEventListener("load", function foo2() {
+				const strKioskOverlay = 'chrome://maavis/content/kiosk/browserOverlay2.xul';
+				const strKioskInstallOverlay = 'chrome://maavis/content/kiosk/xpinstallConfirmOverlay.xul';
+				const strKioskContentOverlay = 'chrome://maavis/content/kiosk/unknownContentType.xul';
+				document.loadOverlay(strKioskOverlay, null);
+                document.loadOverlay(strKioskInstallOverlay, null);
+                document.loadOverlay(strKioskContentOverlay, null);
             }, true);
+			
     }
 
     window.addEventListener("load", function () {
@@ -56,7 +63,9 @@ function kioskStartup()
             window.fullScreen = true;
         }
 
-        const strPage = ((strHomePage == '') ? _defaultHomePage : strHomePage);
-        loadURI(strPage);
+        const strPage = ((strHomePage != '') ? strHomePage : 
+							   ((strMaavisPage != '') ? pagePath+strMaavisPage :
+											  _defaultHomePage ) );
+	loadURI(strPage);
     }
 }

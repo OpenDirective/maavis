@@ -10,9 +10,6 @@ function initWindow()
 {
     window.removeEventListener('load', initWindow, false);
 
-    //window.sizeToContent() 
-    winutils.setWindowFullscreen(window);
-    
     actions.loadActions();
 
     const bConfig = Boolean(winutils.getWindowIntArgument(window, 1));
