@@ -81,7 +81,7 @@ Name: "{app}\Edit Styles"; Filename: "explorer"; Parameters:"{app}\extension\chr
 Name: "{app}\Edit Screens"; Filename: "explorer"; Parameters:"{app}\extension\chrome\content\Maavis"; Comment: "Edit Screens"
 
 ; create startup item so autoruns
-Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis-no-remote"; Comment: "Run Maavis"; IconFilename: "{app}\Maavis.ico";  Tasks: turnkey
+Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote"; Comment: "Run Maavis"; IconFilename: "{app}\Maavis.ico";  Tasks: turnkey
 
 
 [Run]
