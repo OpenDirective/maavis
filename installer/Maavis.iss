@@ -1,15 +1,15 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.0
-OutputBaseFilename=Maavis-0.1.0
-AppVersion=0.1.0
-VersioninfoVersion=0.1.0
-AppPublisher=The University Of Sheffield
+AppVerName=Maavis 0.1.2
+OutputBaseFilename=Maavis-0.1.2
+AppVersion=0.1.2
+VersioninfoVersion=0.1.2
+AppPublisher=Full Measure for the University Of Sheffield
 ; Developed by Steve Lee of Full Measure.
 AppCopyright=Copyright (C) 2008 The University Of Sheffield
-AppPublisherURL=www.actprogramme.org.uk
-AppSupportURL=www.maavis.co.uk
-AppUpdatesURL=www.maavis.co.uk
+AppPublisherURL=http://fullmeasure.co.uk
+AppSupportURL=https://www.assembla.com/wiki/show/maavis
+AppUpdatesURL=https://www.assembla.com/wiki/show/maavis
 DefaultGroupName=Maavis
 ;LicenseFile=GPL.txt
 DefaultDirName={pf}\Maavis
@@ -43,7 +43,7 @@ Source: "Credits and attribution.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Maavis.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 ; copy the non debug version of prefs.js
-Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
+;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
 
 ; Installer
 Source: ".\*"; DestDir: "{app}\installer"; Excludes: "Output"; Flags: ignoreversion
@@ -60,9 +60,9 @@ Filename: "{app}\MozillaEurope.url"; Section: "InternetShortcut"; Key: "URL"; St
 
 [Icons]
 ; programs in start menu
-Name: "{group}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"""; Comment: "Run Maavis."; IconFilename: "{app}\Maavis.ico"
+Name: "{group}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote "; Comment: "Run Maavis."; IconFilename: "{app}\Maavis.ico"
 Name: "{group}\Maavis Media"; Filename: "explorer"; parameters: "{userdocs}\Maavis Media\Users\default"; Comment: "Open Media folder where photos, music and videos are found."; IconFilename: "{app}\Maavis.ico"
-Name: "{group}\Maavis Settings"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -config"; Comment: "Change how Maavis looks and behaves"; IconFilename: "{app}\Maavis.ico"
+Name: "{group}\Maavis Settings"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -config -no-remote"; Comment: "Change how Maavis looks and behaves"; IconFilename: "{app}\Maavis.ico"
 Name: "{group}\Speech Settings"; Filename: "control"; parameters: "speech"; Comment: "Change speech settings"
 ; web links in start menu
 Name: "{group}\Maavis website"; Filename: "{app}\Maavis.url"; Comment: "Visit the Maavis website"
@@ -71,9 +71,9 @@ Name: "{group}\Mozilla Europe website"; Filename: "{app}\MozillaEurope.url"; Com
 Name: "{group}\Full Measure website"; Filename: "{app}\FullMeasure.url"; Comment: "Visit the Full Measure website"
 
 ; desktop - optional
-Name: "{userdesktop}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"""; Comment: "Run Maavis";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopicon
+Name: "{userdesktop}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote"; Comment: "Run Maavis";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopicon
 Name: "{userdesktop}\Maavis Media"; Filename: "explorer"; parameters: "{userdocs}\Maavis Media\Users\default"; Comment: "Open Media folder where photos, music and videos are found.";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconmedia
-Name: "{userdesktop}\Maavis Settings"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -config"; Comment: "Change how Maavis looks";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconcfg
+Name: "{userdesktop}\Maavis Settings"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -config -no-remote"; Comment: "Change how Maavis looks";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconcfg
 ;Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\Launch Maavis"; Filename: "{app}\Maavis.exe"; WorkingDir: "{userdocs}"; Comment: "Automatically narrates PowerPoint presentations"; Tasks: quicklaunchicon
 
 ; config
@@ -81,15 +81,15 @@ Name: "{app}\Edit Styles"; Filename: "explorer"; Parameters:"{app}\extension\chr
 Name: "{app}\Edit Screens"; Filename: "explorer"; Parameters:"{app}\extension\chrome\content\Maavis"; Comment: "Edit Screens"
 
 ; create startup item so autoruns
-Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"""; Comment: "Run Maavis"; IconFilename: "{app}\Maavis.ico";  Tasks: turnkey
+Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis-no-remote"; Comment: "Run Maavis"; IconFilename: "{app}\Maavis.ico";  Tasks: turnkey
 
 
 [Run]
 ;Filename: "{app}\ReadMe.htm"; Description: "View Readme.htm"; Flags: shellexec skipifdoesntexist postinstall skipifsilent
-Filename: "{app}\installer\Firefox Setup 3.0.1.exe"; Description: "Install Firefox 3";
+Filename: "{app}\installer\Firefox Setup 3.5.1.exe"; Description: "Install Firefox 3.5.1 Web browser";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
-Filename: "{app}\installer\vlc-0.9.2-win32.exe";  Description: "Install VLC";
+;Filename: "{app}\installer\vlc-0.9.2-win32.exe";  Description: "Install VLC";
 
 Filename: "{app}\installer\SkypeSetup.exe";  Description: "Install Skype (required for Video Calls)"; Flags: postinstall
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"""; Description: "Run Maavis now"; Flags: postinstall skipifsilent
@@ -103,7 +103,8 @@ Type: files; Name: "{app}\MozillaEurope.url"
 
 
 [Registry]
-;
+; Required so VLC plugin can find it's plugins folder - warning is fragile
+Root: HKLM; Subkey: "SOFTWARE\VideoLAN\VLC"; ValueType: string; ValueName: InstallDir;  ValueData: "{pf}\Maavis\extension\plugins"; Flags: createvalueifdoesntexist;
 
 [code]
 procedure InstallMaavisFFExtension();
