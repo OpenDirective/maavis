@@ -1,10 +1,19 @@
 var winutils = {};
 Components.utils.import("resource://modules/winutils.js", winutils);
-
+var path = {};
+Components.utils.import("resource://modules/path.js", path);
+	
 if (mainwindow.getProp("MaavisMainWindow") === undefined)
     mainwindow.setProp("MaavisMainWindow", "true");
 else
     window.close(); // TODO for links opening in _blank until be can resolve
+
+function playJingle()
+{
+    var player = document.getElementById('player');
+	var jingle = path.ChromeURIToFileURI('chrome://maavis/content/jingle.wav');
+    player.onPlayerReady = function(){ player.play(new Array(jingle)); };
+}
 
 function initWindow()
 {
@@ -18,6 +27,8 @@ function initWindow()
     
     document.getElementById("promptMaavis").setAttribute("collapsed", (bConfig) ? "true" : "false")
     document.getElementById("promptSettings").setAttribute("collapsed", (!bConfig) ? "true" : "false")
+
+	playJingle()
 
     if(!bConfig)
     {

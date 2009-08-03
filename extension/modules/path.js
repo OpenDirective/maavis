@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "expandURI", "expandTypes", "getExtensionRootPath"];
+var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "ChromeURIToFileURI", "expandURI", "expandTypes", "getExtensionRootPath"];
 
 const THUMBFILENAME = "Thumbnail";
 const LINKFILENAME = "links.txt";
@@ -58,11 +58,11 @@ function URIToFile(strURI)
     return fileURI;
 }
 
-function buildPath(root)
+function buildPath(root /*...*/)
 {
     var path = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
     if(root == null) {
-        root = utils._getExtensionPath();
+        root = getExtensionPath();
     }
     path.initWithPath(root);
     for(var i=1; i < arguments.length; i++) {
@@ -79,6 +79,28 @@ function getExtensionRootPath(id)
     var cls = Components.classes["@mozilla.org/extensions/manager;1"];
     var service = cls.getService(Components.interfaces.nsIExtensionManager);
     return service.getInstallLocation(id).getItemLocation(id).path;
+}
+
+function ChromeURIToFileURI(chrome)
+// convert a chrome URI to absolute OS path file URI
+{
+	// until I find an offical way this simple hack will do - pass in filename to be found in Chrome://mavis/content
+	// needs to match chrome manefest mapping
+	const strBase = 'chrome://maavis/content/';
+	var path = '';
+	if (chrome.indexOf(strBase) == 0)
+		path = chrome.slice(strBase.length);
+	const strMaavisContent = '\\chrome\\content\\maavis\\';
+	const root = getExtensionRootPath();
+    try
+	{
+		var uri = fileToURI(root+strMaavisContent+path);
+	} 
+	catch (err) 
+	{
+		return '';
+	}
+	return uri;    
 }
 
 function getInstallationPath()

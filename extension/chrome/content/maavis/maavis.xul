@@ -8,6 +8,9 @@
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
     <script type="application/javascript" src="chrome://maavis/content/maavis.js" />
 
+	<vbox>
+	       <audioplayer id='player' invisible="true" height='1' />
+	</vbox>
     <vbox flex="5" align="center">
         <spacer flex="10" minheight="25px"/>
         <image src="chrome://maavis/skin/Maavis.jpg" />
@@ -22,7 +25,7 @@
             <image src="chrome://maavis/skin/ERDF Logo.jpg" />
         </hbox>
         <spacer flex="1" />
-        <description>Maavis is Copyright (C) 2008 The University of Sheffield and developed by Full Measure.</description>
+        <description>Maavis is Copyright (C) 2008,9 The University of Sheffield and developed by Full Measure.</description>
     </vbox>
 
 </window>
