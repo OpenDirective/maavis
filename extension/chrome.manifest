@@ -3,4 +3,3 @@ overlay	chrome://browser/content/browser.xul	chrome://kiosk/content/browserOverl
 
 content	maavis	chrome/content/maavis/skin maavis skin chrome/skin/
 resource modules modules/
-content	svgtest	chrome/content/svgtest/
