@@ -98,7 +98,7 @@
             box.orient = (bHoriz) ? 'horizontal' : 'vertical';
             this._label_box.align = (bHoriz) ? 'start' : 'stretch';
             this._label_box.flex = (bHoriz && bHasImage) ? '4' : '0';
-            ]]>
+           ]]>
         </body>
       </method>
 
@@ -109,11 +109,8 @@
             var label = this.obLabel;
             if (!label)
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
-            var text = document.createTextNode(this.getAttribute('label')); 
-            if (label.firstChild)
-                label.replaceChild(text, label.firstChild);
-            else
-                label.appendChild(text);
+			label.width = this.width - 20 ;
+			label.value = this.getAttribute('label');
             ]]>
         </body>
       </method>
@@ -187,8 +184,8 @@
         <xul:vbox anonid='box' class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
                 align="stretch" pack="center" orient="vertical" flex="1">
             <xul:vbox anonid='image-frame' flex='1' />
-            <xul:vbox anonid="label-box" flex='0' pack="center" >
-                <xul:label anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"></xul:label>
+            <xul:vbox anonid="label-box" flex='0' pack="center">
+                <xul:label anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"> </xul:label>
             </xul:vbox>
         </xul:vbox> 
       </content>
@@ -430,6 +427,7 @@
         <parameter name='image' />
         <parameter name='image_scale' />
         <parameter name='action' />
+        <parameter name='crop' />
         <body><![CDATA[
            var key = document.createElement("touchkey");
            key.setAttribute("row", row);
@@ -437,6 +435,7 @@
            key.setAttribute("rows", rows);
            key.setAttribute("cols", cols);
            key.setAttribute("label", label);
+           key.setAttribute("crop", crop);
            if (image)
            {
              key.setAttribute("image", image);

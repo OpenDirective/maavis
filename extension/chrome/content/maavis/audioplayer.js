@@ -21,7 +21,7 @@ function loadPage()
         {        
             const file = path.URIToFile(item);
             const name = file.leafName.slice(0,-4);
-            var key = pad.createKey(row++, 0, 1, 6, name, null, 0, null);
+            var key = pad.createKey(row++, 0, 1, 6, name, null, 0, null, 'center');
             key.className += " mediatrack";
         }
         catch(e)
