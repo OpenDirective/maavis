@@ -5,7 +5,7 @@
         xmlns:html = "http://www.w3.org/1999/xhtml">
 
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
-    <script type="application/javascript" src="chrome://maavis/content/call.js" />
+    <script type="application/javascript" src="chrome://maavis/content/choosecall.js" />
 
     <touchpad id="pad" flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'

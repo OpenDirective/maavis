@@ -8,11 +8,13 @@ if (mainwindow.getProp("MaavisMainWindow") === undefined)
 else
     window.close(); // TODO for links opening in _blank until be can resolve
 
-function playJingle()
+function playStartSound()
 {
-    var player = document.getElementById('player');
-	var jingle = path.ChromeURIToFileURI('chrome://maavis/content/jingle.wav');
-    player.onPlayerReady = function(){ player.play(new Array(jingle)); };
+    const player = document.getElementById('player');
+	const sound = config.getUserConfig().startsoundURI;
+	alert(sound);
+	if (sound)
+		player.onPlayerReady = function(){ player.play(new Array(sound)); };
 }
 
 function initWindow()
@@ -28,7 +30,7 @@ function initWindow()
     document.getElementById("promptMaavis").setAttribute("collapsed", (bConfig) ? "true" : "false")
     document.getElementById("promptSettings").setAttribute("collapsed", (!bConfig) ? "true" : "false")
 
-	playJingle()
+	playStartSound()
 
     if(!bConfig)
     {
