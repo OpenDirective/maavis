@@ -73,6 +73,7 @@ function loadActions()
     
     action.setAction('goHome', goHome, setContext);
     action.setAction('showPage', showPage, setContext);
+
     action.setAction('mediaPause', function(){ window.document.getElementById("player").togglePause()}, setContext);
     action.setAction('mediaRestart', function(){ window.document.getElementById("player").restart()}, setContext);
     action.setAction('mediaToggleMute', function(){ window.document.getElementById("player").toggleMute()}, setContext);
@@ -81,6 +82,7 @@ function loadActions()
     action.setAction('mediaQuieter', function(){ window.document.getElementById("player").decVolume()}, setContext);
     action.setAction('mediaPrev', function(){ window.document.getElementById("player").prevItem()}, setContext);
     action.setAction('mediaNext', function(){ window.document.getElementById("player").nextItem()}, setContext);
+    action.setAction('mediaPlayItem', function(item){ window.document.getElementById("player").playItem(item)}, setContext);
 
     action.setAction('masterVolumeLouder', function(){ alterMasterVolume( false ) }, setContext);
     action.setAction('masterVolumeQuieter', function(){ alterMasterVolume( true ) }, setContext);

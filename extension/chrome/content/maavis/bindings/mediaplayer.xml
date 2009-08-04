@@ -99,17 +99,19 @@
     <parameter name="args" />
     <body><![CDATA[
         const vlc = this._vlc;
+	   const that = this;
+	   this._items=[];
         vlc.playlist.clear();
         Components.utils.import("resource://modules/utils.js");
         function addToPlaylist(mrl)
         {
             if (isArray(mrl))
             {
-                function addToPlaylist(amrl)
+                function addToPlaylist2(amrl)
                 {
-                   vlc.playlist.add(amrl);
+				vlc.playlist.add(amrl); 
                 }
-                mrl.forEach(addToPlaylist);
+                mrl.forEach(addToPlaylist2);
                 vlc.playlist.play(); // first I hope
             }
             else
@@ -120,8 +122,7 @@
         args.forEach(addToPlaylist);
         vlc.playlist.play();
         
-        const that = this;
-        this._poller = setInterval(function(){that._pollState();}, 4000);
+        this._poller = setInterval(function(){that._pollState();}, 3000);
         this._broadcast("isPlaying", "true");
         ]]>
     </body>
@@ -131,17 +132,18 @@
     <body><![CDATA[
         // TODO prolly need a state machine if vids can take a while to start
         const vlc = this._vlc;
-        if (vlc.input.state == 0) // idle
+        if (!vlc.playlist.isPlaying) // idle
         {
             // hack but there seems no easy way, the API rather sucks here
             // if this causes glitches then we'll need to reset the playlist
             function loop()
             {
-              vlc.playlist.play();
+              //vlc.playlist.play();
               vlc.playlist.next(); // next loops when playing
+		    setTimeout(function(){if (!vlc.playlist.isPlaying) vlc.playlist.playItem(0);}, 400)
             } 
             // loop if still idle after a short time
-            setTimeout(function(){if (vlc.input.state == 0) loop();}, 500); 
+            setTimeout(function(){if (!vlc.playlist.isPlaying) loop();}, 400); 
         }
         ]]>
     </body>
@@ -193,7 +195,18 @@
 
   <method name='nextItem'>
     <body><![CDATA[
-        this._vlc.playlist.next();
+        this._vlc.playlist.stop(); // this allow poller to loop at end of playlist else next does nothing
+	   this._pollState();
+        // poller will restart it
+        ]]>
+    </body>
+    </method>
+
+   <method name='playItem'>
+    <parameter name="item" />
+    <body><![CDATA[
+		const n = parseInt(item);
+		this._vlc.playlist.playItem(n); // IS the index despite what wiki docs say
         // poller will restart it
         ]]>
     </body>

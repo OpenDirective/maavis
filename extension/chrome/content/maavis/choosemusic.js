@@ -6,8 +6,6 @@ function loadPage()
     {
         item.action = 'showPage|audioplayer.xul,'+item.URI;
     }
-    const mrls = mainwindow.getProp("args");
-	alert(mrls);
     page.addFolderKeys(pad, "file:///%User%/Music/", true, mkItem);
 }
 
