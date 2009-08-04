@@ -6,7 +6,7 @@ function loadPage()
     {
         item.action = 'showPage|videoplayer.xul,'+item.URI;
     }
-    page.addFolderKeys(pad, "file:///%User%/Videos/", bDirs=true, mkItem);
+    page.addFolderKeys(pad, "file:///%User%/Videos/", true, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);

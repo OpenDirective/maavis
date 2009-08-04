@@ -53,7 +53,7 @@ const page =
     
     initPage: function()
     {
-        window.removeEventListener('load', page.loadPage, false);
+        window.removeEventListener('load', page.initPage, false);
 
         mainwindow.setWindow(window);
 

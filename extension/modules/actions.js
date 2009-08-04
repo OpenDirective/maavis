@@ -118,7 +118,7 @@ function showCall(bShow, partner)
     
     function _enableAnswerCall(text)
     {
-        enable = (text && text.length);
+        var enable = (text && text.length);
         var ac = document.getElementsByClassName("answer");
         if (ac.length && ac[0])
         {

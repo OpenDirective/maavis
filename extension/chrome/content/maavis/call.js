@@ -16,7 +16,7 @@ function loadPage()
         {
         }
     }
-    page.addFolderKeys(pad, "file:///%User%/Contacts/", bDirs=false, mkItem);
+    page.addFolderKeys(pad, "file:///%User%/Contacts/", false, mkItem);
 
 }
 
