@@ -77,7 +77,7 @@ function getAppConfig()
 
 var g_allUserConfig = undefined;
 var g_currentUser = 'Default';
-var g_currentUserConfig = {name: "Default"};
+var g_currentUserConfig = {name: "Default", startsoundURI: null};
 
 function getUsers()
 {
@@ -111,8 +111,25 @@ function setCurrentUser(user)
     }   
 }
 
+function _getStartSoundURI()
+{
+    var dir = getUserDataDir();
+	var items = dir.directoryEntries;
+    while (items.hasMoreElements())
+    {
+        var diritem = items.getNext().QueryInterface(Components.interfaces.nsIFile);
+        var filename = diritem.leafName;
+        if (diritem.isFile && filename.indexOf('startsound'.toLowerCase()) == 0)
+        {
+            return path.fileToURI(diritem);
+        }
+    }
+	return null
+}
+
 function getUserConfig()
 {
+	g_currentUserConfig.startsoundURI = _getStartSoundURI();
     return g_currentUserConfig;
 }
 
@@ -144,7 +161,7 @@ function getContactDetails(str)
 function getUserContacts()
 {
     const contactsDir = getUserDataDir();
-    contactsDir.append('Contacts');
+    contactsDir.append('Call');
     const contactsURI = path.fileToURI(contactsDir);
     var arItems=[];
     const b = path.expandURI(contactsURI, arItems, path.expandTypes.EXP_FILES, 5);
