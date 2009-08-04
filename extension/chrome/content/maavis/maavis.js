@@ -12,7 +12,6 @@ function playStartSound()
 {
     const player = document.getElementById('player');
 	const sound = config.getUserConfig().startsoundURI;
-	alert(sound);
 	if (sound)
 		player.onPlayerReady = function(){ player.play(new Array(sound)); };
 }
