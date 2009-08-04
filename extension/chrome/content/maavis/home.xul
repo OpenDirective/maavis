@@ -19,22 +19,6 @@
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
                 
-<!--        <touchkey id="info" row='1' col='0' rows='4' cols='3' 
-                    class='topchoice' label="Information" 
-                    action="showPage|chooseinfo.xul" accesskey='i' />
-        <touchkey id="call" row='1' col='3' rows='4' cols='3' 
-                    class='topchoice' label="Call" 
-                    action="showPage|call.xul" accesskey='c' />
-        <touchkey id="photos" row='5' col='0' rows='4' cols='3' 
-                    class='topchoice' label="Photos" 
-                    action="showPage|choosephoto.xul" accesskey='p' />
-        <touchkey id="videos" row='5' col='3' rows='4' cols='3' 
-                    class='topchoice' label="Videos" 
-                    action="showPage|choosevideo.xul" accesskey='v' />
-        <touchkey id="music" row='5' col='6' rows='4' cols='3' 
-                    class='topchoice' label="Music" 
-                    action="showPage|choosemusic.xul" accesskey='c' />-->
-
     </touchpad>
 
 </window>

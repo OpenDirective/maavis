@@ -312,7 +312,7 @@
         <body>
         <![CDATA[
           const what = (this.spokenLabel) ? this.spokenLabel : this.label;
-          this._tts.speak(what);
+          this._tts.speak(what+'.');
         ]]>
         </body>
       </method>
