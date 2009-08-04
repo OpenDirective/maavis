@@ -57,7 +57,6 @@ function loadPage(page)
     // NB this kills global objects like timers - a new page needs to call setWindow().
     _window.location.replace(page);
 //        const path = _window.document.location.pathname;
-//        _window.document.title = "SIM WIN - " + pa;
 }
 
 var _props = {};

@@ -152,8 +152,10 @@ const page =
             }
             nItem += 1;
             
-            var cbItem = { URI: item.URI, name: itemName, thumbURI: item.thumbURI, action: "" };
-            if (alterItemCB)
+            var cbItem = { URI: item.URI, name: itemName, 
+									thumbURI: item.thumbURI, 
+									action: (item.chooser) ? 'showPage|' + item.chooser + '.xul,' + item.URI : null };
+			if (alterItemCB)
                 alterItemCB(cbItem);
             var key = container.createKey(row, col, 4, 3, cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
         }

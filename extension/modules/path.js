@@ -2,6 +2,7 @@ var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "
 
 const THUMBFILENAME = "Thumbnail";
 const LINKFILENAME = "links.txt";
+const CHOOSEFILEPREFIX = "_choose";
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -110,7 +111,6 @@ function getInstallationPath()
 
 function _getThumbnailFile( dir )
 {
-    var thumbnail = null;
     var items = dir.directoryEntries;
     while (items.hasMoreElements())
     {
@@ -119,6 +119,20 @@ function _getThumbnailFile( dir )
                                     == THUMBFILENAME.toLowerCase())
         {
             return diritem;
+        }
+    }
+}
+
+function _getChooser( dir )
+{
+   var items = dir.directoryEntries;
+    while (items.hasMoreElements())
+    {
+        var diritem = items.getNext().QueryInterface(Components.interfaces.nsIFile);
+        var filename = diritem.leafName;
+        if (diritem.isFile && filename.indexOf(CHOOSEFILEPREFIX.toLowerCase()) == 0)
+        {
+            return filename.slice(1);
         }
     }
 }
@@ -164,18 +178,19 @@ function expandURI(strURI, arURIs, type, max )
                 const URIs = file.readFileLines(fileAdd);
                 function addURI(URI)
                 {
-                    itemz = { URI: URI, thumbURI: null };
+                    itemz = { URI: URI, thumbURI: null, choose: null };
                     arURIs.push( itemz );
                 }
                 URIs.forEach(addURI);
             }
-            else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase())
+            else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase() ||
+                        fileAdd.leafName.slice(0,-4).toLowerCase() == 'choose')
             {
                 //skip
             }
             else
             {
-                itemz = { URI: fileToURI(fileAdd), thumbURI: null };
+                itemz = { URI: fileToURI(fileAdd), thumbURI: null, chooser: null };
                 arURIs.push( itemz );
             }
         }
@@ -185,8 +200,10 @@ function expandURI(strURI, arURIs, type, max )
         {
             // look for thumb
             const thumbfile = _getThumbnailFile(fileAdd);
+            const chooser = _getChooser(fileAdd);
             const item = { URI: fileToURI(fileAdd), 
-                            thumbURI: ((thumbfile) ? fileToURI(thumbfile) : null) };
+                                    thumbURI: ((thumbfile) ? fileToURI(thumbfile) : null),
+                                    chooser: chooser};
             arURIs.push( item );
         }
     }
