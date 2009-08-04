@@ -84,23 +84,17 @@ function getExtensionRootPath(id)
 function ChromeURIToFileURI(chrome)
 // convert a chrome URI to absolute OS path file URI
 {
-	// until I find an offical way this simple hack will do - pass in filename to be found in Chrome://mavis/content
-	// needs to match chrome manefest mapping
-	const strBase = 'chrome://maavis/content/';
-	var path = '';
-	if (chrome.indexOf(strBase) == 0)
-		path = chrome.slice(strBase.length);
-	const strMaavisContent = '\\chrome\\content\\maavis\\';
-	const root = getExtensionRootPath();
     try
 	{
-		var uri = fileToURI(root+strMaavisContent+path);
+		var uri = utils.getService("@mozilla.org/network/io-service;1", "nsIIOService")
+					  .newURI(chrome, null, null);
+		var reg = utils.getService("@mozilla.org/chrome/chrome-registry;1", "nsIChromeRegistry");
+		return reg.convertChromeURL(uri).spec;
 	} 
 	catch (err) 
 	{
 		return '';
 	}
-	return uri;    
 }
 
 function getInstallationPath()
