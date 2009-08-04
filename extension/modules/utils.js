@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["logit", "bind", "trim", "buildPath", "runProcess", "exec", "toJson", "fromJson", "isArray"];
+var EXPORTED_SYMBOLS = ["logit", "bind", "trim", "buildPath", "runProcess", "exec", "toJson", "fromJson", "isArray", "getService", "createInstance"];
 
 function logit()
 {
@@ -113,5 +113,32 @@ function isArray(obj)
 {
     return obj.constructor.toString().indexOf("Array") != -1;
 }
+
+function getService(klass, inteface)
+{
+	try 
+	{
+		return Components.classes[klass].getService(Components.interfaces[inteface]);
+	} 
+	catch (ex)
+	{
+		logit("Error getting service: " + klass + "\n" + inteface + "\n" + ex);
+		return null;
+	}
+}
+
+function createInstance(klass, inteface)
+{
+	try
+	{
+		return Components.classes[klass].createInstance(Components.interfaces[inteface]);
+    }
+	catch (ex)
+	{
+		logit("Error creating instance: " + klass + "\n" + inteface + "\n" + ex);
+		return null;
+    }
+}
+
 
 // EOF
