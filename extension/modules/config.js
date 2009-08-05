@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getcontactDetails", "getUserConfig", "getUserContacts"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getcontactDetails", "getUserConfig", "getUserContacts", "getColour", "toggleColour", "getSpeech", "toggleSpeech"];
 
 //TODO clean up this file
 
@@ -186,5 +186,146 @@ function getUserContacts()
     arItems.forEach(addContact);
     return contacts;
 }
+
+/* no good as the cascade iscompletely messed up
+var g_currentSheet = null;
+function loadStylesheet(sheet)
+{
+    try
+    {
+        var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
+                            .getService(Components.interfaces.nsIStyleSheetService);
+        const type = sss.AGENT_SHEET;
+        var ios = Components.classes["@mozilla.org/network/io-service;1"]
+                            .getService(Components.interfaces.nsIIOService);
+        var uri = ios.newURI(sheet, null, null);
+        if(g_currentSheet  && g_currentSheet != sheet)
+        {
+            sss.unregisterSheet(g_currentSheet, type);
+        }
+        sss.loadAndRegisterSheet(uri, type);
+        g_currentSheet = uri;
+    }
+    catch (ex)
+    {
+        utils.logit('Error loading stylesheet'+ex);
+    }
+}
+*/
+
+function getColourFile()
+{
+    var fileColour = getUserDataDir();
+    fileColour.append('.bw');
+    return fileColour;
+}
+
+function getColour()
+{
+    const file = getColourFile();
+    return (file.exists()) ? "bw" : "colour"; 
+}
+
+function toggleColour()
+{
+    try 
+    {
+        const file = getColourFile();
+        if (file.exists())
+            file.remove(false);
+        else
+            file.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0777);
+    }
+    catch(e)
+    {
+        utils.logit("Can't change colour");
+        throw (e);        
+    }
+ }
+
+function getSpeechFile()
+{
+    var fileNoSpeech = getUserDataDir();
+    fileNoSpeech.append('.nospeech');
+    return fileNoSpeech;
+}
+
+function getSpeech()
+{
+    const file = getSpeechFile();
+    return (file.exists()) ? "nospeech" : "speech"; 
+}
+
+function toggleSpeech()
+{
+    try 
+    {
+        const file = getSpeechFile();
+        if (file.exists())
+            file.remove(false);
+        else
+            file.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0777);
+    }
+    catch(e)
+    {
+        utils.logit("Can't change speech");
+        throw (e);        
+    }
+}
+
+function getComplexity()
+{
+    const files = getComplexityFiles("full");
+    return (areFileTimesTheSame(files.src, files.dst)) ? "full" : "reduced";
+}
+
+function areFileTimesTheSame(fileA, fileB)
+{
+   return fileA.lastModifiedTime == fileB.lastModifiedTime;
+}
+
+function getComplexityFiles(complexity)
+{
+    try 
+    {
+        const root = 'file:///' + path.getExtensionRootPath() + '\\chrome\\content\\';
+        const src = 'maavis_' + g_complexity;
+        const dst = 'maavis';
+        // todo remove hard coding
+        const ios = Components.classes["@mozilla.org/network/io-service;1"]
+                            .getService(Components.interfaces.nsIIOService);
+        const srcURI = ios.newURI(root+src, null, null);
+        const srcFile = srcURI.QueryInterface(Components.interfaces.nsIFileURL).file;
+        const dstURI = ios.newURI(root+dst, null, null);
+        const dstFile = dstURI.QueryInterface(Components.interfaces.nsIFileURL).file;
+        return {src: srcFile, dst: dstFile};
+    }
+    catch(e)
+    {
+        utils.logit("Can't get complexity files");
+        throw(e);
+        return {};        
+    }
+}
+
+
+var g_complexity = 'full';
+function toggleComplexity(g_complexity)
+{
+    g_complexity = (g_complexity == "reduced") ? "full" : 'reduced';
+
+    try 
+    {
+        files = getComplexityFiles();
+        files.dst.remove(true);
+        files.src.copyTo(null, 'maavis');
+    }
+    catch(e)
+    {
+        utils.logit("Can't change complexity");
+        throw (e);        
+    }
+}
+
 
 // EOF

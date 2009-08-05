@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["loadActions", "showPage", "setHome", "goHome", "stopWindowName", "getColour", "getSpeech", "getComplexity", "getPlaylist", "setQuit", "showCall"];
+var EXPORTED_SYMBOLS = ["loadActions", "showPage", "setHome", "goHome", "stopWindowName", "setQuit", "showCall"];
 
 const mainwindow = {};
 Components.utils.import("resource://modules/mainwindow.js", mainwindow);
@@ -87,8 +87,6 @@ function loadActions()
     action.setAction('masterVolumeLouder', function(){ alterMasterVolume( false ) }, setContext);
     action.setAction('masterVolumeQuieter', function(){ alterMasterVolume( true ) }, setContext);
 
-    action.setAction('playlistAdd', playlistAdd, setContext);
-
     action.setAction('browseTo', function(page){ window.document.getElementById("browser").loadURI(page)}, setContext);
     action.setAction('browseBack', function(){ window.document.getElementById("browser").goBack()}, setContext);
     action.setAction('browseForward', function(){ window.document.getElementById("browser").goForward()}, setContext);
@@ -107,8 +105,8 @@ function loadActions()
     action.setAction('progExec', execute.execProc, setContext);
     action.setAction('progKill', execute.killProc, setContext);
 
-    action.setAction('configToggleColour', function(){toggleColour(); goHome()} , setContext);
-    action.setAction('configToggleSpeech', function(){toggleSpeech(); goHome()} , setContext);
+    action.setAction('configToggleColour', function(){config.toggleColour(); goHome()} , setContext);
+    action.setAction('configToggleSpeech', function(){config.toggleSpeech(); goHome()} , setContext);
     //action.setAction('configToggleComplexity', function(){toggleComplexity() ; goHome();}, setContext);
  
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);
@@ -144,152 +142,6 @@ function showCall(bShow, partner)
     if (endcall)
         endcall.setAttribute('hidden', (bShow) ? 'false' : 'true');
 }
-
-function getColour()
-{
-    const files = getColourFiles("colour");
-    return (areFileTimesTheSame(files.src, files.dst)) ? "colour" : "bw"; 
-}
-
-function getSpeechFile()
-{
-    var fileNoSpeech = config.getUserDataDir();
-    fileNoSpeech.append('.nospeech');
-    return fileNoSpeech;
-}
-
-function getSpeech()
-{
-    const file = getSpeechFile();
-    return (file.exists()) ? "nospeech" : "speech"; 
-}
-
-function toggleSpeech()
-{
-    try 
-    {
-        const file = getSpeechFile();
-        if (file.exists())
-            file.remove(false);
-        else
-            file.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0777);
-    }
-    catch(e)
-    {
-        utils.logit("Can't change speech");
-        throw (e);        
-    }
-}
-
-function getComplexity()
-{
-    const files = getComplexityFiles("full");
-    return (areFileTimesTheSame(files.src, files.dst)) ? "full" : "reduced";
-}
-
-function areFileTimesTheSame(fileA, fileB)
-{
-   return fileA.lastModifiedTime == fileB.lastModifiedTime;
-}
-
-function getColourFiles(colour)
-{
-    try 
-    {
-        const root = 'file:///' + path.getExtensionRootPath() + '\\chrome\\skin\\';
-        const src = 'maavis_' + colour + '.css';
-        const dst = 'maavis.css';
-        // todo remove hard coding
-        const ios = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
-        const srcURI = ios.newURI(root+src, null, null);
-        const srcFile = srcURI.QueryInterface(Components.interfaces.nsIFileURL).file;
-        const dstURI = ios.newURI(root+dst, null, null);
-        const dstFile = dstURI.QueryInterface(Components.interfaces.nsIFileURL).file;
-        return {src: srcFile, dst: dstFile};
-    }
-    catch(e)
-    {
-        utils.logit("Can't get colour files");
-        return {};        
-    }
-}
-
-function getComplexityFiles(complexity)
-{
-    try 
-    {
-        const root = 'file:///' + path.getExtensionRootPath() + '\\chrome\\content\\';
-        const src = 'maavis_' + g_complexity;
-        const dst = 'maavis';
-        // todo remove hard coding
-        const ios = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
-        const srcURI = ios.newURI(root+src, null, null);
-        const srcFile = srcURI.QueryInterface(Components.interfaces.nsIFileURL).file;
-        const dstURI = ios.newURI(root+dst, null, null);
-        const dstFile = dstURI.QueryInterface(Components.interfaces.nsIFileURL).file;
-        return {src: srcFile, dst: dstFile};
-    }
-    catch(e)
-    {
-        utils.logit("Can't get complexity files");
-        throw(e);
-        return {};        
-    }
-}
-
-
-var g_complexity = 'full';
-function toggleComplexity(g_complexity)
-{
-    g_complexity = (g_complexity == "reduced") ? "full" : 'reduced';
-
-    try 
-    {
-        files = getComplexityFiles();
-        files.dst.remove(true);
-        files.src.copyTo(null, 'maavis');
-    }
-    catch(e)
-    {
-        utils.logit("Can't change complexity");
-        throw (e);        
-    }
-}
-
-var g_colour = 'colour';
-function toggleColour()
-{
-//    g_complexity = (g_complexity == "minimal) ? "full" : 'minimal';
-    g_colour = (g_colour == "colour") ? "bw" : 'colour';
-
-    try 
-    {
-        files = getColourFiles(g_colour);
-        
-        files.dst.remove(false);
-        files.src.copyTo(null, 'maavis.css');
-    }
-    catch(e)
-    {
-        utils.logit("Can't change theme");
-        throw (e);        
-    }
-}
-
-var g_playlist = [];
-function getPlaylist()
-{
-    return g_playlist;
-}
-
-function playlistAdd(item)
-{
-    //TODO toggle?
-    g_playlist.push(item);
-}
-
 
 function alterMasterVolume(bDec)
 {

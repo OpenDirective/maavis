@@ -4,9 +4,9 @@ function loadPage()
 
     function f()
     {
-        if (actions.getColour() == "colour") 
+        if (config.getColour() == "colour") 
             document.getElementById("theme_btn").state = 'b';
-        if (actions.getSpeech() == "speech") 
+        if (config.getSpeech() == "speech") 
             document.getElementById("speech_btn").state = 'b';
     }
     window.setTimeout(f, 200); // so layout is correct

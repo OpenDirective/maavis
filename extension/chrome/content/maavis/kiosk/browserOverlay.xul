@@ -1,4 +1,9 @@
 <?xml version="1.0"?>
+<!-- want to put all stylesheets here but doesn't seem to work 
+    so duplicate in each file page for now 
+-->
+<?xml-stylesheet href="chrome://maavis/skin/maavis_colour.css" type="text/css"?>
+<?xml-stylesheet href="chrome://maavis/skin/maavis_bw.css" type="text/css"?>
 
 <overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
