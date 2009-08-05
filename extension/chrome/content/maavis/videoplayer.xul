@@ -27,7 +27,7 @@
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
 
         <touchkey id="louder" row='8' col='7' rows='2' cols='3'
-                class='player_incvol' label="Louder" accesskey='m' 
+                class='player_incvol' label="Louder" accesskey='l' 
                 image='chrome://maavis/skin/playerbuttons/louder.png' 
                 action="masterVolumeLouder" />
               

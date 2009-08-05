@@ -33,6 +33,7 @@ function loadPage()
 				const action = 'mediaPlayItem|'+(row-1).toString();
 				key = pad.createKey(row++, 0, 1, 6, name, null, 0, action, 'center');
 				key.className += " mediatrack";
+                key.leftalignlabel = 'true';
 			}
 			catch(e)
 			{

@@ -42,7 +42,7 @@
                 action="masterVolumeQuieter" />
                 
         <touchkey id="louder" row='8' col='8' rows='2' cols='2'
-                class='player_incvol' label="Louder" accesskey='m' 
+                class='player_incvol' label="Louder" accesskey='l' 
                 image='chrome://maavis/skin/playerbuttons/louder.png' 
                 action="masterVolumeLouder" />
 

@@ -24,6 +24,9 @@
             this._label_box = document.getAnonymousElementByAttribute(this, 'anonid', 'label-box');
             if (!this._label_box)
                  throw "XBL binding for <button type=\"touchkey\"/> must contain an element with anonid=\"label-box\"";
+            this._image_box = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
+            if (!this._image_box)
+                 throw "XBL binding for <button type=\"touchkey\"/> must contain an element with anonid=\"image-frame\"";
 
             this.obLabel = document.getAnonymousElementByAttribute(this, 'anonid', 'label');
 
@@ -56,6 +59,16 @@
            </setter>
         </property>
 
+        <property name="cols"
+                onget="return this.getAttribute('cols')" >
+            <setter><![CDATA[
+                this.setAttribute('cols', val);
+                this.setOrientation();
+                return val;
+                ]]> 
+            </setter>
+        </property>
+
         <property name="label"
                 onget="return this.getAttribute('label')">
             <setter><![CDATA[
@@ -66,14 +79,17 @@
            </setter>
         </property>
 
-        <property name="cols"
-                onget="return this.getAttribute('cols')" >
+        <property name="leftalignlabel"
+                onget="return this.getAttribute('leftalignlabel')">
             <setter><![CDATA[
-                this.setAttribute('cols', val);
-                this.setOrientation();
+                this.setAttribute('leftalignlabel', val);
+                if (val == 'true')
+                {
+                    document.getAnonymousElementByAttribute(this, 'anonid', 'label').className+=' lefty';                
+                }
                 return val;
-                ]]> 
-            </setter>
+                ]]>
+           </setter>
         </property>
 
         <method name="_setAction">
@@ -92,12 +108,31 @@
  
         <method name="setOrientation">
         <body><![CDATA[
-            const bHoriz = (this.width / this.height > 2);
-            const bHasImage = this.hasAttribute('image');
             const box = this._label_box.parentNode;
-            box.orient = (bHoriz) ? 'horizontal' : 'vertical';
-            this._label_box.align = (bHoriz) ? 'start' : 'stretch';
-            this._label_box.flex = (bHoriz && bHasImage) ? '4' : '0';
+            
+            const bHoriz = (this.width / this.height > 2);
+            if  (bHoriz)
+            {
+                const bHasImage = this.hasAttribute('image');
+                box.orient =  'horizontal';
+                box.pack =  'center';
+                this._label_box.orient =  'horizontal';
+                this._image_box.orient =  'horizontal';
+                this._image_box.flex =  '0';
+                const boxw = box.boxObject.width;
+                this._image_box.width=boxw/4-5;
+                this._label_box.flex = (bHasImage) ? '0' : '1';
+                this._label_box.width=3*boxw/4-5;
+                //document.getAnonymousElementByAttribute(this, 'anonid', 'label').className+=' lefty';
+            }
+            else
+            {
+                box.orient =  'vertical';
+                this._label_box.orient =  'vertical';
+                this._image_box.flex =  '1';
+                this._label_box.flex = '0';
+                this._label_box.align = 'stretch';
+            }
            ]]>
         </body>
       </method>
@@ -109,7 +144,7 @@
             var label = this.obLabel;
             if (!label)
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
-			label.width = this.width - 20 ;
+			label.width = label.parentNode.width - 20 ;
 			label.value = this.getAttribute('label');
             ]]>
         </body>
@@ -182,10 +217,10 @@
                 
    <content>
         <xul:vbox anonid='box' class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
-                align="stretch" pack="center" orient="vertical" flex="1">
+                align="stretch" pack="center" flex="1">
             <xul:vbox anonid='image-frame' flex='1' />
-            <xul:vbox anonid="label-box" flex='0' pack="center">
-                <xul:label anonid='label' class="touchkey-text" xbl:inherits="accesskey,crop"> </xul:label>
+            <xul:vbox anonid="label-box" flex='0' align="center">
+                <xul:label anonid='label' flex='1' class="touchkey-text" xbl:inherits="accesskey,crop"> </xul:label>
             </xul:vbox>
         </xul:vbox> 
       </content>

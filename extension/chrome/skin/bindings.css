@@ -35,3 +35,10 @@ slide{
     -moz-binding: url('chrome://maavis/content/bindings/slideshow.xml#slide');
 }
 
+touchkey label.lefty {text-align:left;}
+
+/*Useful for debugging layout issues*/
+/*
+touchkey vbox ,togglekey vbox { border: solid black 2px;}
+touchkey label,togglekey label { border: solid red 2px; }
+*/
