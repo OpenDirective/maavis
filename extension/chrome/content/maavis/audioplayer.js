@@ -8,7 +8,7 @@ function loadPage()
     var mrls = mainwindow.getProp("args");
     
     var row = 1;
-    const MAXROWS = 10;
+    const MAXROWS = 9;
     const pad = document.getElementById("pad");
     if (!pad)
         return;
@@ -28,9 +28,9 @@ function loadPage()
 		{
 			try 
 			{        
-				file = path.URIToFile(item);
-				name = file.leafName.slice(0,-4);
-				action = 'mediaPlayItem|'+(row-1).toString();
+				const file = path.URIToFile(item);
+				const name = file.leafName.slice(0,-4);
+				const action = 'mediaPlayItem|'+(row-1).toString();
 				key = pad.createKey(row++, 0, 1, 6, name, null, 0, action, 'center');
 				key.className += " mediatrack";
 			}

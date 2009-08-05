@@ -26,9 +26,9 @@
                 />
 -->
         <togglekey id="pause" row='6' col='6' rows='2' cols='2'
-                class='player_pause' label='Pause' labelB="Play" accesskey='p' 
-                image='chrome://maavis/skin/playerbuttons/pause.png' 
-                imageB='chrome://maavis/skin/playerbuttons/play.png' 
+                class='player_pause' label='Play' labelB="Pause" accesskey='p' 
+                image='chrome://maavis/skin/playerbuttons/play.png' 
+                imageB='chrome://maavis/skin/playerbuttons/pause.png' 
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
 
         <touchkey id="next" row='6' col='8' rows='2' cols='2'

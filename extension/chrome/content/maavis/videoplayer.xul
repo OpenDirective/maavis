@@ -21,9 +21,9 @@
                 action="voipAnswerCall" />
 
         <togglekey id="pause" row='4' col='7' rows='2' cols='3'
-                class='player_pause' label='Pause' labelB="Play" accesskey='p' 
-                image='chrome://maavis/skin/playerbuttons/pause.png' 
-                imageB='chrome://maavis/skin/playerbuttons/play.png'
+                class='player_pause' label='Play' labelB="Pause" accesskey='p' 
+                image='chrome://maavis/skin/playerbuttons/play.png' 
+                imageB='chrome://maavis/skin/playerbuttons/pause.png'
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
 
         <touchkey id="louder" row='8' col='7' rows='2' cols='3'

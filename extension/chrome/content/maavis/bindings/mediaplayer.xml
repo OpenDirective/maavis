@@ -48,6 +48,8 @@
             if(mythis.getAttribute('invisible') == 'true') // hiding bound obj means player not created
                 e.setAttribute('hidden', 'true');
             
+            mythis._broadcast("isPlaying", "false");
+
             if (mythis._readyFunc)
             {
                 setTimeout(mythis._readyFunc, 500);
@@ -99,8 +101,8 @@
     <parameter name="args" />
     <body><![CDATA[
         const vlc = this._vlc;
-	   const that = this;
-	   this._items=[];
+	    const that = this;
+	    this._items=[];
         vlc.playlist.clear();
         Components.utils.import("resource://modules/utils.js");
         function addToPlaylist(mrl)
@@ -123,7 +125,8 @@
         vlc.playlist.play();
         
         this._poller = setInterval(function(){that._pollState();}, 3000);
-        this._broadcast("isPlaying", "true");
+        if (args.length)
+            this._broadcast("isPlaying", "true");
         ]]>
     </body>
     </method>
@@ -132,18 +135,20 @@
     <body><![CDATA[
         // TODO prolly need a state machine if vids can take a while to start
         const vlc = this._vlc;
-        if (!vlc.playlist.isPlaying) // idle
+        const that = this;
+        if (!vlc.playlist.isPlaying && this._vlc.input.state != 4) // idle and not paused
         {
             // hack but there seems no easy way, the API rather sucks here
             // if this causes glitches then we'll need to reset the playlist
             function loop()
             {
-              //vlc.playlist.play();
-              vlc.playlist.next(); // next loops when playing
-		    setTimeout(function(){if (!vlc.playlist.isPlaying) vlc.playlist.playItem(0);}, 400)
+                //vlc.playlist.play();
+                vlc.playlist.next(); // seems to paly as well
+                that._broadcast("isPlaying", "true");
+                setTimeout(function(){if (!vlc.playlist.isPlaying) vlc.playlist.playItem(0);}, 200)
             } 
             // loop if still idle after a short time
-            setTimeout(function(){if (!vlc.playlist.isPlaying) loop();}, 400); 
+            setTimeout(function(){if (!vlc.playlist.isPlaying) loop();}, 200); 
         }
         ]]>
     </body>
@@ -180,7 +185,8 @@
    <method name='restart'>
     <body><![CDATA[
         this._vlc.playlist.stop();
-        // poller will restart it
+        this._broadcast("isPlaying", "false");
+         // poller will restart it
         ]]>
     </body>
     </method>
@@ -188,6 +194,7 @@
   <method name='prevItem'>
     <body><![CDATA[
         this._vlc.playlist.prev();
+        this._broadcast("isPlaying", "false");
         // poller will restart it
         ]]>
     </body>
@@ -195,9 +202,9 @@
 
   <method name='nextItem'>
     <body><![CDATA[
-        this._vlc.playlist.stop(); // this allow poller to loop at end of playlist else next does nothing
-	   this._pollState();
-        // poller will restart it
+        this._vlc.playlist.stop(); // this allows poller to loop at end of playlist else next does nothing
+        this._broadcast("isPlaying", "false");
+ 	    this._pollState();           // call for immediate response
         ]]>
     </body>
     </method>
@@ -206,8 +213,8 @@
     <parameter name="item" />
     <body><![CDATA[
 		const n = parseInt(item);
-		this._vlc.playlist.playItem(n); // IS the index despite what wiki docs say
-        // poller will restart it
+		this._vlc.playlist.playItem(n); // IS the index despite what wiki docs say; plus add() doesn't return an id
+        this._broadcast("isPlaying", "true");
         ]]>
     </body>
     </method>

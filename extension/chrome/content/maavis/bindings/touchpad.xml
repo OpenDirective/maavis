@@ -214,12 +214,9 @@
                 this.setAttribute('watch', val); 
                 const w = val.split('.');
                 var obs = document.createElement('observes');
-                const bcid = w[0]+"_bc";
                 obs.setAttribute("element", w[0]+"_bc");
                 obs.setAttribute("attribute", w[1]);
-//                obs.setAttribute("onbroadcast", 'alert(this.getAttribute("'+w[1]+'"));'); //TODO why not?
-                //obs.setAttribute("onbroadcast", 'alert(document.getElementById("'+w[0]+'").'+w[1]+')');
-                const str = 'this.parentNode.state = (document.getElementById("'+w[0]+'").'+w[1]+' == "true") ? "a" : "b";';
+                const str = 'this.parentNode.state = (this.parentNode.getAttribute("'+w[1]+'") == "true") ? "b" : "a";'; // observer sets on parent
                 obs.setAttribute("onbroadcast", str);
                 const curobs = this.getElementsByClassName("observes");
                 if (curobs.length)

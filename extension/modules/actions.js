@@ -40,7 +40,7 @@ function showPage(page /*...*/)
     for (i=1; i < arguments.length; i++)
     {
         var str = config.parseURI(arguments[i])
-        ar=[];
+        var ar=[];
         if (path.expandURI(str, ar))
         {
             ar.forEach(function(item){ args.push(item.URI); });
