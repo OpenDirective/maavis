@@ -10,14 +10,14 @@
     <touchpad flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
-                label="Choose Maavis settings" spokenLabel="Choose Mayvis settings" speakOnLoad='true'/>
+                label="Choose Maavis settings" spokenLabel="Choose Mavis settings" speakOnLoad='true'/>
                 
         <touchkey id='quit' row='1' col='6' rows='2' cols='4'
-                class='quit' label="Bye Settings" accesskey='l' 
+                class='quit' label="Bye Settings" accesskey='b' 
                 action="logout" />
 
         <togglekey id="theme_btn" row='4' col='2' rows='2' cols='6'
-                class='config_btn' label='Choose colour' labelB="Choose black and white" accesskey='t' 
+                class='config_btn' label='Choose colour' labelB="Choose black and white" accesskey='c' 
                 action="configToggleColour" autoToggle='false' />
 
         <togglekey id="speech_btn" row='6' col='2' rows='2' cols='6'

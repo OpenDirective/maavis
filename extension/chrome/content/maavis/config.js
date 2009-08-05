@@ -9,7 +9,7 @@ function loadPage()
         if (actions.getSpeech() == "speech") 
             document.getElementById("speech_btn").state = 'b';
     }
-    window.setTimeout(f, 300); // so layout is correct
+    window.setTimeout(f, 200); // so layout is correct
     /*
     if (actions.getComplexity() != "full") 
         document.getElementById("complexity_btn").state = 'b';

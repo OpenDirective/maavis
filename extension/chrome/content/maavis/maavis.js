@@ -22,7 +22,10 @@ function initWindow()
 
     actions.loadActions();
 
-    const bConfig = Boolean(winutils.getWindowIntArgument(window, 1));
+    //const bConfig = Boolean(winutils.getWindowIntArgument(window, 1));
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"].
+    getService(Components.interfaces.nsIPrefBranch);
+    const bConfig = prefs.getBoolPref("maavis.commandline.config");
     const home = (bConfig) ? "config.xul" : "home.xul"
     actions.setHome(home);
     

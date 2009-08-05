@@ -62,10 +62,7 @@ function kioskStartup()
         {
             window.fullScreen = true;
         }
-
-        const strPage = ((strHomePage != '') ? strHomePage : 
-							   ((strMaavisPage != '') ? pagePath+strMaavisPage :
-											  _defaultHomePage ) );
+        const strPage = ((strHomePage != '') ? strHomePage :  _defaultHomePage );
 	loadURI(strPage);
     }
 }
