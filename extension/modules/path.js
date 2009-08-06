@@ -184,7 +184,7 @@ function expandURI(strURI, arURIs, type, max )
                 URIs.forEach(addURI);
             }
             else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase() ||
-                        fileAdd.leafName.slice(0,-4).toLowerCase() == 'choose')
+                        fileAdd.leafName.slice(0,-4).toLowerCase() ==CHOOSEFILEPREFIX)
             {
                 //skip
             }
