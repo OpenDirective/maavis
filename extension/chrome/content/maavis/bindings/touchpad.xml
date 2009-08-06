@@ -162,34 +162,55 @@
               var config = {};
               Components.utils.import("resource://modules/config.js", config);
               src = config.parseURI(src); // TODO review bad design having this here
-              
+ 
+              const isSVG = (src.slice(-4).toLowerCase() == '.svg');
+  
               function setImageSizez()
               {
-                // resize to fit keeping aspect ratio
-                const imageWidth = this.naturalWidth;
-                const imageHeight = this.naturalHeight;
                 const availableWidth = imageFrame.boxObject.width; // note could also use getComputedStyle
                 const availableHeight = imageFrame.boxObject.height;
-                var width = availableWidth;
-                var height = availableWidth * imageHeight / imageWidth;
-                if (height > availableHeight)
+
+                if (isSVG)
                 {
+                    width = availableWidth;
                     height = availableHeight;
-                    width = availableHeight * imageWidth / imageHeight;
                 }
-            //window.alert(availableWidth+'x'+availableHeight + ' '+ width+'x'+height);
+                else
+                {
+                    // resize to fit keeping aspect ratio
+                    const imageWidth = this.naturalWidth;
+                    const imageHeight = this.naturalHeight;
+                    var width = availableWidth;
+                    var height = availableWidth * imageHeight / imageWidth;
+                    if (height > availableHeight)
+                    {
+                        height = availableHeight;
+                        width = availableHeight * imageWidth / imageHeight;
+                    }
+                }
+                width *=  scale;
+                height *=  scale;
+        //window.alert(availableWidth+'x'+availableHeight + ' '+ width+'x'+height);
             
                 imageFrame.align='center';
                 imageFrame.pack='center';
-
+                
+                const that = this;
                 function setImageSize()
                 {
-                    // add child image (xul:image) not HTML to avoid display problems
-                    var i = document.createElement('image');
+                    if (isSVG)
+                    { 
+                        i = that;
+                    }
+                    else
+                    {
+                        // add child image (xul:image) not HTML to avoid display problems
+                        var i = document.createElement('image');
+                        i.setAttribute('src', src);
+                    }
+                    i.width = width;
+                    i.height = height;
                     i.setAttribute('class', 'touchkey-image');
-                    i.setAttribute('src', src);
-                    i.width = width * scale;
-                    i.height = height * scale;
                     if (imageFrame.firstChild)
                       imageFrame.replaceChild(i, imageFrame.firstChild);
                     else
@@ -199,10 +220,21 @@
                 setTimeout(setImageSize, 1); // seem to need this as well
               }
               
-              // create a temp HTML img which includes the actual image size so we can keep aspect ratio
-              var i = document.createElementNS("http://www.w3.org/1999/xhtml", 'img');
-              i.setAttribute('src', src);
-              i.onload = setImageSizez;
+              if (isSVG)
+              {
+                    // no obvious way of getting at image size from file.
+                    i = document.createElementNS("http://www.w3.org/1999/xhtml", 'object');
+                    i.type='image/svg+xml';
+                    i.data=src;
+                    setTimeout(function(){setImageSizez.call(i)}, 1);
+              }
+              else
+              {
+                    // create a temp HTML img which includes the actual image size so we can keep aspect ratio
+                    var i = document.createElementNS("http://www.w3.org/1999/xhtml", 'img');
+                    i.onload = setImageSizez;
+                    i.src = src;
+                }
             }
             else
             {
