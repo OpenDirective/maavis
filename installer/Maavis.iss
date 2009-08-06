@@ -37,15 +37,18 @@ Name: "desktopiconcfg"; Description: "Put an icon on the desktop to change how M
 
 [Files]
 ; we might expect *.* to copy *this* file too but looks Inno like writes to temp file 1st so not a problem
-Source: "..\extension\*"; DestDir: "{app}\extension"; Flags: recursesubdirs ignoreversion
+Source: "..\extension\*"; DestDir: "{app}\extension"; Excludes: "\platform"; Flags: recursesubdirs ignoreversion
 Source: "GPL.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Credits and attribution.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Maavis.ico"; DestDir: "{app}"; Flags: ignoreversion
 
+; MaavisSkypeServer
+Source: "..\extension\platform\dist\*"; DestDir: "{app}\extension\platform\dist"; Flags: recursesubdirs ignoreversion
+
 ; copy the non debug version of prefs.js
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
 
-; Installer
+; Installer stuff
 Source: ".\*"; DestDir: "{app}\installer"; Excludes: "Output"; Flags: ignoreversion
 
 ; Media
