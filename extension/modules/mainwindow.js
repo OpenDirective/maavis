@@ -68,7 +68,10 @@ function setProp(name, value)
 
 function getProp(name)
 {
-    return _props[name];
+    if (name in _props) // this way to stop warnings in console
+        return _props[name];
+    else
+        return undefined;
 }
 
 function alert(str)
