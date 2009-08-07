@@ -86,28 +86,15 @@ function speak(what)
     return pm;
 }
 
-/* access to nave JSON */
-var _ijson = null;
-
-function _getJSON()
-{
-    if(!_ijson)
-    {
-        _ijson = Components.classes["@mozilla.org/dom/json;1"].createInstance(Components.interfaces.nsIJSON);
-    }
-    return _ijson;
-}
-    
 function toJson(obj)
 {
-    return _getJSON().encode(obj);
+    return JSON.stringify(obj);
 }
 
 function fromJson(text)
 {
-    return _getJSON().decode(text);
+    return JSON.parse(text);
 }
-
 
 function isArray(obj)
 {
