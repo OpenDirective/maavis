@@ -1,3 +1,9 @@
+/* Useful for debugging layout issues */
+/*
+touchkey vbox ,togglekey vbox { border: solid black 2px;}
+touchkey label,togglekey label { border: solid red 2px; }
+*/
+
 touchpad
 {
 	-moz-binding: url("chrome://maavis/content/bindings/touchpad.xml#touchpad");
@@ -37,8 +43,3 @@ slide{
 
 touchkey label.lefty {text-align:left;}
 
-/*Useful for debugging layout issues*/
-/*
-touchkey vbox ,togglekey vbox { border: solid black 2px;}
-touchkey label,togglekey label { border: solid red 2px; }
-*/

@@ -12,11 +12,11 @@ function loadPage()
             document.getElementById("sound_btn").state = 'b';
         if ( page.config.speakTitles == "yes") 
             document.getElementById("speech_btn").state = 'b';
-        if ( page.config.showText== "yes") 
-            document.getElementById("showtext_btn").state = 'b';
-        if ( page.config.showImages== "yes") 
+        if ( page.config.showLabels == "yes") 
+            document.getElementById("showlabels_btn").state = 'b';
+        if ( page.config.showImages == "yes") 
             document.getElementById("showimages_btn").state = 'b';
-        if ( page.config.useSkype== "yes") 
+        if ( page.config.useSkype == "yes") 
             document.getElementById("skype_btn").state = 'b';
     }
     window.setTimeout(f, 1); // so layout is correct

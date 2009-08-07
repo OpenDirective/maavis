@@ -16,9 +16,16 @@ Components.utils.import("resource://modules/skype.js", skype);
 const CONFIRM_EXIT_PROMPT = "Confirm Bye Maavis";
 const CONFIRM_EXIT_TIME = 3 * 1000;
 
+function _loadConfig()
+{
+    config.reloadUserConfig(); // so F5 rereads config file
+    return config.getUserConfig();
+}
+
 const page = 
 {
-    config : config.getUserConfig(),
+    
+    config : _loadConfig(),
 
     _setColourStylesheet: function()
     {
@@ -92,6 +99,16 @@ const page =
         {
             const speech = (page.config.speakTitles == "yes");
             message.setAttribute("speakOnLoad", (speech) ? "true" : "false");
+        }
+        const pad = document.getElementsByTagName('touchpad')[0];
+        if (pad !== undefined)
+        {
+            const showLabels  = (page.config.showLabels == "yes");
+            pad.setAttribute("showLabels", (showLabels) ? "true" : "false");
+            const showImages = (page.config.showImages == "yes");
+            pad.setAttribute("showImages", (showImages) ? "true" : "false");
+            const speakLabels = (page.config.speakLabels == "yes");
+            pad.setAttribute("showText", (speakLabels) ? "true" : "false");
         }
         
         if (skype.isAvailable())

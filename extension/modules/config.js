@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", /*"getAppConfig",  "getUsers",*/"parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakText", "toggleShowText", "toggleShowImages", "toggleUseSkype"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", /*"getAppConfig",  "getUsers",*/"parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype"];
 
 //TODO clean up this file
 
@@ -11,6 +11,9 @@ Components.utils.import("resource://modules/utils.js", utils);
 
 // for now we do synchronous all at once access direct to object
 // dojo data will give us a better api for the long term 
+
+var g_user = 'Default';
+var g_userConfig;//= {name: "Default", startsoundURI: null};
 
 function _setConfigDefaults()
 {
@@ -25,8 +28,8 @@ function _setConfigDefaults()
     _default(g_userConfig, 'theme', 'colour');
     _default(g_userConfig, 'playStartSound', 'yes');
     _default(g_userConfig, 'speakTitles', "yes");
-    _default(g_userConfig, 'speakText', "yes");
-    _default(g_userConfig, 'showText', "yes");
+    _default(g_userConfig, 'speakLabels', "yes");
+    _default(g_userConfig, 'showLabels', "yes");
     _default(g_userConfig, 'showImages', "yes");
     _default(g_userConfig, 'useSkype', "yes");
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
@@ -35,7 +38,7 @@ function _setConfigDefaults()
 function toggleTheme()
 {
     g_userConfig.theme = (g_userConfig.theme == 'colour') ? 'bw' : 'colour';
- }
+}
 
 function toggleSpeakTitles()
 {
@@ -47,14 +50,14 @@ function togglePlayStartSound()
     g_userConfig.playStartSound = (g_userConfig.playStartSound == 'yes') ? 'no' : 'yes';
 }
 
-function toggleSpeakText()
+function toggleSpeakLabels()
 {
-    g_userConfig.speakText= (g_userConfig.speakText == 'yes') ? 'no' : 'yes';
+    g_userConfig.speakLabels= (g_userConfig.speakLabels == 'yes') ? 'no' : 'yes';
 }
 
-function toggleShowText()
+function toggleShowLabels()
 {
-    g_userConfig.showText= (g_userConfig.showText == 'yes') ? 'no' : 'yes';
+    g_userConfig.showLabels= (g_userConfig.showLabels == 'yes') ? 'no' : 'yes';
 }
 
 function toggleShowImages()
@@ -81,9 +84,6 @@ function _getMaavisDataDir()
     dir.append('Maavis Media');
     return dir;
 }
-
-var g_user = 'Default';
-var g_userConfig;//= {name: "Default", startsoundURI: null};
 
 function getUserDataDir(user)
 { 
@@ -112,7 +112,7 @@ function _getStartSoundURI()
 function _getUserConfigFile()
 {
     const configFile = getUserDataDir();
-    configFile.append("config.json");
+    configFile.append("userconfig.json");
     return configFile;
 }
 
@@ -163,6 +163,12 @@ function saveUserConfig()
             return;
         }
  }
+
+function reloadUserConfig()
+{
+    g_userConfig = undefined;
+    const user = page.config.name; // so are loaded
+}
 
 function parseURI(str)
 // translate keywords in URI  and convert \ to / 

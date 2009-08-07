@@ -30,8 +30,19 @@
 
             this.obLabel = document.getAnonymousElementByAttribute(this, 'anonid', 'label');
 
-            this._setLabel();
-            this._setAction();
+            // get containing touchpad.
+            var node=this;
+            while (node.tagName != 'touchpad')
+                node = node.parentNode;
+            this.obTouchPad =  node;
+            
+            const that = this;
+            function foo()
+            {
+                that._setLabel();
+                that._setAction();
+            }
+            setTimeout(foo, 1); // alow labels to be set correctly even for those define in XUL
             
             // window.addEventListener('DOMContentLoaded', showImage, false); is too early as layout not compelete
  //           const mt = this;
@@ -59,6 +70,10 @@
            </setter>
         </property>
 
+        <property name="alwaysShowLabel"
+                onget="return this.getAttribute('alwaysShowLabel')"
+                onset="this.setAttribute('alwaysShowLabel', val); return val;"/>
+
         <property name="cols"
                 onget="return this.getAttribute('cols')" >
             <setter><![CDATA[
@@ -79,6 +94,10 @@
            </setter>
         </property>
 
+       <property name="_showLabel"
+                readonly="true"
+                onget='return (this.alwaysShowLabel || (this.obTouchPad.getAttribute("showLabels") == "true")) ;'/>
+                
         <property name="leftalignlabel"
                 onget="return this.getAttribute('leftalignlabel')">
             <setter><![CDATA[
@@ -109,27 +128,27 @@
         <method name="setOrientation">
         <body><![CDATA[
             const box = this._label_box.parentNode;
-            
-            const bHoriz = (this.width / this.height > 2);
+
+            const bShowImage = (this.hasAttribute('image') && (this.obTouchPad.getAttribute("showImages") == 'true'));
+            const bHoriz = ((this.width / this.height) > 2);
             if  (bHoriz)
             {
-                const bHasImage = this.hasAttribute('image');
+                //const bHasImage = this.hasAttribute('image');
                 box.orient =  'horizontal';
                 box.pack =  'center';
                 this._label_box.orient =  'horizontal';
                 this._image_box.orient =  'horizontal';
                 this._image_box.flex =  '0';
                 const boxw = box.boxObject.width;
-                this._image_box.width=boxw/4-5;
-                this._label_box.flex = (bHasImage) ? '0' : '1';
-                this._label_box.width=3*boxw/4-5;
-                //document.getAnonymousElementByAttribute(this, 'anonid', 'label').className+=' lefty';
+                this._label_box.flex = (bShowImage) ? '0' : '1';
+                this._image_box.width = (bShowImage && this._showLabel) ? boxw/4-5 : null;
+                this._label_box.width = (bShowImage && this._showLabel) ? 3*boxw/4-5 :null;
             }
             else
             {
                 box.orient =  'vertical';
                 this._label_box.orient =  'vertical';
-                this._image_box.flex =  '1';
+                this._image_box.flex =  (bShowImage) ? '1' : '0';
                 this._label_box.flex = '0';
                 this._label_box.align = 'stretch';
             }
@@ -137,10 +156,14 @@
         </body>
       </method>
 
+
         <method name="_setLabel">
         <body><![CDATA[
             // set the text of the label so it is wrapped
             // TODO prolly want to set/get property+attrib as well
+            if (!this._showLabel)
+                return
+                
             var label = this.obLabel;
             if (!label)
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
@@ -152,6 +175,9 @@
 
       <method name="_setImage">
         <body><![CDATA[
+           if (this.obTouchPad.showImages != 'true') // skip stack
+            return;
+            
           const scale = (this.hasAttribute('image-scale')) ? this.getAttribute('image-scale') : 1;
           const imageFrame = document.getAnonymousElementByAttribute(this, 'anonid', 'image-frame');
           if (!imageFrame)
@@ -406,6 +432,9 @@
                 that.layoutKeys(); // TODO we're fighting against gecko here so find a better way
             }
             window.addEventListener('load', function(){setTimeout(f, 1);}, false);
+            
+            this.setAttribute('showLabels', 'true')
+            this.setAttribute('showImages', 'true')
         ]]>
         </constructor>
 
@@ -417,6 +446,14 @@
                 onget="return this.getAttribute('cols')"
                 onset="this.setAttribute('cols', val); return val;"/>
 
+      <property name="showImages"
+                onget="return this.getAttribute('showImages')"
+                onset="this.setAttribute('showImages', val); return val;"/>
+                
+      <property name="showLabels"
+                onget="return this.getAttribute('showLabels')"
+                onset="this.setAttribute('showLabels', val); return val;"/>
+                
      <method name="_getGridCellDimensions">
         <body><![CDATA[
             const width = this._stack.boxObject.width;

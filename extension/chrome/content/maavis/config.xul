@@ -11,35 +11,36 @@
     <touchpad flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
-                label="Choose Maavis settings" spokenLabel="Choose Mavis settings" speakOnLoad='true'/>
+                label="Choose Maavis settings" spokenLabel="Choose Mavis settings" 
+                alwaysShowLabel='true' speakOnLoad='true'/>
                 
         <touchkey id='quit' row='1' col='6' rows='2' cols='4'
                 class='quit' label="Bye Settings" accesskey='b' 
-                action="logout" />
+                alwaysShowLabel='true' action="logout" />
 
         <togglekey id="theme_btn" row='1' col='0' rows='1' cols='6'
                 class='config_btn' label='Choose colour' labelB="Choose black and white" accesskey='c' 
-                action="configToggleTheme" autoToggle='false' />
+                alwaysShowLabel='true' action="configToggleTheme" autoToggle='false' />
 
         <togglekey id="sound_btn" row='2' col='0' rows='1' cols='6'
-                class='config_btn' label='Choose play start sound' labelB="Choose don't play start sound" accesskey='c' 
-                action="configTogglePlayStartSound" autoToggle='false' />
+                class='config_btn' label='Choose play start sound' labelB="Choose don't play start sound" accesskey='d' 
+                alwaysShowLabel='true' action="configTogglePlayStartSound" autoToggle='false' />
 
         <togglekey id="speech_btn" row='3' col='0' rows='1' cols='6'
                 class='config_btn' label='Choose speak page titles' labelB="Choose don't speak page titles" accesskey='s' 
-                action="configToggleSpeakTitles" autoToggle='false' />
+                alwaysShowLabel='true' action="configToggleSpeakTitles" autoToggle='false' />
 
-        <togglekey id="showtext_btn" row='4' col='0' rows='1' cols='6'
+        <togglekey id="showlabels_btn" row='4' col='0' rows='1' cols='6'
                 class='config_btn' label='Choose show item text' labelB="Choose don't show item text" accesskey='t' 
-                action="configToggleShowText" autoToggle='false' />
+                alwaysShowLabel='true' action="configToggleShowLabels" autoToggle='false' />
 
         <togglekey id="showimages_btn" row='5' col='0' rows='1' cols='6'
-                class='config_btn' label='Choose show item images' labelB="Choose don't show item images" accesskey='t' 
-                action="configToggleShowImages" autoToggle='false' />
+                class='config_btn' label='Choose show item images' labelB="Choose don't show item images" accesskey='i' 
+                alwaysShowLabel='true' action="configToggleShowImages" autoToggle='false' />
 
         <togglekey id="skype_btn" row='6' col='0' rows='1' cols='6'
                 class='config_btn' label='Choose use Skype' labelB="Choose don't use Skype" accesskey='k' 
-                action="configToggleUseSkype" autoToggle='false' />
+                alwaysShowLabel='true' action="configToggleUseSkype" autoToggle='false' />
 <!--
         <hbox class="config_desc" pack="center" align="center" row='6' col='1' rows='2' cols='4'>
             <description >Complexity:</description>

@@ -8,7 +8,7 @@
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
     <script type="application/javascript" src="chrome://maavis/content/home.js" />
 
-    <touchpad flex='1' rows='10' cols='10'>
+    <touchpad id='pad' flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
                 label="Touch the topic you want to read" speakOnLoad='true'/>
