@@ -32,6 +32,7 @@ function initWindow()
     const home = (bConfig) ? "config.xul" : "home.xul"
     actions.setHome(home);
     
+    // show correct info on home page
     document.getElementById("promptMaavis").setAttribute("collapsed", (bConfig) ? "true" : "false")
     document.getElementById("promptSettings").setAttribute("collapsed", (!bConfig) ? "true" : "false")
 
@@ -42,7 +43,7 @@ function initWindow()
         skype.init();
     }
     
-    const splashtime = 4;
+    const splashtime = (bConfig) ? 2 : config.getUserConfig().splashTime;
     mainwindow.showWindow(window, function(){actions.goHome();}, splashtime);
 }
 

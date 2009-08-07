@@ -111,7 +111,15 @@ const page =
             pad.setAttribute("showText", (speakLabels) ? "true" : "false");
         }
         
-        if (skype.isAvailable())
+        if (!skype.isAvailable())
+        {
+            const answer = document.getElementsByClassName('answer')[0];
+            if (answer !== undefined)
+            {
+                answer.collapsed = true;
+            }
+        }
+        else
         {
             function onSkypeCallStatus(status, partner)
             { 

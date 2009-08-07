@@ -6,6 +6,8 @@ function loadPage()
     
     function f()
     {
+        if ( page.config.userType == "touch") 
+            document.getElementById("usertype_btn").state = 'b';
         if ( page.config.theme == "colour") 
             document.getElementById("theme_btn").state = 'b';
         if ( page.config.playStartSound == "yes") 

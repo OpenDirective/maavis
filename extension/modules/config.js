@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType"];
 
 //TODO clean up this file
 
@@ -17,22 +17,29 @@ var g_userConfig;//= {name: "Default", startsoundURI: null};
 
 function _setConfigDefaults()
 {
-    function _default(obj, prop, value)
+    function _defaultSetting(obj, prop, value)
     {
         if (! (prop in obj))
             obj[prop] = value;
     }
 
-    _default(g_userConfig, "name", g_user);
-    _default(g_userConfig, 'startsoundURI', _getStartSoundURI());
-    _default(g_userConfig, 'theme', 'colour');
-    _default(g_userConfig, 'playStartSound', 'yes');
-    _default(g_userConfig, 'speakTitles', "yes");
-    _default(g_userConfig, 'speakLabels', "yes");
-    _default(g_userConfig, 'showLabels', "yes");
-    _default(g_userConfig, 'showImages', "yes");
-    _default(g_userConfig, 'useSkype', "yes");
+    _defaultSetting(g_userConfig, "name", g_user);
+    _defaultSetting(g_userConfig, "userType", 'touch');
+    _defaultSetting(g_userConfig, 'startsoundURI', _getStartSoundURI());
+    _defaultSetting(g_userConfig, 'theme', 'colour');
+    _defaultSetting(g_userConfig, 'playStartSound', 'yes');
+    _defaultSetting(g_userConfig, 'speakTitles', "yes");
+    _defaultSetting(g_userConfig, 'speakLabels', "yes");
+    _defaultSetting(g_userConfig, 'showLabels', "yes");
+    _defaultSetting(g_userConfig, 'showImages', "yes");
+    _defaultSetting(g_userConfig, 'useSkype', "yes");
+    _defaultSetting(g_userConfig, 'splashTime', "4");
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
+}
+
+function toggleUserType()
+{
+    g_userConfig.userType = (g_userConfig.userType == 'touch') ? 'scan' : 'touch';
 }
 
 function toggleTheme()

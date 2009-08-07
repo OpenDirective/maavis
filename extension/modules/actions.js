@@ -51,9 +51,20 @@ function showPage(page /*...*/)
         }
     }
     mainwindow.setProp("args", args); // pass args to new window
-   
-    const fpage = config.getPageUrl(page);
-    mainwindow.loadPage(fpage);
+
+    var fpage = page;
+    var prefs = utils.getService("@mozilla.org/preferences-service;1", "nsIPrefBranch");
+    const bConfig = prefs.getBoolPref("maavis.commandline.config");
+    if (!bConfig)
+    {
+        // get scan version of file
+        var arPage = fpage.split('.');
+        arPage[0] += (config.getUserConfig().userType == 'scan') ? '-scan' : '';
+        fpage = arPage.join('.');
+    }
+    var pageURI = config.getPageUrl(fpage);
+    
+    mainwindow.loadPage(pageURI);
 }
 
     
@@ -112,6 +123,7 @@ function loadActions()
     action.setAction('configToggleShowLabels', function(){config.toggleShowLabels(); goHome()} , setContext);
     action.setAction('configToggleShowImages', function(){config.toggleShowImages(); goHome()} , setContext);
     action.setAction('configToggleUseSkype', function(){config.toggleUseSkype(); goHome()} , setContext);
+    action.setAction('configToggleUserType', function(){config.toggleUserType(); goHome()} , setContext);
     //action.setAction('configToggleComplexity', function(){toggleComplexity() ; goHome();}, setContext);
  
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);
