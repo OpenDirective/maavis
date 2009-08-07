@@ -16,27 +16,29 @@ Components.utils.import("resource://modules/skype.js", skype);
 const CONFIRM_EXIT_PROMPT = "Confirm Bye Maavis";
 const CONFIRM_EXIT_TIME = 3 * 1000;
 
-function setColourStylesheet()
-{
-    try 
-    {
-        const COLOUR_COLOUR = 0; // Is style sheet index - all pages must be same
-        const COLOUR_BW = 1;        // Is style sheet index
-        const toenable = (config.getColour() == 'colour') ? COLOUR_COLOUR : COLOUR_BW;
-        const todisable = (toenable == COLOUR_COLOUR) ? COLOUR_BW : COLOUR_COLOUR;
-        document.styleSheets[toenable].disabled=false;
-        document.styleSheets[todisable].disabled=true;
-    }
-    catch(e)
-    {
-        utils.logit("Missing style sheet");
-        throw (e);        
-    }
-}
-
 const page = 
 {
-    onQuit: function()
+    config : config.getUserConfig(),
+
+    _setColourStylesheet: function()
+    {
+        try 
+        {
+            const COLOUR_COLOUR = 0; // Is style sheet index - all pages must be same
+            const COLOUR_BW = 1;        // Is style sheet index
+            const toenable = (page.config.theme == 'colour') ? COLOUR_COLOUR : COLOUR_BW;
+            const todisable = (toenable == COLOUR_COLOUR) ? COLOUR_BW : COLOUR_COLOUR;
+            document.styleSheets[toenable].disabled=false;
+            document.styleSheets[todisable].disabled=true;
+        }
+        catch(e)
+        {
+            utils.logit("Missing style sheet");
+            throw (e);        
+        }
+    },
+
+   onQuit: function()
     {
         function quit (aForceQuit)
         {
@@ -77,7 +79,7 @@ const page =
 
         actions.setQuit(this.onQuit);
         
-        setColourStylesheet();
+        page._setColourStylesheet();
         
         var execute = {};
         Components.utils.import("resource://modules/execute.js", execute);
@@ -88,7 +90,7 @@ const page =
         const message = document.getElementsByClassName('message')[0];
         if (message !== undefined)
         {
-            const speech = (config.getSpeech() == "speech");
+            const speech = (page.config.speakTitles == "yes");
             message.setAttribute("speakOnLoad", (speech) ? "true" : "false");
         }
         

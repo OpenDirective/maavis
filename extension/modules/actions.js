@@ -105,8 +105,13 @@ function loadActions()
     action.setAction('progExec', execute.execProc, setContext);
     action.setAction('progKill', execute.killProc, setContext);
 
-    action.setAction('configToggleColour', function(){config.toggleColour(); goHome()} , setContext);
-    action.setAction('configToggleSpeech', function(){config.toggleSpeech(); goHome()} , setContext);
+    action.setAction('configToggleTheme', function(){config.toggleTheme(); goHome()} , setContext);
+    action.setAction('configTogglePlayStartSound', function(){config.togglePlayStartSound(); goHome()} , setContext);
+    action.setAction('configToggleSpeakTitles', function(){config.toggleSpeakTitles(); goHome()} , setContext);
+    action.setAction('configToggleSpeakText', function(){config.toggleSpeakText(); goHome()} , setContext);
+    action.setAction('configToggleShowText', function(){config.toggleShowText(); goHome()} , setContext);
+    action.setAction('configToggleShowImages', function(){config.toggleShowImages(); goHome()} , setContext);
+    action.setAction('configToggleUseSkype', function(){config.toggleUseSkype(); goHome()} , setContext);
     //action.setAction('configToggleComplexity', function(){toggleComplexity() ; goHome();}, setContext);
  
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);

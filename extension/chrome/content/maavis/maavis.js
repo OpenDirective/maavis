@@ -10,10 +10,13 @@ else
 
 function playStartSound()
 {
-    const player = document.getElementById('player');
-	const sound = config.getUserConfig().startsoundURI;
-	if (sound)
-		player.onPlayerReady = function(){ player.play(new Array(sound)); };
+    if (page.config.playStartSound == 'yes')
+    {
+        const player = document.getElementById('player');
+        const sound = page.config.startsoundURI;
+        if (sound)
+            player.onPlayerReady = function(){ player.play([sound]); };
+    }
 }
 
 function initWindow()
@@ -34,7 +37,7 @@ function initWindow()
 
 	playStartSound()
 
-    if(!bConfig)
+    if(!bConfig && page.config.useSkype == "yes")
     {
         skype.init();
     }

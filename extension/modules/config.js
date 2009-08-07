@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "getAppConfig", "parseURI", "getUsers", "setCurrentUser", "getcontactDetails", "getUserConfig", "getUserContacts", "getColour", "toggleColour", "getSpeech", "toggleSpeech"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", /*"getAppConfig",  "getUsers",*/"parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakText", "toggleShowText", "toggleShowImages", "toggleUseSkype"];
 
 //TODO clean up this file
 
@@ -12,6 +12,62 @@ Components.utils.import("resource://modules/utils.js", utils);
 // for now we do synchronous all at once access direct to object
 // dojo data will give us a better api for the long term 
 
+function _setConfigDefaults()
+{
+    function _default(obj, prop, value)
+    {
+        if (! (prop in obj))
+            obj[prop] = value;
+    }
+
+    _default(g_userConfig, "name", g_user);
+    _default(g_userConfig, 'startsoundURI', _getStartSoundURI());
+    _default(g_userConfig, 'theme', 'colour');
+    _default(g_userConfig, 'playStartSound', 'yes');
+    _default(g_userConfig, 'speakTitles', "yes");
+    _default(g_userConfig, 'speakText', "yes");
+    _default(g_userConfig, 'showText', "yes");
+    _default(g_userConfig, 'showImages', "yes");
+    _default(g_userConfig, 'useSkype', "yes");
+    //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
+}
+
+function toggleTheme()
+{
+    g_userConfig.theme = (g_userConfig.theme == 'colour') ? 'bw' : 'colour';
+ }
+
+function toggleSpeakTitles()
+{
+    g_userConfig.speakTitles= (g_userConfig.speakTitles == 'yes') ? 'no' : 'yes';
+}
+
+function togglePlayStartSound()
+{
+    g_userConfig.playStartSound = (g_userConfig.playStartSound == 'yes') ? 'no' : 'yes';
+}
+
+function toggleSpeakText()
+{
+    g_userConfig.speakText= (g_userConfig.speakText == 'yes') ? 'no' : 'yes';
+}
+
+function toggleShowText()
+{
+    g_userConfig.showText= (g_userConfig.showText == 'yes') ? 'no' : 'yes';
+}
+
+function toggleShowImages()
+{
+    g_userConfig.showImages= (g_userConfig.showImages == 'yes') ? 'no' : 'yes';
+}
+
+function toggleUseSkype()
+{
+    g_userConfig.useSkype= (g_userConfig.useSkype == 'yes') ? 'no' : 'yes';
+}
+
+
 // TODO exception handling
 
 function getPageUrl(page)
@@ -19,96 +75,22 @@ function getPageUrl(page)
     return "chrome://maavis/content/" + page;
 }
 
-function readConfig(configFile)
-{
-    const strConfig = file.readFileToString(configFile);
-    if ("" == strConfig)
-        return {};
-    const configObj =  utils.fromJson(strConfig);
-    return configObj;
-}
-
-function writeConfig(configObj)
-{
-    const strConfig = utils.toJson(configObj);
-    file.writeStringToFile(strConfig);
-}
-
-function getMaavisDataDir()
+function _getMaavisDataDir()
 {
     const dir = path.getUserDocsDir();
     dir.append('Maavis Media');
     return dir;
 }
 
+var g_user = 'Default';
+var g_userConfig;//= {name: "Default", startsoundURI: null};
+
 function getUserDataDir(user)
-{ //TODO - process user
-    var dir = getMaavisDataDir();
-    dir.append('Users');
-    dir.append('Default');
-    return dir;
-}
-
-function getAppConfigFile()
-{
-    var f = getMaavisDataDir();
-    f.append("config.json");
-    return f;
-}
-
-function getUserConfigFile()
-{
-    var f = getMaavisDataDir();
-    f.append("users.json");
-    return f;
-}
-
-var g_appConfig = undefined;
-
-function getAppConfig()
-{
-    if (!g_appConfig)
-    {
-        const appConfigFile = getAppConfigFile();
-        g_appConfig = readConfig(appConfigFile);
-    }
-    return g_appConfig;
-}
-
-var g_allUserConfig = undefined;
-var g_currentUser = 'Default';
-var g_currentUserConfig = {name: "Default", startsoundURI: null};
-
-function getUsers()
-{
-    if (!g_allUserConfig)
-    {
-        const userConfigFile = getUserConfigFile();
-        g_allUserConfig = readConfig(userConfigFile).items;
-    }
-    var users = g_allUserConfig.map(function(o){return o.name});
-    return users;
-}
-
-function getUserDirFilenames(user, dirname)
-{
-    var dir = getUserDataDir(user);
-    dir.append(dirname);
-    const files = file.getDirFiles(dir);
-    const filenames = files.map(function(f){return f.leafName;});
-    return filenames;
-}
-
-function setCurrentUser(user)
 { 
-    if (getUsers().indexOf(user) != -1 &&
-        g_currentUser != user)
-    {
-        g_currentUser = user;
-        g_currentUserConfig = g_allUserConfig.filter(function(e,i,a){return e.name == user})[0];
-        g_currentUserConfig.videos = getUserDirFilenames(g_currentUser, "Videos");
-        g_currentUserConfig.music = getUserDirFilenames(g_currentUser, "Music");
-    }   
+    var dir = _getMaavisDataDir();
+    dir.append('Users');
+    dir.append(g_user);
+    return dir;
 }
 
 function _getStartSoundURI()
@@ -127,13 +109,63 @@ function _getStartSoundURI()
 	return null
 }
 
-function getUserConfig()
+function _getUserConfigFile()
 {
-	g_currentUserConfig.startsoundURI = _getStartSoundURI();
-    return g_currentUserConfig;
+    const configFile = getUserDataDir();
+    configFile.append("config.json");
+    return configFile;
 }
 
+function _readConfig(configFile)
+{
+    const strConfig = file.readFileToString(configFile);
+    if ("" == strConfig)
+        return {};
+    const configObj =  utils.fromJson(strConfig);
+    return configObj;
+}
+
+function _writeConfig(configObj, configFile)
+{
+    var strConfig = utils.toJson(configObj);
+    if ("" == strConfig )
+        return; // avoid erasing it if error
+    strConfig  = strConfig.replace(/,"/gi, ',\n\r"'); // crude pretty print
+    file.writeStringToFile(strConfig, configFile);
+}
+
+function getUserConfig()
+{
+    if (!g_userConfig)
+    {
+        g_userConfig = {};
+        try
+        {
+            g_userConfig = _readConfig(_getUserConfigFile());
+        }
+        catch (ex)
+        {
+        }
+        // set defaults 
+        _setConfigDefaults();
+    }
+    return g_userConfig;
+}
+
+function saveUserConfig()
+{
+       try
+        {
+            _writeConfig(g_userConfig, _getUserConfigFile());
+        }
+        catch (ex)
+        {
+            return;
+        }
+ }
+
 function parseURI(str)
+// translate keywords in URI  and convert \ to / 
 {
     if (!str)
         return str;
@@ -187,92 +219,49 @@ function getUserContacts()
     return contacts;
 }
 
-/* no good as the cascade iscompletely messed up
-var g_currentSheet = null;
-function loadStylesheet(sheet)
+
+/*
+function getUserConfigFile()
 {
-    try
+    var f = _getMaavisDataDir();
+    f.append("users.json");
+    return f;
+}
+
+function getUsers()
+{
+    if (!g_allUserConfig)
     {
-        var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
-                            .getService(Components.interfaces.nsIStyleSheetService);
-        const type = sss.AGENT_SHEET;
-        var ios = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
-        var uri = ios.newURI(sheet, null, null);
-        if(g_currentSheet  && g_currentSheet != sheet)
-        {
-            sss.unregisterSheet(g_currentSheet, type);
-        }
-        sss.loadAndRegisterSheet(uri, type);
-        g_currentSheet = uri;
+        const userConfigFile = getUserConfigFile();
+        g_allUserConfig = _readConfig(userConfigFile).items;
     }
-    catch (ex)
+    var users = g_allUserConfig.map(function(o){return o.name});
+    return users;
+}
+
+function getUserDirFilenames(user, dirname)
+{
+    var dir = getUserDataDir(user);
+    dir.append(dirname);
+    const files = file.getDirFiles(dir);
+    const filenames = files.map(function(f){return f.leafName;});
+    return filenames;
+}
+
+function setCurrentUser(user)
+{ 
+    if (getUsers().indexOf(user) != -1 &&
+        g_currentUser != user)
     {
-        utils.logit('Error loading stylesheet'+ex);
-    }
+        g_currentUser = user;
+        g_currentUserConfig = g_allUserConfig.filter(function(e,i,a){return e.name == user})[0];
+        g_currentUserConfig.videos = getUserDirFilenames(g_currentUser, "Videos");
+        g_currentUserConfig.music = getUserDirFilenames(g_currentUser, "Music");
+    }   
 }
 */
 
-function getColourFile()
-{
-    var fileColour = getUserDataDir();
-    fileColour.append('.bw');
-    return fileColour;
-}
-
-function getColour()
-{
-    const file = getColourFile();
-    return (file.exists()) ? "bw" : "colour"; 
-}
-
-function toggleColour()
-{
-    try 
-    {
-        const file = getColourFile();
-        if (file.exists())
-            file.remove(false);
-        else
-            file.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0777);
-    }
-    catch(e)
-    {
-        utils.logit("Can't change colour");
-        throw (e);        
-    }
- }
-
-function getSpeechFile()
-{
-    var fileNoSpeech = getUserDataDir();
-    fileNoSpeech.append('.nospeech');
-    return fileNoSpeech;
-}
-
-function getSpeech()
-{
-    const file = getSpeechFile();
-    return (file.exists()) ? "nospeech" : "speech"; 
-}
-
-function toggleSpeech()
-{
-    try 
-    {
-        const file = getSpeechFile();
-        if (file.exists())
-            file.remove(false);
-        else
-            file.create(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0777);
-    }
-    catch(e)
-    {
-        utils.logit("Can't change speech");
-        throw (e);        
-    }
-}
-
+/*
 function getComplexity()
 {
     const files = getComplexityFiles("full");
@@ -326,6 +315,51 @@ function toggleComplexity(g_complexity)
         throw (e);        
     }
 }
+*/
+/*var g_appConfig = undefined;
 
+function getAppConfigFile()
+{
+    var f = _getMaavisDataDir();
+    f.append("config.json");
+    return f;
+}
+
+function getAppConfig()
+{
+    if (!g_appConfig)
+    {
+        const appConfigFile = getAppConfigFile();
+        g_appConfig = _readConfig(appConfigFile);
+    }
+    return g_appConfig;
+}
+*/
+
+/* no good as the cascade iscompletely messed up
+var g_currentSheet = null;
+function loadStylesheet(sheet)
+{
+    try
+    {
+        var sss = Components.classes["@mozilla.org/content/style-sheet-service;1"]
+                            .getService(Components.interfaces.nsIStyleSheetService);
+        const type = sss.AGENT_SHEET;
+        var ios = Components.classes["@mozilla.org/network/io-service;1"]
+                            .getService(Components.interfaces.nsIIOService);
+        var uri = ios.newURI(sheet, null, null);
+        if(g_currentSheet  && g_currentSheet != sheet)
+        {
+            sss.unregisterSheet(g_currentSheet, type);
+        }
+        sss.loadAndRegisterSheet(uri, type);
+        g_currentSheet = uri;
+    }
+    catch (ex)
+    {
+        utils.logit('Error loading stylesheet'+ex);
+    }
+}
+*/
 
 // EOF
