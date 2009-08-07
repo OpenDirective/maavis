@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", /*"getAppConfig",  "getUsers",*/"parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype"];
 
 //TODO clean up this file
 
@@ -167,7 +167,7 @@ function saveUserConfig()
 function reloadUserConfig()
 {
     g_userConfig = undefined;
-    const user = page.config.name; // so are loaded
+    getUserConfig();
 }
 
 function parseURI(str)
