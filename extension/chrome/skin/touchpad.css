@@ -30,43 +30,43 @@ chatterkey {
   text-align: center;
 }
 
+.stop_button {
+	margin: 0;
+}
 
 /* .......... focused state .......... */
 
-touchkey:focus {
+/*touchkey:focus {
   -moz-border-top-colors: ThreeDDarkShadow ThreeDHighlight transparent;
   -moz-border-right-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
   -moz-border-bottom-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
   -moz-border-left-colors: ThreeDDarkShadow ThreeDHighlight transparent;
 }
-
-touchkey:focus > .touchkey-box {
+*/
+/*touchkey:focus > .touchkey-box {
   border: 1px dotted ThreeDDarkShadow;
-}
+}*/
 
 /* .......... default state .......... */
 
-touchkey[default="true"] {
+/*touchkey[default="true"] {
   -moz-border-top-colors: ThreeDDarkShadow ThreeDHighlight ThreeDLightShadow;
   -moz-border-right-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
   -moz-border-bottom-colors: ThreeDDarkShadow ThreeDDarkShadow ThreeDShadow;
   -moz-border-left-colors: ThreeDDarkShadow ThreeDHighlight ThreeDLightShadow;
-}
+} */
 
 /* .......... hover state .......... */
-
+/*
 touchkey:hover,
 togglekey:hover {
   color: -moz-buttonhovertext;
   background-color: -moz-buttonhoverface;
 }
-
+*/
 /* .......... active/open/checked state .......... */
-.stop_button {
-	margin: 0;
-}
 
-touchkey:hover:active,
+/*touchkey:hover:active,
 touchkey[open="true"],
 touchkey[checked="true"] {
   -moz-border-top-colors: ThreeDDarkShadow ThreeDShadow transparent;
@@ -84,10 +84,10 @@ touchkey[checked="true"] > .touchkey-box {
   -moz-padding-start: 4px;
   -moz-padding-end: 3px;
 }
-
+*/
 /* .......... disabled state .......... */
 
-touchkey[disabled="true"],
+/*touchkey[disabled="true"],
 touchkey[disabled="true"]:hover:active {
   color: GrayText;
 }
@@ -98,10 +98,4 @@ touchkey[disabled="true"] > .touchkey-box {
   -moz-padding-start: 3px !important;
   -moz-padding-end: 4px !important;
 }
-
-/* doesn't work yet */
-touchkey .touchkey-image {
-  list-style-image: url("chrome://maavis/skin/playerbuttons/pause.png");
-}
-
-/** {border:solid;}*/
+*/

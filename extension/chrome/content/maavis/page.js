@@ -22,6 +22,13 @@ function _loadConfig()
     return config.getUserConfig();
 }
 
+function nodeGen(nodelist)
+// so we can iterate over HTML modelists
+{
+  for (var i = 0; i < nodelist.length; i++)
+    yield nodelist[i];
+};
+
 const page = 
 {
     
@@ -111,6 +118,20 @@ const page =
             pad.setAttribute("showText", (speakLabels) ? "true" : "false");
         }
         
+        if (page.config.userType == 'scan')
+        {
+            function makeScankey(obj)
+            {
+                obj.className += ' scankey';
+            }
+            
+            for (var key in nodeGen(document.getElementsByTagName('touchkey')))
+                makeScankey(key);
+            for (var key in nodeGen(document.getElementsByTagName('togglekey')))
+                makeScankey(key);
+        }
+        
+        document.getElementsByTagName('touchpad')
         if (!skype.isAvailable())
         {
             const answer = document.getElementsByClassName('answer')[0];
@@ -204,7 +225,14 @@ const page =
 									action: (item.chooser) ? 'showPage|' + item.chooser + '.xul,' + item.URI : null };
 			if (alterItemCB)
                 alterItemCB(cbItem);
-            var key = container.createKey(row, col, 4, 3, cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
+            if (page.config.userType == 'scan') // TODO temp so old screens still work
+                var key = container.addSelectionItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
+            else
+                var key = container.createKey(row, col, 4, 3, cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
+            if (page.config.userType == 'scan')
+            {
+                key.className += ' scankey'
+            }
         }
     
     const folder = config.parseURI(folderURI);

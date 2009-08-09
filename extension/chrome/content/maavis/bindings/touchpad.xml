@@ -419,6 +419,17 @@
       <stylesheet src="chrome://maavis/skin/touchpad.css"/>
     </resources>
 
+<!--
+    <handlers>
+        <handler event="keypress" keycode="vk_tab" preventdefault ='true'>
+        <![CDATA[
+        this._tabGroups
+        window.alert(event.keyCode  );
+        ]]>
+        </handler>
+    </handlers>
+-->
+
     <implementation>
         <constructor><![CDATA[
             var stack = document.getAnonymousElementByAttribute(this, 'anonid', 'stack');
@@ -435,6 +446,9 @@
             
             this.setAttribute('showLabels', 'true')
             this.setAttribute('showImages', 'true')
+            this._tabGroupIndexs = {};
+            this._nSelection = 0;
+            //setTimeout(function(){window.alert(that.children);}, 1);
         ]]>
         </constructor>
 
@@ -454,6 +468,36 @@
                 onget="return this.getAttribute('showLabels')"
                 onset="this.setAttribute('showLabels', val); return val;"/>
                 
+     <method name="_assignTabIndex">
+        <parameter name='key' />
+        <body><![CDATA[
+            // isn't working - only 0 or 1 seem to work for added keys
+            key.setAttribute("tabindex", "0");
+            return; 
+            
+            const tabgroup = key.getAttribute("tabgroup");
+            var tabindex=key.tabindex;
+            if (tabgroup == '' && tabindex == undefined)
+            {
+                key.setAttribute("tabindex", "-1");
+            }
+            if (tabgroup == '' || (tabgroup != '' && tabindex == "-1"))
+                return;
+            if (tabindex == undefined)
+                tabindex = '0';
+            const ntabindex =  parseInt(tabindex);
+            const ntabgroup =  parseInt(tabgroup);
+            if (!(tabgroup in this._tabGroupIndexs))
+            {
+                this._tabGroupIndexs[tabgroup] = (ntabgroup * 1000) + 1; // so cant be 0
+            }
+            const tabval =  (ntabindex == 0) ? this._tabGroupIndexs[tabgroup] : (ntabgroup * 1000 +  ntabindex);
+            key.setAttribute("tabindex", tabval.toString()); // what if mixed 0 and numbers
+            this._tabGroupIndexs[tabgroup] = this._tabGroupIndexs[tabgroup]+1;
+         ]]>
+        </body>
+      </method>
+
      <method name="_getGridCellDimensions">
         <body><![CDATA[
             const width = this._stack.boxObject.width;
@@ -537,7 +581,60 @@
            key.setAttribute("cols", cols);
            key.setAttribute("label", label);
            key.setAttribute("crop", crop);
+           key.setAttribute("tabgroup", "1");
+           this._assignTabIndex(key);
            if (image)
+           {
+             key.setAttribute("image", image);
+           }
+           if (image_scale)
+           {
+             key.setAttribute("image-scale", image_scale);
+           }
+           key.setAttribute("action", action);
+           this._stack.appendChild(key);
+           this._positionKey(key); // sets the image too
+           return key
+        ]]>
+        </body>
+      </method>
+
+     <method name="addSelectionItem">
+        <parameter name='label' />
+        <parameter name='image' />
+        <parameter name='image_scale' />
+        <parameter name='action' />
+        <parameter name='crop' />
+        <body><![CDATA[
+            const selection = this.getElementsByTagName('selections')[0];
+            if  (!selection)
+                return;
+                
+            const col = parseInt(selection.getAttribute('col'));
+            const row = parseInt(selection.getAttribute('row'));
+            const cols = parseInt(selection.getAttribute('cols'));
+            const rows = parseInt(selection.getAttribute('rows'));
+            const itemcols = parseInt(selection.getAttribute('itemcols'));
+            const itemrows = parseInt(selection.getAttribute('itemrows'));
+            // l->r t->b
+            const nitemcols = Math.floor(cols / itemcols);
+            const nitems = nitemcols * this._nSelection;
+            const itemcol = (this._nSelection % nitemcols) * itemcols + col;
+            const itemrow = Math.floor(this._nSelection / nitemcols ) * itemrows + row;
+            this._nSelection ++;
+
+           var key = document.createElement("touchkey");
+           key.setAttribute("row", itemrow);
+           key.setAttribute("col", itemcol);
+           key.setAttribute("rows", itemrows);
+           key.setAttribute("cols", itemcols);
+           
+           key.setAttribute("label", label);
+           key.setAttribute("crop", crop);
+           key.setAttribute("tabgroup", "1");
+           this._assignTabIndex(key);
+
+            if (image)
            {
              key.setAttribute("image", image);
            }
@@ -559,6 +656,7 @@
             for (var i = 0; i < keys.length; i++) 
             {
                 var key = keys[i];
+                this._assignTabIndex(key);
                 this._positionKey(key);
 //                this._dumpKey(key);
             };

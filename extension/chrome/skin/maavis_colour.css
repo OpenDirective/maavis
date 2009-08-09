@@ -98,3 +98,16 @@ browser
 {
 	overflow: hidden;
 }
+
+touchkey.scankey:focus,
+togglekey.scankey:focus
+{
+ background-color: rgb(200,200,0);
+}
+
+touchkey:active,
+togglekey:active
+{
+ background-color: rgb(127,0,127);
+}
+
