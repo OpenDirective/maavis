@@ -206,29 +206,33 @@ const page =
                 return;
             }
             const itemName = (bDirs) ? file.leafName : file.leafName.slice(0, -4);
-            var row, col;
-            const nRows = 2, width = 3, height = 4;
-            if (nItem < 4)
-            {
-                row = (nItem < nRows) ? 1 : 1 + height;
-                col = (nItem % nRows) * width;
-            }
-            else
-            {
-                row = 1 + height;
-                col = 2 * width;
-            }
-            nItem += 1;
-            
+           
             var cbItem = { URI: item.URI, name: itemName, 
 									thumbURI: item.thumbURI, 
 									action: (item.chooser) ? 'showPage|' + item.chooser + '.xul,' + item.URI : null };
 			if (alterItemCB)
                 alterItemCB(cbItem);
             if (page.config.userType == 'scan') // TODO temp so old screens still work
+            {
                 var key = container.addSelectionItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
+            }
             else
+            {
                 var key = container.createKey(row, col, 4, 3, cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
+                var row, col;
+                const nRows = 2, width = 3, height = 4;
+                if (nItem < 4)
+                {
+                    row = (nItem < nRows) ? 1 : 1 + height;
+                    col = (nItem % nRows) * width;
+                }
+                else
+                {
+                    row = 1 + height;
+                    col = 2 * width;
+                }
+                nItem += 1;
+                 }
             if (page.config.userType == 'scan')
             {
                 key.className += ' scankey'

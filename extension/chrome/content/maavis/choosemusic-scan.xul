@@ -13,11 +13,13 @@
                 class='message'
                 label="Choose the music you want to hear" speakOnLoad='true'/>
                 
-        <touchkey row='1' col='6' rows='2' cols='4'
+	<selections row='1' col='0' rows='9' cols='7' itemcols='3' itemrows='3' />
+
+	<touchkey row='1' col='6' rows='2' cols='4'
                 class='otherthings' label="Other things to do" accesskey='o' 
                 action="goHome" />
 
-        <touchkey row='3' col='6' rows='2' cols='4'
+	<touchkey row='3' col='6' rows='2' cols='4'
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
                
