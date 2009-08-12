@@ -52,9 +52,13 @@ class ChannelController(ChannelBase):
     def do_answercall(self, cmd):
         self.skype.answerCall()
 
+    def do_enablejoys(self, cmd):
+        pass
+
     def pushResponse(self, cmd):
         self.observer.pushResponse(cmd)
         return
+        
 
 
 import Skype4Py

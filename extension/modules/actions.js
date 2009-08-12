@@ -132,32 +132,34 @@ function loadActions()
 function showCall(bShow, partner)
 {
     const document = mainwindow.getWindow().document;
-    
-    function _enableAnswerCall(text)
+    const pad = document.getElementsByTagName('touchpad')[0];
+    if (pad !== undefined)
     {
-        var enable = (text && text.length);
-        var ac = document.getElementsByClassName("answer");
-        if (ac.length && ac[0])
+        function _enableAnswerCall(text)
         {
-            ac = ac[0];
-            ac.setAttribute("disabled", enable ? "false" : "true");
-            if (enable)
+            var enable = (text && text.length);
+            var ac = pad.content.getElementsByClassName("answer")[0];
+            if (ac)
             {
-                ac.oldLabel = ac.label;
-                ac.label += "\n" + text;
-            }
-            else if (!enable && ac.oldLabel)
-            {
-                ac.label = ac.oldLabel;
-                delete ac.oldLabel;
+                ac.setAttribute("disabled", enable ? "false" : "true");
+                if (enable)
+                {
+                    ac.oldLabel = ac.label;
+                    ac.label += "\n" + text;
+                }
+                else if (!enable && ac.oldLabel)
+                {
+                    ac.label = ac.oldLabel;
+                    delete ac.oldLabel;
+                }
             }
         }
-    }
 
-    _enableAnswerCall(partner);
-    const endcall = document.getElementById("endcall");
-    if (endcall)
-        endcall.setAttribute('hidden', (bShow) ? 'false' : 'true');
+        _enableAnswerCall(partner);
+        const endcall = pad.content.getElementsByClassName("endcallbutton")[0];
+        if (endcall)
+            endcall.setAttribute('hidden', (bShow) ? 'false' : 'true');
+    }
 }
 
 function alterMasterVolume(bDec)

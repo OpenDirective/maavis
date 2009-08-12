@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["init", "shutdown", "isAvailable", "call", "endCall", "answerCall", "setCallStatusObserver"];
+var EXPORTED_SYMBOLS = ["init", "shutdown", "isAvailable", "call", "endCall", "answerCall", "setCallStatusObserver", "initJoys", "setJoyStatusObserver"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -7,7 +7,9 @@ Components.utils.import("resource://modules/outfox.js", server);
 
 var _proxy = null;
 const _id = 0;
+const _id2 = 1;
 var _csobserver = null;
+var _jsobserver = null;
 var _isAvailable = false;
 
 
@@ -30,15 +32,31 @@ function _checkInstalled()
     return bInstalled
 }
 
+// TODO - this is a *monster* kludge to get some joystick input. refactor or use XPCOM component
+function initJoys()
+{
+    if (!_proxy)
+    {
+        _proxy = server.serverProxy;
+        _proxy.constructor(); // TODO sort this out - couldn't use declare as it used window
+    }
+    _proxy.addObserver(_id2, utils.bind(this, _onJoyButton));
+    _proxy.send(_id2, '{"action" : "enablejoys", "channel":"2000"}');
+}
+
 function init()
 {
     if (!_checkInstalled())
         return;
-        
-    _proxy = server.serverProxy;
-    _proxy.constructor(); // TODO sort this out - couldn't use declare as it used window
+
+    if (!_proxy)
+    {
+        _proxy = server.serverProxy;
+        _proxy.constructor(); // TODO sort this out - couldn't use declare as it used window
+    }
     _proxy.addObserver(_id, utils.bind(this, _onResponse));
     _sendRequest('{"action": "launch"}');
+    
     //TODO need a statemachine to track success/failure/shutdown
     _isAvailable = true;
 }
@@ -107,5 +125,19 @@ function _onResponse(json) {
     {
         if (_csobserver)
             _csobserver(cmd.status, cmd.partner);
+    }
+}
+
+function setJoyStatusObserver(ob)
+{
+    _jsobserver=ob;
+}
+
+function _onJoyButton(json) {
+    var cmd = utils.fromJson(json);
+    if (cmd.action == 'button-status')
+    {
+        if (_jsobserver)
+            _jsobserver(cmd.status, cmd.joy, cmd.button);
     }
 }

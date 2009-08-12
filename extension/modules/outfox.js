@@ -114,7 +114,7 @@ serverProxy=
             var args, prog;
             if (useSource)
             {
-                prog = "python.exe";
+                prog = "c:\\python25\\python.exe -i "; // -i keeps window open at python prompt
                 args = utils.buildPath(null, 'platform', 'outfox.py').path + " " + port;
             }
             else
@@ -146,7 +146,7 @@ serverProxy=
 	for(var page_id in this.observers) {
 	    var ob = this.observers[page_id];
 	    try {
-		ob(json);
+            ob(json);
 	    } catch(e) {
 		//logit('ServerProxy: notify failure', e);
 	    }

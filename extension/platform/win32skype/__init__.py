@@ -19,12 +19,23 @@ import os
 from common.server import JSONServer
 import channel
 import asyncore
+import switch
 
 def buildServer(port):
     return JSONServer(port)
 
+
+# TODO refactor this hack to get joy integration - assume called only once
+_joy_channel = None
 def buildChannel(ch_id):
-    return channel.ChannelController(ch_id)
+    print(ch_id)
+    if ch_id == "2000":
+        switch.init()
+        global _joy_channel
+        _joy_channel = channel.ChannelController(ch_id)
+        return _joy_channel
+    else:
+        return channel.ChannelController(ch_id)
 
 def shutdown():
     raise asyncore.ExitNow
@@ -32,8 +43,15 @@ def shutdown():
 def run():
     try:
         while 1:
-        # poll asyncore
-            asyncore.poll(0.1); # TODO should we limit sockets? with MAP
+            # poll joystick buttons
+            if _joy_channel != None:
+                event, joy, button = switch.getEvent()
+                if event != switch.NO_EVENT:
+                    _joy_channel.pushResponse( { "action": "button-status", "status": event, "joy": joy, "button": button } )
+ 
+            # poll asyncore 
+            # deliberately always call for joystick polling
+            asyncore.poll(0.1) # TODO should we limit sockets? with MAP
             
     except asyncore.ExitNow:
         pass

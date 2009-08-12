@@ -419,25 +419,60 @@
       <stylesheet src="chrome://maavis/skin/touchpad.css"/>
     </resources>
 
-<!--
     <handlers>
-        <handler event="keypress" keycode="vk_tab" preventdefault ='true'>
-        <![CDATA[
-        this._tabGroups
-        window.alert(event.keyCode  );
+        <handler event="keypress" keycode="vk_tab" modifiers="" preventdefault ='true'>
+        <![CDATA[ window.alert("tab");
+        this.navigate(1, true);
         ]]>
         </handler>
-    </handlers>
--->
+        <handler event="keypress" keycode="vk_tab" modifiers='shift' preventdefault ='true'>
+        <![CDATA[
+        this.navigate(0, true);
+        ]]>
+        </handler>
+        <handler event="keypress" keycode="vk_right" modifiers="" preventdefault ='true'>
+        <![CDATA[
+        event.preventDefault()
+        this.navigate(1, true);
+        ]]>
+        </handler>
+        <handler event="keypress" keycode="vk_left" modifiers='' preventdefault ='true'>
+        <![CDATA[
+        event.preventDefault()
+        this.navigate(0, true);
+        ]]>
+        </handler>
+        <!-- why doesn't this work? Docs say can use custom events -->
+        <handler event="joystickdown" >
+        <![CDATA[
+        window.alert('aaa');
+        ]]>
+        </handler>
+      </handlers>
 
-    <implementation>
+   <implementation>
         <constructor><![CDATA[
             var stack = document.getAnonymousElementByAttribute(this, 'anonid', 'stack');
             if (!stack)
                  throw "XBL binding for <button type=\"touchpad\"/> must contain an element with anonid=\"stack\"";
             this._stack = stack;
             
+            var nodes = [];
+            for (var i = 0; i<this.childNodes.length; i++)
+            {
+                const node = this.childNodes[i];
+                if (node.tagName != 'selections')
+                {
+                    nodes.push(node); 
+                }
+            }
             const that = this;
+            // we seem to need to move them here - ideally would derive binding from stack
+            nodes.forEach(function(node){ that.removeChild(node);
+                                                    that._stack.appendChild(node);
+                                                    });
+            this._firstPageKey = this._stack.firstChild; // we insert selections before this for tab ordering
+            
             function f()
             {
                 that.layoutKeys(); // TODO we're fighting against gecko here so find a better way
@@ -446,13 +481,18 @@
             
             this.setAttribute('showLabels', 'true')
             this.setAttribute('showImages', 'true')
-            this._tabGroupIndexs = {};
+            //this._tabGroupIndexs = {};
             this._nSelection = 0;
+            this._currentKey = null;
             //setTimeout(function(){window.alert(that.children);}, 1);
         ]]>
         </constructor>
 
-      <property name="rows"
+         <property name="content"
+                onget="return this._stack;"
+                readonly="true"/>
+
+        <property name="rows"
                 onget="return this.getAttribute('rows')"
                 onset="this.setAttribute('rows', val); return val;"/>
                 
@@ -472,7 +512,7 @@
         <parameter name='key' />
         <body><![CDATA[
             // isn't working - only 0 or 1 seem to work for added keys
-            key.setAttribute("tabindex", "0");
+           key.setAttribute("tabindex", "0");
             return; 
             
             const tabgroup = key.getAttribute("tabgroup");
@@ -494,6 +534,59 @@
             const tabval =  (ntabindex == 0) ? this._tabGroupIndexs[tabgroup] : (ntabgroup * 1000 +  ntabindex);
             key.setAttribute("tabindex", tabval.toString()); // what if mixed 0 and numbers
             this._tabGroupIndexs[tabgroup] = this._tabGroupIndexs[tabgroup]+1;
+         ]]>
+        </body>
+      </method>
+
+       <method name="select">
+        <body><![CDATA[
+           var current = this._currentKey;
+           if (current)
+           {
+             //current.focus();
+             current.click();
+            }
+         ]]>
+        </body>
+      </method>
+ 
+
+        <method name="navigate">
+        <parameter name='direction' />
+        <parameter name='focus' />
+        <body><![CDATA[
+            var next = null;
+            var current = this._currentKey;
+            function skipNode(node)
+            {
+               return (node.disabled || (node.className.indexOf('scankey') == -1));
+            }
+            next = current;
+            if (direction == 0)
+            {
+                do
+                {
+                    if (!next)
+                        next =  this._stack.lastChild;
+                    else
+                        next = next.previousSibling;
+                }
+                while (!next || skipNode(next))
+            }
+            else
+            {
+                do
+                {
+                    if (!next)
+                        next =  this._stack.firstChild;
+                    else
+                        next = next.nextSibling;
+                }
+                while (!next || skipNode(next))
+            }
+            this._currentKey = next;
+            if (focus)
+                next.focus();
          ]]>
         </body>
       </method>
@@ -643,7 +736,7 @@
              key.setAttribute("image-scale", image_scale);
            }
            key.setAttribute("action", action);
-           this._stack.appendChild(key);
+           this._stack.insertBefore(key, this._firstPageKey);
            this._positionKey(key); // sets the image too
            return key
         ]]>
@@ -652,7 +745,7 @@
 
     <method name="layoutKeys">
         <body><![CDATA[
-            const keys = this.childNodes;
+            const keys = this._stack.childNodes;
             for (var i = 0; i < keys.length; i++) 
             {
                 var key = keys[i];

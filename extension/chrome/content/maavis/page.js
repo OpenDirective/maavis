@@ -101,37 +101,36 @@ const page =
         actions.showCall(false);
         const that = this;
 
-        const message = document.getElementsByClassName('message')[0];
-        if (message !== undefined)
-        {
-            const speech = (page.config.speakTitles == "yes");
-            message.setAttribute("speakOnLoad", (speech) ? "true" : "false");
-        }
         const pad = document.getElementsByTagName('touchpad')[0];
         if (pad !== undefined)
         {
+            const message = pad.content.getElementsByClassName('message')[0];
+            if (message !== undefined)
+            {
+                const speech = (page.config.speakTitles == "yes");
+                message.setAttribute("speakOnLoad", (speech) ? "true" : "false");
+            }
             const showLabels  = (page.config.showLabels == "yes");
             pad.setAttribute("showLabels", (showLabels) ? "true" : "false");
             const showImages = (page.config.showImages == "yes");
             pad.setAttribute("showImages", (showImages) ? "true" : "false");
             const speakLabels = (page.config.speakLabels == "yes");
             pad.setAttribute("showText", (speakLabels) ? "true" : "false");
-        }
-        
-        if (page.config.userType == 'scan')
-        {
-            function makeScankey(obj)
-            {
-                obj.className += ' scankey';
-            }
             
-            for (var key in nodeGen(document.getElementsByTagName('touchkey')))
-                makeScankey(key);
-            for (var key in nodeGen(document.getElementsByTagName('togglekey')))
-                makeScankey(key);
+            if (page.config.userType == 'scan')
+            {
+                function makeScankey(obj)
+                {
+                    obj.className += ' scankey';
+                }
+                
+                for (var key in nodeGen(pad.content.getElementsByTagName('touchkey')))
+                    makeScankey(key);
+                for (var key in nodeGen(pad.content.getElementsByTagName('togglekey')))
+                    makeScankey(key);
+            }
         }
         
-        document.getElementsByTagName('touchpad')
         if (!skype.isAvailable())
         {
             const answer = document.getElementsByClassName('answer')[0];
@@ -176,15 +175,51 @@ const page =
                     }
                 }
             }
-            skype.setCallStatusObserver(onSkypeCallStatus)
-        
+            skype.setCallStatusObserver(onSkypeCallStatus);
+
             window.addEventListener('unload', skype.endCall, false);
         }
+
+        function onJoyButtonStatus(status, joys, button)
+        {
+            // we mis use a mutation event as can't create custom events with data.
+            var event = document.createEvent("MutationEvents");
+            const atype = ((status == 1) ? "joystickdown" : "joystickup");
+            event.initMutationEvent(atype, true, true, null,
+                                          '', // preValue
+                                          '', // newValue
+                                          joys.toString(), // attrName
+                                          button); // attrChange
+
+                window.dispatchEvent(event);
+        }
         
+        skype.setJoyStatusObserver(onJoyButtonStatus);
+        window.addEventListener('joystickdown', page.scan, false);
+        window.addEventListener('joystickup', page.scan, false);
+        
+        page.scan({'type':'joystickup', 'button':0});
+
 //        var users = config.getUsers();
 //        config.setCurrentUser(users[0]);
     },
     
+    // TODO for some reason can't handle custom events in XBL so do here for now
+    // tab key is done in XBL
+    scan: function (event)
+    {
+        const down = (event.type == "joystickdown");
+        const button = event.attrChange;
+        const pad = document.getElementsByTagName('touchpad')[0];
+        if (pad === undefined)
+            return;
+            
+        //primitive 2 button scan.
+        if (button == 0 && !down)
+            pad.navigate(1, true);
+        if (button == 1 && !down)
+            pad.select();
+    },
     
     addFolderKeys: function(container, folderURI, bDirs, alterItemCB)
     {    
@@ -250,3 +285,4 @@ const page =
 };
 
 window.addEventListener('load', function(){page.initPage();}, false);
+

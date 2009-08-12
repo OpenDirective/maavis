@@ -100,13 +100,15 @@ browser
 }
 
 touchkey.scankey:focus,
-togglekey.scankey:focus
+togglekey.scankey:focus,
+chatterkey.scankey:focus
 {
  background-color: rgb(200,200,0);
 }
 
 touchkey:active,
-togglekey:active
+togglekey:active,
+chatterkey:active
 {
  background-color: rgb(127,0,127);
 }
