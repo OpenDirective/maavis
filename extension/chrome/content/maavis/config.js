@@ -20,6 +20,10 @@ function loadPage()
             document.getElementById("showimages_btn").state = 'b';
         if ( page.config.useSkype == "yes") 
             document.getElementById("skype_btn").state = 'b';
+        if ( page.config.scanMode == "USER1SWITCH" || page.config.scanMode == "AUTO1SWITCH") 
+            document.getElementById("nswitches_btn").state = 'b';
+        if ( page.config.scanMode == "AUTO1SWITCH" || page.config.scanMode == "AUTO2SWITCH") 
+            document.getElementById("scanmode_btn").state = 'b';
     }
     window.setTimeout(f, 1); // so layout is correct
     /*

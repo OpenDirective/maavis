@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode"];
 
 //TODO clean up this file
 
@@ -35,7 +35,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'useSkype', "yes");
     _defaultSetting(g_userConfig, 'splashTime', "4");
     _defaultSetting(g_userConfig, 'scanRate', "500");
-    _defaultSetting(g_userConfig, 'scanMode', "A1S");
+    _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCH");
     
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
 }
@@ -86,6 +86,25 @@ function toggleUseSkype()
     g_userConfig.useSkype= (g_userConfig.useSkype == 'yes') ? 'no' : 'yes';
 }
 
+function toggleNSwitches()
+{
+    utils.logit(g_userConfig.scanMode);
+    g_userConfig.scanMode = ( g_userConfig.scanMode == "USER1SWITCH" ) ? "USER2SWITCH" : 
+                                            ( g_userConfig.scanMode == "AUTO1SWITCH" ) ? "AUTO2SWITCH" :
+                                            ( g_userConfig.scanMode == "USER2SWITCH") ? "USER1SWITCH" :
+                                                "USER1SWITCH" ; 
+    utils.logit(g_userConfig.scanMode);
+}
+
+function toggleScanMode()
+{
+    utils.logit(g_userConfig.scanMode);
+    g_userConfig.scanMode = ( g_userConfig.scanMode == "USER1SWITCH" ) ? "AUTO1SWITCH" : 
+                                            ( g_userConfig.scanMode == "AUTO1SWITCH" ) ? "USER1SWITCH" :
+                                            ( g_userConfig.scanMode == "USER2SWITCH") ? "AUTO2SWITCH" :
+                                                "USER2SWITCH" ;
+    utils.logit(g_userConfig.scanMode);
+}
 
 // TODO exception handling
 
@@ -137,7 +156,7 @@ function _readConfig(configFile)
     const strConfig = file.readFileToString(configFile);
     if ("" == strConfig)
         return {};
-    const configObj =  utils.fromJson(strConfig);
+    const configObj =  utils.fromJson(strConfig); //TODO handle errors
     return configObj;
 }
 

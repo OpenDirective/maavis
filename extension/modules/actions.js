@@ -124,6 +124,8 @@ function loadActions()
     action.setAction('configToggleShowImages', function(){config.toggleShowImages(); goHome()} , setContext);
     action.setAction('configToggleUseSkype', function(){config.toggleUseSkype(); goHome()} , setContext);
     action.setAction('configToggleUserType', function(){config.toggleUserType(); goHome()} , setContext);
+    action.setAction('configToggleNSwitches', function(){config.toggleNSwitches(); goHome()} , setContext);
+    action.setAction('configToggleScanMode', function(){config.toggleScanMode(); goHome()} , setContext);
     //action.setAction('configToggleComplexity', function(){toggleComplexity() ; goHome();}, setContext);
  
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);

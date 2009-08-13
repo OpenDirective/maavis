@@ -19,7 +19,7 @@
                 alwaysShowLabel='true' action="logout" />
 
         <togglekey id="usertype_btn" row='1' col='0' rows='1' cols='6'
-                class='config_btn' label='Choose touch user' labelB="Choose scan user" accesskey='c' 
+                class='config_btn' label='Choose touch user' labelB="Choose scan user" accesskey='u' 
                 alwaysShowLabel='true' action="configToggleUserType" autoToggle='false' />
 
         <togglekey id="theme_btn" row='2' col='0' rows='1' cols='6'
@@ -43,8 +43,16 @@
                 alwaysShowLabel='true' action="configToggleShowImages" autoToggle='false' />
 
         <togglekey id="skype_btn" row='7' col='0' rows='1' cols='6'
-                class='config_btn' label='Choose use Skype' labelB="Choose don't use Skype" accesskey='k' 
+                class='config_btn' label='Choose use Skype' labelB="Choose don't use Skype" accesskey='y' 
                 alwaysShowLabel='true' action="configToggleUseSkype" autoToggle='false' />
+
+        <togglekey id="nswitches_btn" row='8' col='0' rows='1' cols='6'
+                class='config_btn' label='Choose 1 Switch' labelB="Choose 2 switches" accesskey='w' 
+                alwaysShowLabel='true' action="configToggleNSwitches" autoToggle='false' />
+
+        <togglekey id="scanmode_btn" row='9' col='0' rows='1' cols='6'
+                class='config_btn' label='Choose auto scan' labelB="Choose user scan" accesskey='n' 
+                alwaysShowLabel='true' action="configToggleScanMode" autoToggle='false' />
 <!--
         <hbox class="config_desc" pack="center" align="center" row='6' col='1' rows='2' cols='4'>
             <description >Complexity:</description>

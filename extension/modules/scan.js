@@ -9,7 +9,7 @@ const g_config = config.regetUserConfig();
 
 const EVENTS = {"BUTTONDOWN":0, "BUTTONUP":1};
 const DIRECTIONS = {"FORWARD":0, "BACKWARD":1};
-const SCANMODES = {"A1S":0, "U1S":1, "A2S":2, "U2S":3};
+const SCANMODES = {"AUTO1SWITCH":0, "USER1SWITCH":1, "AUTO2SWITCH":2, "USER2SWITCH":3};
 
 function Nodes(nodes, skipFunc) // double linked list with nextSibling & previousSibling ala DOM nodes
 {
@@ -138,7 +138,8 @@ Timer.prototype.toggle = function()
 
 g_timer = new Timer(g_config.scanRate, function() {onEvent("AUTOSCANTIMEOUT", null, null);});
 
-g_scanMode = SCANMODES.U1S;
+g_scanMode = SCANMODES[g_config.scanMode];
+utils.logit('ScanMode is '+g_config.scanMode+ ' ' +g_scanMode);
 function onEvent(event, joystick, button)
 {
     try
@@ -147,7 +148,7 @@ function onEvent(event, joystick, button)
         //TODO see if can make data driven
         switch(g_scanMode)
         {
-            case SCANMODES.A1S:
+            case SCANMODES.AUTO1SWITCH:
                 switch(event)
                 {
                     case "AUTOSCANTIMEOUT":
@@ -161,7 +162,7 @@ function onEvent(event, joystick, button)
                         break;
                 }
                 break;
-            case SCANMODES.U1S:
+            case SCANMODES.USER1SWITCH:
                 switch(event)
                 {
                     case "AUTOSCANTIMEOUT":
@@ -173,6 +174,44 @@ function onEvent(event, joystick, button)
                     case EVENTS.BUTTONUP:
                         g_timer.stop();
                         _select();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case SCANMODES.AUTO2SWITCH:
+                switch(event)
+                {
+                    case "AUTOSCANTIMEOUT":
+                        _navigateAndHighlight();
+                        break
+                    case EVENTS.BUTTONDOWN:
+                        if (button == 0)
+                            g_timer.start();
+                        else if (button == 1)
+                        {
+                            g_timer.stop();
+                            _select();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case SCANMODES.USER2SWITCH:
+                switch(event)
+                {
+                    case "AUTOSCANTIMEOUT":
+                        _navigateAndHighlight();
+                        break
+                    case EVENTS.BUTTONDOWN:
+                        if (button == 0)
+                            g_timer.start();
+                        else if (button == 1)
+                        {
+                            g_timer.stop();
+                            _select();
+                        }
                         break;
                     default:
                         break;
