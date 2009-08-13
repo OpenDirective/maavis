@@ -54,22 +54,10 @@ const page =
 
    onQuit: function()
     {
-        function quit (aForceQuit)
-        {
-          var appStartup = Components.classes['@mozilla.org/toolkit/app-startup;1'].
-            getService(Components.interfaces.nsIAppStartup);
-
-          // eAttemptQuit will try to close each XUL window, but the XUL window can cancel the quit
-          // process if there is unsaved data. eForceQuit will quit no matter what.
-          var quitSeverity = aForceQuit ? Components.interfaces.nsIAppStartup.eForceQuit :
-                                          Components.interfaces.nsIAppStartup.eAttemptQuit;
-          appStartup.quit(quitSeverity);
-        }
-
         const quitBtn = mainwindow.getWindow().document.getElementById("quit");
         if ("quitting" in quitBtn)
         {
-            quit(false);
+            mainwindow.quit(false);
         }
         else
         {
@@ -180,40 +168,46 @@ const page =
             window.addEventListener('unload', skype.endCall, false);
         }
 
-        function onJoyButtonStatus(status, joys, button)
+        if (page.config.userType == 'scan')
         {
-            // we mis use a mutation event as can't create custom events with data.
-            var event = document.createEvent("MutationEvents");
-            const atype = ((status == 1) ? "joystickdown" : "joystickup");
-            event.initMutationEvent(atype, true, true, null,
-                                          '', // preValue
-                                          '', // newValue
-                                          joys.toString(), // attrName
-                                          button); // attrChange
+            function onJoyButtonStatus(status, joys, button)
+            {
+                // we mis use a mutation event as can't create custom events with data.
+                var event = document.createEvent("MutationEvents");
+                const atype = ((status == 1) ? "joystickdown" : "joystickup");
+                event.initMutationEvent(atype, true, true, null,
+                                              '', // preValue
+                                              '', // newValue
+                                              joys.toString(), // attrName
+                                              button); // attrChange
 
-                window.dispatchEvent(event);
+                    window.dispatchEvent(event);
+            }
+            
+            skype.setJoyStatusObserver(onJoyButtonStatus);
+            window.addEventListener('joystickdown', page.onjoybutton, false);
+            window.addEventListener('joystickup', page.onjoybutton, false);
+            
+            page.onjoybutton({'type':'joystickup', 'button':0}); // start scan
         }
-        
-        skype.setJoyStatusObserver(onJoyButtonStatus);
-        window.addEventListener('joystickdown', page.scan, false);
-        window.addEventListener('joystickup', page.scan, false);
-        
-        page.scan({'type':'joystickup', 'button':0});
 
+        // TODO really want to captchare ALT F4
+        window.addEventListener('keyup', function(event){if (String.fromCharCode(event.which) == 'Q' && event.altKey ) {mainwindow.quit();}}, false);
+            
 //        var users = config.getUsers();
 //        config.setCurrentUser(users[0]);
     },
     
     // TODO for some reason can't handle custom events in XBL so do here for now
     // tab key is done in XBL
-    scan: function (event)
+    onjoybutton: function (event)
     {
         const down = (event.type == "joystickdown");
         const button = event.attrChange;
         const pad = document.getElementsByTagName('touchpad')[0];
         if (pad === undefined)
             return;
-            
+        
         //primitive 2 button scan.
         if (button == 0 && !down)
             pad.navigate(1, true);

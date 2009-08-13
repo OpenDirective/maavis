@@ -573,7 +573,7 @@
                 }
                 while (!next || skipNode(next))
             }
-            else
+            else if (direction == 1)
             {
                 do
                 {

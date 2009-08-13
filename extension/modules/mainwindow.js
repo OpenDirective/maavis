@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["showWindow", "loadPage", "setWindow", "getWindow", "getDocument()", "getElementById", "setProp", "getProp", "alert", "logit"];
+var EXPORTED_SYMBOLS = ["showWindow", "quit", "loadPage", "setWindow", "getWindow", "getDocument()", "getElementById", "setProp", "getProp", "alert", "logit"];
 
 var winutils = {};
 Components.utils.import("resource://modules/winutils.js", winutils);
@@ -31,6 +31,19 @@ function showWindow(window, callback, splashtime)
         window.setTimeout(func, splashtime * 1000); // must be async to work and cover Windows task bar
     }
 }
+
+function quit (aForceQuit)
+{
+  var appStartup = Components.classes['@mozilla.org/toolkit/app-startup;1'].
+    getService(Components.interfaces.nsIAppStartup);
+
+  // eAttemptQuit will try to close each XUL window, but the XUL window can cancel the quit
+  // process if there is unsaved data. eForceQuit will quit no matter what.
+  var quitSeverity = aForceQuit ? Components.interfaces.nsIAppStartup.eForceQuit :
+                                  Components.interfaces.nsIAppStartup.eAttemptQuit;
+  appStartup.quit(quitSeverity);
+}
+
 
 function setWindow(window)
 {
