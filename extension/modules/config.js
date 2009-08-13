@@ -34,6 +34,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "yes");
     _defaultSetting(g_userConfig, 'splashTime', "4");
+    _defaultSetting(g_userConfig, 'scanRate', "2");
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
 }
 

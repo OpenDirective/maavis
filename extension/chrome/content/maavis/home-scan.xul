@@ -15,10 +15,7 @@
                 
         <selections row='1' col='0' rows='9' cols='7' itemcols='3' itemrows='3' />
         
-        <touchkey id="quit" row='1' col='7' rows='3' cols='3'
-                class='quit' label="Bye Maavis" accesskey='b'  tabgroup='2'
-                action="logout" />
-        <touchkey row='3' col='7' rows='3' cols='3'
+        <touchkey row='4' col='7' rows='3' cols='3'
                 class='answer' label="Answer" accesskey='a'   tabgroup='2'
                 action="voipAnswerCall" />
                 

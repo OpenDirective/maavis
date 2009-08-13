@@ -15,14 +15,23 @@ function loadPage()
 	
     function addButton(item)
     {
+
         if (row > MAXROWS)
 		{
             return;
 		}
         else if (row == MAXROWS)
 		{
-            var key = pad.createKey(row++, 0, 1, 6, 'More...', null, 0, null, 'center');
+            var key = null;
+            if (page.config.userType == 'scan')
+                key =pad.addSelectionItem('More...', null, 0, null, 'center');
+            else
+                key = pad.createKey(row++, 0, 1, 6, 'More...', null, 0, null, 'center'); //TODO temp so old pages work
             key.className += " mediatrack";
+            if (page.config.userType == 'scan')
+            {
+                key.className += ' scankey'
+            }
 		}
 		else
 		{
@@ -31,12 +40,23 @@ function loadPage()
 				const file = path.URIToFile(item);
 				const name = file.leafName.slice(0,-4);
 				const action = 'mediaPlayItem|'+(row-1).toString();
-				key = pad.createKey(row++, 0, 1, 6, name, null, 0, action, 'center');
+                if (page.config.userType == 'scan')
+                {
+                    key = pad.addSelectionItem(name, null, 0, action, 'center');
+                    row++;
+                }
+                else
+                    key = pad.createKey(row++, 0, 1, 6, name, null, 0, action, 'center');
 				key.className += " mediatrack";
+                if (page.config.userType == 'scan')
+                {
+                    key.className += ' scankey'
+                }
                 key.leftalignlabel = 'true';
 			}
-			catch(e)
+			catch(ex)
 			{
+                utils.logit(ex);
 			}
 		}
     }

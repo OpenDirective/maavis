@@ -421,7 +421,7 @@
 
     <handlers>
         <handler event="keypress" keycode="vk_tab" modifiers="" preventdefault ='true'>
-        <![CDATA[ window.alert("tab");
+        <![CDATA[ 
         this.navigate(1, true);
         ]]>
         </handler>

@@ -12,6 +12,8 @@ const config = {};
 Components.utils.import("resource://modules/config.js", config);
 var skype = {};
 Components.utils.import("resource://modules/skype.js", skype);
+const scan = {};
+Components.utils.import("resource://modules/scan.js", scan);
 
 const CONFIRM_EXIT_PROMPT = "Confirm Bye Maavis";
 const CONFIRM_EXIT_TIME = 3 * 1000;
@@ -168,53 +170,39 @@ const page =
             window.addEventListener('unload', skype.endCall, false);
         }
 
-        if (page.config.userType == 'scan')
+        if (pad && page.config.userType == 'scan')
         {
-            function onJoyButtonStatus(status, joys, button)
+            function foo()
             {
-                // we mis use a mutation event as can't create custom events with data.
-                var event = document.createEvent("MutationEvents");
-                const atype = ((status == 1) ? "joystickdown" : "joystickup");
-                event.initMutationEvent(atype, true, true, null,
-                                              '', // preValue
-                                              '', // newValue
-                                              joys.toString(), // attrName
-                                              button); // attrChange
-
-                    window.dispatchEvent(event);
+                scan.setSkipFunc(function(node) {return (node.disabled || (node.className.indexOf('scankey') == -1));});
+                scan.setHighlightFunc(function(node) {node.focus();});
+                scan.setSelectFunc(function(node) {node.click();});
+                scan.startScan(pad.content.firstChild);
             }
-            
+            setTimeout(foo,1); // so all selection buttons get added
+
+            function onJoyButtonStatus(status, joystick, button)
+            {
+                const direction = (status == 1) ? scan.EVENTS.BUTTONDOWN : scan.EVENTS.BUTTONUP;
+                scan.onEvent(status, joystick, button);
+            }
             skype.setJoyStatusObserver(onJoyButtonStatus);
-            window.addEventListener('joystickdown', page.onjoybutton, false);
-            window.addEventListener('joystickup', page.onjoybutton, false);
-            
-            page.onjoybutton({'type':'joystickup', 'button':0}); // start scan
         }
 
-        // TODO really want to captchare ALT F4
-        window.addEventListener('keyup', function(event){if (String.fromCharCode(event.which) == 'Q' && event.altKey ) {mainwindow.quit();}}, false);
+        window.addEventListener('keydown', 
+                                            function(event)
+                                            {
+                                                if ((String.fromCharCode(event.which) == 'Q' 
+                                                        || event.keyCode == 115/*ALT_F4*/) && event.altKey ) 
+                                                {
+                                                    mainwindow.quit();
+                                                }
+                                            }, false);
             
 //        var users = config.getUsers();
 //        config.setCurrentUser(users[0]);
     },
-    
-    // TODO for some reason can't handle custom events in XBL so do here for now
-    // tab key is done in XBL
-    onjoybutton: function (event)
-    {
-        const down = (event.type == "joystickdown");
-        const button = event.attrChange;
-        const pad = document.getElementsByTagName('touchpad')[0];
-        if (pad === undefined)
-            return;
-        
-        //primitive 2 button scan.
-        if (button == 0 && !down)
-            pad.navigate(1, true);
-        if (button == 1 && !down)
-            pad.select();
-    },
-    
+
     addFolderKeys: function(container, folderURI, bDirs, alterItemCB)
     {    
         var nItem = 0;
