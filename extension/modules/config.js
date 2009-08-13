@@ -24,7 +24,7 @@ function _setConfigDefaults()
     }
 
     _defaultSetting(g_userConfig, "name", g_user);
-    _defaultSetting(g_userConfig, "userType", 'touch');
+    _defaultSetting(g_userConfig, "userType", 'scan');
     _defaultSetting(g_userConfig, 'startsoundURI', _getStartSoundURI());
     _defaultSetting(g_userConfig, 'theme', 'colour');
     _defaultSetting(g_userConfig, 'playStartSound', 'yes');
