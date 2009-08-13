@@ -18,12 +18,6 @@ Components.utils.import("resource://modules/scan.js", scan);
 const CONFIRM_EXIT_PROMPT = "Confirm Bye Maavis";
 const CONFIRM_EXIT_TIME = 3 * 1000;
 
-function _loadConfig()
-{
-    config.reloadUserConfig(); // so F5 rereads config file
-    return config.getUserConfig();
-}
-
 function nodeGen(nodelist)
 // so we can iterate over HTML modelists
 {
@@ -34,7 +28,7 @@ function nodeGen(nodelist)
 const page = 
 {
     
-    config : _loadConfig(),
+    config : config.regetUserConfig(),
 
     _setColourStylesheet: function()
     {
@@ -184,7 +178,7 @@ const page =
             function onJoyButtonStatus(status, joystick, button)
             {
                 const direction = (status == 1) ? scan.EVENTS.BUTTONDOWN : scan.EVENTS.BUTTONUP;
-                scan.onEvent(status, joystick, button);
+                scan.onEvent(direction, joystick, button);
             }
             skype.setJoyStatusObserver(onJoyButtonStatus);
         }

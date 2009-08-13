@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType"];
 
 //TODO clean up this file
 
@@ -34,8 +34,16 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "yes");
     _defaultSetting(g_userConfig, 'splashTime', "4");
-    _defaultSetting(g_userConfig, 'scanRate', "2");
+    _defaultSetting(g_userConfig, 'scanRate', "500");
+    _defaultSetting(g_userConfig, 'scanMode', "A1S");
+    
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
+}
+
+function regetUserConfig()
+{
+    reloadUserConfig(); // so F5 rereads config file
+    return getUserConfig();
 }
 
 function toggleUserType()
