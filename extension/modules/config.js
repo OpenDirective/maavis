@@ -15,6 +15,7 @@ Components.utils.import("resource://modules/utils.js", utils);
 var g_user = 'Default';
 var g_userConfig;//= {name: "Default", startsoundURI: null};
 
+//TODO refactor out these app sepcific bits
 function _setConfigDefaults()
 {
     function _defaultSetting(obj, prop, value)
@@ -34,16 +35,10 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "yes");
     _defaultSetting(g_userConfig, 'splashTime', "4");
-    _defaultSetting(g_userConfig, 'scanRate', "500");
+    _defaultSetting(g_userConfig, 'scanRate', "700");
     _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCH");
     
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
-}
-
-function regetUserConfig()
-{
-    reloadUserConfig(); // so F5 rereads config file
-    return getUserConfig();
 }
 
 function toggleUserType()
@@ -107,6 +102,12 @@ function toggleScanMode()
 }
 
 // TODO exception handling
+
+function regetUserConfig()
+{
+    reloadUserConfig(); // so F5 rereads config file
+    return getUserConfig();
+}
 
 function getPageUrl(page)
 {
