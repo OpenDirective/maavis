@@ -49,7 +49,9 @@
  //           setTimeout(function (){mt._setImage();}, 300); // so layout completes without image
  //                                       // TODO find a better way to know layout has completed
             
-            ]]>
+          this._tts = Components.classes["@fullmeasure.co.uk/tts;1"]
+                         .getService(Components.interfaces.ITTS);
+        ]]>
         </constructor>
 
         <property name="row"
@@ -73,6 +75,10 @@
         <property name="alwaysShowLabel"
                 onget="return this.getAttribute('alwaysShowLabel')"
                 onset="this.setAttribute('alwaysShowLabel', val); return val;"/>
+
+        <property name="prompt"
+                onget="return this.getAttribute('prompt')"
+                onset="this.setAttribute('prompt', val); return val;"/>
 
         <property name="cols"
                 onget="return this.getAttribute('cols')" >
@@ -270,6 +276,42 @@
         </body>
       </method>
 
+
+     <property name="spokenLabel"
+            onget="return this.getAttribute('spokenLabel')"
+            onset="this.setAttribute('spokenLabel', val); return val;"/>
+                
+    <method name="playPrompt">
+        <body>
+        <![CDATA[
+        if (this.prompt)
+         {
+         utils.logit(this.prompt);
+            //TODO may need to cach the player
+            const player = document.createElement('videop');
+            utils.logit(player.tagName);
+            
+            const that = this;
+            setTimeout(function(){player.play(that.prompt);}, 1000);
+         }
+         else
+         {
+          this.speak();
+          }
+        ]]>
+        </body>
+      </method>
+
+
+    <method name="speak">
+        <body>
+        <![CDATA[
+          const what = (this.spokenLabel) ? this.spokenLabel : this.label;
+          this._tts.speak(what+'.'); // add . so sound correct
+        ]]>
+        </body>
+      </method>
+
     </implementation>
     
                 
@@ -371,9 +413,6 @@
     <implementation>
         <constructor>
             <![CDATA[
-          this._tts = Components.classes["@fullmeasure.co.uk/tts;1"]
-                         .getService(Components.interfaces.ITTS);
-
             if (this.speakOnLoad == "true")
             {
                 var that = this;
@@ -381,31 +420,18 @@
                 {   if (that.speakOnLoad == "true")
                     {
                     //ensure speaks after display of new page
-                    window.setTimeout(function(){that.speak();}, 800);
+                    window.setTimeout(function(){that.speak();}, 500);
                     }
                 }
                 window.addEventListener('load', speak, false);
-
             }
         ]]>
         </constructor>
 
-    <property name="spokenLabel"
-            onget="return this.getAttribute('spokenLabel')"
-            onset="this.setAttribute('spokenLabel', val); return val;"/>
-                
     <property name="speakOnLoad"
             onget="return this.getAttribute('speakOnLoad')"
             onset="this.setAttribute('speakOnLoad', val); return val;"/>
-                
-    <method name="speak">
-        <body>
-        <![CDATA[
-          const what = (this.spokenLabel) ? this.spokenLabel : this.label;
-          this._tts.speak(what+'.');
-        ]]>
-        </body>
-      </method>
+
     </implementation>
 
     <handlers>
@@ -698,6 +724,7 @@
         <parameter name='image_scale' />
         <parameter name='action' />
         <parameter name='crop' />
+        <parameter name='prompt' />
         <body><![CDATA[
             const selection = this.getElementsByTagName('selections')[0];
             if  (!selection)
@@ -724,6 +751,7 @@
            
            key.setAttribute("label", label);
            key.setAttribute("crop", crop);
+           key.setAttribute("prompt", prompt);
            key.setAttribute("tabgroup", "1");
            this._assignTabIndex(key);
 

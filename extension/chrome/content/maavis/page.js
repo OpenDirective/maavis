@@ -98,9 +98,7 @@ const page =
             pad.setAttribute("showLabels", (showLabels) ? "true" : "false");
             const showImages = (page.config.showImages == "yes");
             pad.setAttribute("showImages", (showImages) ? "true" : "false");
-            const speakLabels = (page.config.speakLabels == "yes");
-            pad.setAttribute("showText", (speakLabels) ? "true" : "false");
-            
+           
             if (page.config.userType == 'scan')
             {
                 function makeScankey(obj)
@@ -169,9 +167,16 @@ const page =
             function foo()
             {
                 scan.setSkipFunc(function(node) {return (node.disabled || (node.className.indexOf('scankey') == -1));});
-                scan.setHighlightFunc(function(node) {node.focus();});
+                function selectItem(node)
+                {
+                    node.focus();
+                    const speakLabels = (page.config.speakLabels == "yes");
+                    if (speakLabels)
+                        setTimeout(function(){node.speak();}, 300); // a little delay
+                }
+                scan.setHighlightFunc(selectItem);
                 scan.setSelectFunc(function(node) {node.click();});
-                scan.startScan(pad.content.firstChild);
+                setTimeout(function(){scan.startScan(pad.content.firstChild);}, 900); // a little delay
             }
             setTimeout(foo,1); // so all selection buttons get added
 
@@ -206,16 +211,14 @@ const page =
         {
             try
             {
-                const ios = Components.classes["@mozilla.org/network/io-service;1"]
-                                    .getService(Components.interfaces.nsIIOService);
-                const URI = ios.newURI(item.URI, null, null);
-                const file = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+                const file = path.URIToFile(item.URI);
             }
             catch(err)
             {
                 throw (err);
                 return;
             }
+            //TODO remove assumption is local file URI
             const itemName = (bDirs) ? file.leafName : file.leafName.slice(0, -4);
            
             var cbItem = { URI: item.URI, name: itemName, 
@@ -225,7 +228,11 @@ const page =
                 alterItemCB(cbItem);
             if (page.config.userType == 'scan') // TODO temp so old screens still work
             {
-                var key = container.addSelectionItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
+                var promptFile = file.parent;
+                promptFile.append(itemName+'_prompt.wma');
+                const prompt  = (promptFile.exists()) ? path.fileToURI(promptFile) : null;
+                
+                var key = container.addSelectionItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
             }
             else
             {
