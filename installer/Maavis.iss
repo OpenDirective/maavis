@@ -1,9 +1,9 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.2
-OutputBaseFilename=Maavis-0.1.2
-AppVersion=0.1.2
-VersioninfoVersion=0.1.2
+AppVerName=Maavis 0.1.3
+OutputBaseFilename=Maavis-0.1.3
+AppVersion=0.1.3
+VersioninfoVersion=0.1.3
 AppPublisher=Full Measure for the University Of Sheffield
 ; Developed by Steve Lee of Full Measure.
 AppCopyright=Copyright (C) 2008 The University Of Sheffield
@@ -22,12 +22,13 @@ SetupIconFile=Maavis.ico
 ;InternalCompressLevel=max
 
 ; max compression - slower
-;Compression=lzma/ultra
-;SolidCompression=true
-;InternalCompressLevel=ultra
+Compression=lzma/ultra
+SolidCompression=true
+InternalCompressLevel=ultra
 
 
 [Tasks]
+Name: "firefox"; Description: "Install Firefox 3.5.2 (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
 Name: "turnkey"; Description: "Run Maavis &automatically on login"; GroupDescription: "Additional icons:";
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Additional icons:";
 Name: "desktopiconmedia"; Description: "Put an icon on the desktop to &change Maavis photos, music and videos"; GroupDescription: "Additional icons:";
@@ -89,7 +90,7 @@ Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; pa
 
 [Run]
 ;Filename: "{app}\ReadMe.htm"; Description: "View Readme.htm"; Flags: shellexec skipifdoesntexist postinstall skipifsilent
-Filename: "{app}\installer\Firefox Setup 3.5.1.exe"; Description: "Install Firefox 3.5.1 Web browser";
+Filename: "{app}\installer\Firefox Setup 3.5.2.exe"; Description: "Install Firefox 3.5.2 Web browser"; Tasks: "firefox"
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
 ;Filename: "{app}\installer\vlc-0.9.2-win32.exe";  Description: "Install VLC";
@@ -137,7 +138,7 @@ begin
   end;
   FFExtensionsDir := ProfileDir + '\extensions';
   CreateDir(FFExtensionsDir);
-  MaavisExtensionDir := ExpandConstant('{pf}\Maavis\extension');
+  MaavisExtensionDir := ExpandConstant('{pf}\Maavis\extension\');
   SaveStringToFile(FFExtensionsDir + '\maavis@fullmeasure.co.uk', MaavisExtensionDir + #13#10, False);
 end;
 
