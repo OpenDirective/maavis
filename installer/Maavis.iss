@@ -39,6 +39,7 @@ Name: "desktopiconcfg"; Description: "Put an icon on the desktop to change how M
 [Files]
 ; we might expect *.* to copy *this* file too but looks Inno like writes to temp file 1st so not a problem
 Source: "..\extension\*"; DestDir: "{app}\extension"; Excludes: "\platform"; Flags: recursesubdirs ignoreversion
+Source: "..\extension\platform\dist\*"; DestDir: "{app}\platform\dist\extension"; Flags: ignoreversion
 Source: "GPL.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Credits and attribution.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Maavis.ico"; DestDir: "{app}"; Flags: ignoreversion
