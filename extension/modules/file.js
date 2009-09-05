@@ -58,15 +58,18 @@ function writeStringToFile(string, file)
     }
 }
 
-function getDirFiles(dir)
+function getDirFiles(dir, reMatch)
 {
     var entries = dir.directoryEntries;
     var array = [];
     while(entries.hasMoreElements())
     {
-      var entry = entries.getNext();
-      entry.QueryInterface(Components.interfaces.nsIFile);
-      array.push(entry);
+        var entry = entries.getNext();
+        entry.QueryInterface(Components.interfaces.nsIFile);
+        if (!reMatch || reMatch.test(entry.leafName))
+        {
+            array.push(entry);
+        }
     }
     return array;
 }
@@ -90,7 +93,7 @@ function readFileLines(file)
                        .createInstance(Components.interfaces.nsIConverterInputStream);
     is.init(fis, charset, 1024, 0xFFFD);
 
-    lines = [];
+    var lines = [];
     if (is instanceof Components.interfaces.nsIUnicharLineInputStream) {
       var line = {};
       var cont;
@@ -98,7 +101,7 @@ function readFileLines(file)
         cont = is.readLine(line);
 //        if (cont)
         {
-            strLine = utils.trim(line.value);
+            var strLine = utils.trim(line.value);
             if (strLine.length)
                 lines.push(strLine);
         }

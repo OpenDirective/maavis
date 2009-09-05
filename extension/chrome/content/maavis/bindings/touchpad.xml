@@ -282,21 +282,61 @@
             onset="this.setAttribute('spokenLabel', val); return val;"/>
                 
     <method name="playPrompt">
+        <parameter name='onPlayed' />
         <body>
         <![CDATA[
+        var player = this.obTouchPad.player;
+        if (player) 
+        {
+            player.stop();
+        }
+        
+        const that = this;
         if (this.prompt)
          {
-         utils.logit(this.prompt);
-            //TODO may need to cach the player
-            const player = document.createElement('videop');
-            utils.logit(player.tagName);
+            if (!player) // cache a player TODO rather hacky - what if more than one used at once?
+            {
+                player = document.createElement('audioplayer');
+                player.setAttribute("top", "-1"); // off screen
+                player.setAttribute("left","0");
+                player.setAttribute("width","1");
+                player.setAttribute("height","1");
+                player.setAttribute("id", 'promptPlayer');
+                this.obTouchPad.appendChild(player);
+                player.playOnce = 'true'; // these 2 calls need to be here to work - weird
+                player.onPlayerReady = function(){player.play(that.prompt);}; 
+                this.obTouchPad.player = player;
+           }
+            else
+            {
+                player.play(that.prompt); 
+            }
             
-            const that = this;
-            setTimeout(function(){player.play(that.prompt);}, 1000);
+            if (onPlayed)
+            {
+                var curobs = this.getElementsByClassName("observes");
+                if (!curobs.length)
+                {
+                    // observer to wait for done - don't really need one per key 
+                    var obs = document.createElement('observes');
+                    obs.setAttribute("element", "promptPlayer_bc");
+                    obs.setAttribute("attribute", "isPlaying");
+                    this.appendChild(obs);
+                    curobs = obs;
+                }
+                this._onPlayed = onPlayed;
+                const str = 'const that = this.parentNode; if (that.getAttribute("isPlaying") == "false" && that._onPlayed) { that._onPlayed(); that._onPlayed = undefined;}'; // observer sets on parent
+                curobs.setAttribute("onbroadcast", str);
+            }
          }
          else
          {
-          this.speak();
+            this.speak(); // synchronous
+            if (onPlayed)
+            {
+                this._onPlayed = onPlayed;
+                setTimeout(function(){that._onPlayed();}, 1);
+            }
           }
         ]]>
         </body>
@@ -349,7 +389,7 @@
                 this.setAttribute('watch', val); 
                 const w = val.split('.');
                 var obs = document.createElement('observes');
-                obs.setAttribute("element", w[0]+"_bc");
+                obs.setAttribute("element", w[0]+"_bc"); // TODO do reduce coupling
                 obs.setAttribute("attribute", w[1]);
                 const str = 'this.parentNode.state = (this.parentNode.getAttribute("'+w[1]+'") == "true") ? "b" : "a";'; // observer sets on parent
                 obs.setAttribute("onbroadcast", str);

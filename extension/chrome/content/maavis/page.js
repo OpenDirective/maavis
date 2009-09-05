@@ -8,27 +8,33 @@ const utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
 const actions = {};
 Components.utils.import("resource://modules/actions.js", actions);
-const config = {};
-Components.utils.import("resource://modules/config.js", config);
 var skype = {};
 Components.utils.import("resource://modules/skype.js", skype);
-const scan = {};
-Components.utils.import("resource://modules/scan.js", scan);
+
+const file= {};
+Components.utils.import("resource://modules/file.js", file);
 
 const CONFIRM_EXIT_PROMPT = "Confirm Bye Maavis";
 const CONFIRM_EXIT_TIME = 3 * 1000;
 
-function nodeGen(nodelist)
-// so we can iterate over HTML modelists
+const _ns = 
+// private namespace
 {
-  for (var i = 0; i < nodelist.length; i++)
-    yield nodelist[i];
-};
+    nodeGen: function(nodelist)
+    // so we can iterate over HTML modelists
+    {
+      for (var i = 0; i < nodelist.length; i++)
+        yield nodelist[i];
+    },
+
+    config:{},
+
+}
+Components.utils.import("resource://modules/config.js", _ns.config);
 
 const page = 
 {
-    
-    config : config.regetUserConfig(),
+    config : _ns.config.regetUserConfig(),
 
     _setColourStylesheet: function()
     {
@@ -106,9 +112,9 @@ const page =
                     obj.className += ' scankey';
                 }
                 
-                for (var key in nodeGen(pad.content.getElementsByTagName('touchkey')))
+                for (var key in _ns.nodeGen(pad.content.getElementsByTagName('touchkey')))
                     makeScankey(key);
-                for (var key in nodeGen(pad.content.getElementsByTagName('togglekey')))
+                for (var key in _ns.nodeGen(pad.content.getElementsByTagName('togglekey')))
                     makeScankey(key);
             }
         }
@@ -164,30 +170,30 @@ const page =
 
         if (pad && page.config.userType == 'scan')
         {
-            function foo()
+            function startScanning()
             {
-                scan.setSkipFunc(function(node) {return (node.disabled || (node.className.indexOf('scankey') == -1));});
-                function selectItem(node)
+                const scan = {};
+                Components.utils.import("resource://modules/scan.js", scan);
+                
+                scan.setSkipFunc(function(node) {return (node.hidden || node.disabled || (node.className.indexOf('scankey') == -1));});
+                function highlightItem(node)
                 {
                     node.focus();
                     const speakLabels = (page.config.speakLabels == "yes");
                     if (speakLabels)
-                        setTimeout(function(){node.speak();}, 300); // a little delay
+                    {
+                        setTimeout(function() {setTimeout(function(){node.playPrompt( scan.resumeScan );}, 1)}, 1); // need this to make screen refresh
+                   }
+                   return true; // pause scanning until scan.resume called to simulate sync calls
                 }
-                scan.setHighlightFunc(selectItem);
+                scan.setHighlightFunc(highlightItem);
                 scan.setSelectFunc(function(node) {node.click();});
-                setTimeout(function(){scan.startScan(pad.content.firstChild);}, 900); // a little delay
+                setTimeout(function(){scan.startScan(page.config.scanMode, page.config.scanRate, pad.content.firstChild);}, 900); // a little delay for spoken title
             }
-            setTimeout(foo,1); // so all selection buttons get added
-
-            function onJoyButtonStatus(status, joystick, button)
-            {
-                const direction = (status == 1) ? scan.EVENTS.BUTTONDOWN : scan.EVENTS.BUTTONUP;
-                scan.onEvent(direction, joystick, button);
-            }
-            skype.setJoyStatusObserver(onJoyButtonStatus);
+            setTimeout(startScanning,1); // so all selection buttons get added
         }
 
+        // Quit handling
         window.addEventListener('keydown', 
                                             function(event)
                                             {
@@ -211,7 +217,7 @@ const page =
         {
             try
             {
-                const file = path.URIToFile(item.URI);
+                const fileItem = path.URIToFile(item.URI);
             }
             catch(err)
             {
@@ -219,7 +225,7 @@ const page =
                 return;
             }
             //TODO remove assumption is local file URI
-            const itemName = (bDirs) ? file.leafName : file.leafName.slice(0, -4);
+            const itemName = (bDirs) ? fileItem.leafName : fileItem.leafName.slice(0, -4);
            
             var cbItem = { URI: item.URI, name: itemName, 
 									thumbURI: item.thumbURI, 
@@ -228,9 +234,11 @@ const page =
                 alterItemCB(cbItem);
             if (page.config.userType == 'scan') // TODO temp so old screens still work
             {
-                var promptFile = file.parent;
-                promptFile.append(itemName+'_prompt.wma');
-                const prompt  = (promptFile.exists()) ? path.fileToURI(promptFile) : null;
+                // look for a prompt file 
+                const baseName = fileItem.leafName.split('.')[0]; // assume single . for extension - pretty safe on win
+                const re = new RegExp ('^'+baseName+'_prompt.*$', "i");
+                const promptFiles = file.getDirFiles(fileItem.parent, re);
+                const prompt  = (promptFiles.length) ? path.fileToURI(promptFiles[0]) : null;
                 
                 var key = container.addSelectionItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
             }
@@ -257,7 +265,7 @@ const page =
             }
         }
     
-    const folder = config.parseURI(folderURI);
+    const folder = _ns.config.parseURI(folderURI);
     const path = {};
     Components.utils.import("resource://modules/path.js", path);
     const type = (bDirs) ? path.expandTypes.EXP_DIRS : path.expandTypes.EXP_FILES;

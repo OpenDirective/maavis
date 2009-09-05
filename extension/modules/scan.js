@@ -1,15 +1,21 @@
-var EXPORTED_SYMBOLS = ["EVENTS", "DIRECTIONS", "SCANMODES", "setSkipFunc",  "setHighlightFunc",  "setSelectFunc", "startScan", "onEvent"];
+var EXPORTED_SYMBOLS = ["DIRECTIONS", "SCANMODES", "setSkipFunc",  "setHighlightFunc",  "setSelectFunc", "startScan", "resumeScan"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
-const config = {};
-Components.utils.import("resource://modules/config.js", config);
+var skype = {};
+Components.utils.import("resource://modules/skype.js", skype);
+var ticker = {};
+Components.utils.import("resource://modules/ticker.js", ticker);
 
-const g_config = config.regetUserConfig();
-
-const EVENTS = {"BUTTONDOWN":0, "BUTTONUP":1};
+const EVENTS = {"START":0, "TICK":1, "BUTTONDOWN":2, "BUTTONUP":3};
 const DIRECTIONS = {"FORWARD":0, "BACKWARD":1};
-const SCANMODES = {"AUTO1SWITCH":0, "USER1SWITCH":1, "AUTO2SWITCH":2, "USER2SWITCH":3};
+const SCANMODES = {"AUTO1SWITCH":0, "USER1SWITCH":1, "AUTO2SWITCH":2, "USER2SWITCH":3, "AUTO1SWITCHAUTOSTART":4};
+
+function _logState(what)
+{
+    return; // comment out to monitor state changes
+    utils.logit(what);
+}
 
 function Nodes(nodes, skipFunc) // double linked list with nextSibling & previousSibling ala DOM nodes
 {
@@ -55,8 +61,10 @@ Nodes.prototype.next = function()
 }
     
 var g_nodes = null;
-g_actions = {"onHighlight":null, "onSelect":null};
-g_skipFunc = null;
+var g_actions = {"onHighlight":null, "onSelect":null};
+var g_skipFunc = null;
+var g_pauseScan = false;
+var g_pendingTick = false;
 
 function setSkipFunc(skipFunc)
 {
@@ -81,19 +89,65 @@ function _navigate(direction)
 
 function _navigateAndHighlight()
 {
-    _navigate(DIRECTIONS.FORWARD);
-    g_actions.onHighlight(g_nodes.current());
+    if (!g_pauseScan)
+    {
+        _navigate(DIRECTIONS.FORWARD);
+        g_pauseScan = g_actions.onHighlight(g_nodes.current());
+        g_pendingTick = false;
+        if(g_pauseScan)
+          _logState('pause '+((g_nodes.current())?g_nodes.current().label:'none'));
+    }
+    else
+    {
+        _logState('pending '+((g_nodes.current())?g_nodes.current().label:'none'));
+        g_pendingTick = true;
+    }
 }
 
 function _select()
 {
+    _logState('select '+((g_nodes.current())?g_nodes.current().label:'none'));
+    if (g_pendingTick)
+    {
+        g_pendingTick = false; // stop any extra steps
+    }
+
     g_actions.onSelect(g_nodes.current());
 }
 
-function startScan(nodes)
+function _tick() 
 {
+    _onEvent(EVENTS.TICK, null, null);
+}
+
+function resumeScan()
+{ // so can process immediatiately rather than waiting for next tick
+    if (g_pauseScan)
+    {
+        _logState('resume '+g_pendingTick);
+        g_pauseScan = false;
+        if (g_pendingTick)
+        {
+            g_pendingTick = false;
+            window.setTimeout(_tick, 1); // so done after this 'thread' returns
+        }
+    }
+}
+
+var g_ticker = undefined;
+var g_scanMode = undefined;
+
+function startScan(mode, rate, nodes)
+{
+    getContext();
+
+    utils.logit('ScanMode: '+mode+' ScanRate: '+rate);
+
+    g_scanMode = SCANMODES[mode];
+    g_pauseScan = false;
     g_nodes = new Nodes(nodes, g_skipFunc);
-    _navigateAndHighlight();
+    g_ticker = new ticker.Ticker(rate, _tick);
+    _onEvent(EVENTS.START, null, null); // "off we go" as mole said
 }
 
 var window = null;
@@ -107,90 +161,103 @@ function getContext()
     }
 }
     
-// A general purpose timer classs
-function Timer(time, cb)
+function onJoyButtonStatus(status, joystick, button)
 {
-    this.timer = null;
-    this.time = time;
-    this.cb= cb;
+    const direction = (status == 1) ? EVENTS.BUTTONDOWN : EVENTS.BUTTONUP;
+    _onEvent(direction, joystick, button);
 }
-Timer.prototype.start = function()
-{
-    if (this.timer !== null)
-        window.clearInterval(this.timer);
-    this.timer = window.setInterval(this.cb, this.time); //TODO sort out this binding
-} 
-Timer.prototype.stop = function()
-{
-    if (this.timer !== null)
-        window.clearInterval(this.timer);
-    this.timer = null;
-}
-Timer.prototype.toggle = function()
-{  
-    if (this.timer === null)
-        this.start();
-    else
-        this.stop();
-    return (this.timer !== null);
-}
+skype.setJoyStatusObserver(onJoyButtonStatus);
 
-
-g_timer = new Timer(g_config.scanRate, function() {onEvent("AUTOSCANTIMEOUT", null, null);});
-
-g_scanMode = SCANMODES[g_config.scanMode];
-utils.logit('ScanMode is '+g_config.scanMode+ ' ' +g_scanMode);
-function onEvent(event, joystick, button)
+function _onEvent(event, joystick, button)
 {
     try
     {  
-        getContext();
         //TODO see if can make data driven
         switch(g_scanMode)
         {
-            case SCANMODES.AUTO1SWITCH:
+            case SCANMODES.AUTO1SWITCH: // press to start, press to stop
                 switch(event)
                 {
-                    case "AUTOSCANTIMEOUT":
+                    case EVENTS.START:
+                        break
+                    case EVENTS.TICK:
                         _navigateAndHighlight();
                         break
                     case EVENTS.BUTTONDOWN:
-                        if (!g_timer.toggle())
+                        if (g_ticker.toggle())
+                        {
+                            _navigateAndHighlight();
+                        }
+                        else
+                        {
                             _select();
+                        }
                     break;
                     default:
                         break;
                 }
                 break;
-            case SCANMODES.USER1SWITCH:
+            case SCANMODES.AUTO1SWITCHAUTOSTART: // press to start, press to stop
                 switch(event)
                 {
-                    case "AUTOSCANTIMEOUT":
+                    case EVENTS.START:
+                        g_ticker.start()
+                        _navigateAndHighlight();
+                        break
+                    case EVENTS.TICK:
                         _navigateAndHighlight();
                         break
                     case EVENTS.BUTTONDOWN:
-                        g_timer.start();
+                        if (g_ticker.toggle())
+                        {
+                            _navigateAndHighlight();
+                        }
+                        else
+                        {
+                            _select();
+                        }
+                    break;
+                    default:
+                        break;
+                }
+                break;
+            case SCANMODES.USER1SWITCH: // whilst_ switch is pressed down
+                switch(event)
+                {
+                    case EVENTS.START:
+                        break
+                    case EVENTS.TICK:
+                        _navigateAndHighlight();
+                        break
+                    case EVENTS.BUTTONDOWN:
+                        _navigateAndHighlight();
+                        g_ticker.start();
                         break;
                     case EVENTS.BUTTONUP:
-                        g_timer.stop();
+                        g_ticker.stop();
                         _select();
                         break;
                     default:
                         break;
                 }
                 break;
-            case SCANMODES.AUTO2SWITCH:
+            case SCANMODES.AUTO2SWITCH: // switch 1 to start, switch 2 to select
                 switch(event)
                 {
-                    case "AUTOSCANTIMEOUT":
+                    case EVENTS.START:
+                        break
+                    case EVENTS.TICK:
                         _navigateAndHighlight();
                         break
                     case EVENTS.BUTTONDOWN:
                         if (button == 0)
-                            g_timer.start();
+                        {
+                            g_ticker.start();
+                             _navigateAndHighlight();
+                        }
                         else if (button == 1)
                         {
-                            g_timer.stop();
+                            g_ticker.stop();
                             _select();
                         }
                         break;
@@ -198,20 +265,29 @@ function onEvent(event, joystick, button)
                         break;
                 }
                 break;
-            case SCANMODES.USER2SWITCH:
+            case SCANMODES.USER2SWITCH: // switch 1 to move whilst pressed, switch 2 to select
                 switch(event)
                 {
-                    case "AUTOSCANTIMEOUT":
+                    case EVENTS.START:
+                        break
+                    case EVENTS.TICK:
                         _navigateAndHighlight();
                         break
                     case EVENTS.BUTTONDOWN:
                         if (button == 0)
-                            g_timer.start();
+                        {
+                            g_ticker.start();
+                             _navigateAndHighlight();
+                        }
                         else if (button == 1)
                         {
-                            g_timer.stop();
+                            g_ticker.stop();
                             _select();
                         }
+                        break;
+                    case EVENTS.BUTTONUP:
+                        if (button == 0)
+                            g_ticker.stop();
                         break;
                     default:
                         break;
