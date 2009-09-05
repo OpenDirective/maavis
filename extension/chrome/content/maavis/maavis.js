@@ -44,7 +44,7 @@ function initWindow()
     }
     skype.initJoys();
     
-    const splashtime = (bConfig) ? 2 : config.getUserConfig().splashTime;
+    const splashtime = (bConfig) ? 2 : page.config.splashTime;
     mainwindow.showWindow(window, function(){actions.goHome();}, splashtime);
 }
 
