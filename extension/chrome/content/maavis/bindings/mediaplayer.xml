@@ -25,6 +25,11 @@
         this._MAXVOL = 200
      
         this._setBroadcaster();
+        this.setAttribute('playOnce', 'false');
+        
+        // const - no convienient global scope to define them in 
+        this.POLLRATE = 100;
+        this.POLLLOOPCOUNT = 30; // 3 seconds
         
         //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
         var mythis = this    
@@ -48,14 +53,11 @@
             if(mythis.getAttribute('invisible') == 'true') // hiding bound obj means player not created
                 e.setAttribute('hidden', 'true');
             
+            mythis._wasPlaying = false;
             mythis._broadcast("isPlaying", "false");
-
-            if (mythis._readyFunc)
-            {
-                setTimeout(mythis._readyFunc, 500);
-            }
          }
          setTimeout(showImage, 100); // so layout completes without image
+         setTimeout(function() {if (mythis._readyFunc) mythis._readyFunc();}, 500); // long enough to alow VLC to start up
         ]]>
      </constructor> 
 
@@ -63,7 +65,11 @@
             onget="return this._readyFunc;// attrib converts everthing to a string"
             onset="this._readyFunc = val; return val;"/>
 
-   <property name="isPlaying" readonly="true"   
+    <property name="playOnce"
+            onget="return this.getAttribute('playOnce')"
+            onset="this.setAttribute('playOnce', val); return val;"/>
+
+    <property name="isPlaying" readonly="true"   
             onget="return (this._vlc.playlist.isPlaying) ? 'true' : 'false';" />
 
    <property name="isMuted" readonly="true"   
@@ -97,43 +103,82 @@
     </body>
     </method>
 
+    <method name='_broadcastPlayStateChange'>
+        <body><![CDATA[
+        // broadcast playing state if changed
+        const isPlaying = this._vlc.playlist.isPlaying;
+        if (this._wasPlaying != isPlaying)
+        {
+            const state = (isPlaying) ? 'true' : 'false'; 
+            this._broadcast("isPlaying", state);
+            this._wasPlaying = isPlaying;
+        }
+        ]]>
+        </body>
+    </method>
+
    <method name='play'>
     <parameter name="args" />
     <body><![CDATA[
+        if (!args.length)
+            return;
+
+        this.stop();
         const vlc = this._vlc;
-	    const that = this;
-	    this._items=[];
-        vlc.playlist.clear();
-        Components.utils.import("resource://modules/utils.js");
+        this._items=[];
         function addToPlaylist(mrl)
         {
-            if (isArray(mrl))
+            if (utils.isArray(mrl))
             {
                 function addToPlaylist2(amrl)
                 {
 				vlc.playlist.add(amrl); 
                 }
                 mrl.forEach(addToPlaylist2);
-                vlc.playlist.play(); // first I hope
             }
             else
             {
-                var item = vlc.playlist.add(mrl);
+                vlc.playlist.add(mrl);
             }
+            vlc.playlist.play(); // first I hope
         }
-        args.forEach(addToPlaylist);
+        if (utils.isArray(args))
+            args.forEach(addToPlaylist);
+        else
+            addToPlaylist(args);
         vlc.playlist.play();
         
-        this._poller = setInterval(function(){that._pollState();}, 3000);
-        if (args.length)
-            this._broadcast("isPlaying", "true");
+        this._startPoll();
+        this._broadcast("isPlaying", "true");
+        ]]>
+    </body>
+    </method>
+
+    <method name='_startPoll'>
+    <body><![CDATA[
+        this._pollLoopCount = 0; 
+        const that = this;
+        this._poller = setInterval(function(){that._pollState();}, this.POLLRATE);
         ]]>
     </body>
     </method>
 
    <method name='_pollState'>
     <body><![CDATA[
-        // TODO prolly need a state machine if vids can take a while to start
+        this._broadcastPlayStateChange();
+        
+        if (++this._pollLoopCount >= this.POLLLOOPCOUNT)
+        {
+            this._pollLoopCount = 0;
+        }
+        else
+        {
+            return;
+        }
+
+        if (this.playOnce == 'true')
+            return ;
+            
         const vlc = this._vlc;
         const that = this;
         if (!vlc.playlist.isPlaying && this._vlc.input.state != 4) // idle and not paused
@@ -143,8 +188,7 @@
             function loop()
             {
                 //vlc.playlist.play();
-                vlc.playlist.next(); // seems to paly as well
-                that._broadcast("isPlaying", "true");
+                vlc.playlist.next(); // seems to play as well
                 setTimeout(function(){if (!vlc.playlist.isPlaying) vlc.playlist.playItem(0);}, 200)
             } 
             // loop if still idle after a short time
@@ -160,23 +204,20 @@
         if (this._poller)
             clearInterval(this._poller);
         this._vlc.playlist.stop();
-        this._broadcast("isPlaying", "false");
+        this._broadcastPlayStateChange();
         ]]>
-    </body>
+        </body>
     </method>
  
    <method name='togglePause'>
      <body><![CDATA[
-        // no need to close poller as it will see we are paused
         if (this._vlc.input.state == 3) // playing
         {
             this._vlc.playlist.togglePause();
-            this._broadcast("isPlaying", "false");
         }
         else if (this._vlc.input.state == 4) // paused
         {
             this._vlc.playlist.play();
-            this._broadcast("isPlaying", "true");
         }
         ]]>
     </body>
@@ -185,8 +226,7 @@
    <method name='restart'>
     <body><![CDATA[
         this._vlc.playlist.stop();
-        this._broadcast("isPlaying", "false");
-         // poller will restart it
+        // poller will restart it
         ]]>
     </body>
     </method>
@@ -194,8 +234,7 @@
   <method name='prevItem'>
     <body><![CDATA[
         this._vlc.playlist.prev();
-        this._broadcast("isPlaying", "false");
-        // poller will restart it
+        this._pollLoopCount = this.POLLLOOPCOUNT;           // for immediate response
         ]]>
     </body>
     </method>
@@ -203,8 +242,7 @@
   <method name='nextItem'>
     <body><![CDATA[
         this._vlc.playlist.stop(); // this allows poller to loop at end of playlist else next does nothing
-        this._broadcast("isPlaying", "false");
- 	    this._pollState();           // call for immediate response
+        this._pollLoopCount = this.POLLLOOPCOUNT;           // for immediate response
         ]]>
     </body>
     </method>
@@ -212,9 +250,9 @@
    <method name='playItem'>
     <parameter name="item" />
     <body><![CDATA[
-		const n = parseInt(item);
-		this._vlc.playlist.playItem(n); // IS the index despite what wiki docs say; plus add() doesn't return an id
-        this._broadcast("isPlaying", "true");
+        //TODO what if already playing - also assumes poller is already going
+        const n = parseInt(item);
+        this._vlc.playlist.playItem(n); // IS the index despite what wiki docs say; plus add() doesn't return an id
         ]]>
     </body>
     </method>
