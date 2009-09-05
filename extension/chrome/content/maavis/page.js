@@ -234,7 +234,7 @@ const page =
                 alterItemCB(cbItem);
             if (page.config.userType == 'scan') // TODO temp so old screens still work
             {
-                // look for a prompt file 
+                // look for a prompt file of form <item>_prompt{.*}
                 const baseName = fileItem.leafName.split('.')[0]; // assume single . for extension - pretty safe on win
                 const re = new RegExp ('^'+baseName+'_prompt.*$', "i");
                 const promptFiles = file.getDirFiles(fileItem.parent, re);
