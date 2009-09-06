@@ -10,7 +10,7 @@
     <script type="application/javascript" src="chrome://maavis/content/maavis.js" />
 
 	<vbox>
-	       <audioplayer id='player' invisible="true" height='1' />
+	       <audioplayer id='player' hidden="true" width='1' height='1' left='0' top='-1'/>
 	</vbox>
     <vbox flex="5" align="center">
         <spacer flex="10" minheight="25px"/>
