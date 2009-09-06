@@ -13,7 +13,7 @@
                 class='message'
                 label="Touch the picture of the person you want to call" speakOnLoad='true'/>
                 
-        <selections row='1' col='0' rows='9' cols='7' itemcols='3' itemrows='3' />
+        <selections row='1' col='0' rows='9' cols='7' />
  
         <touchkey row='1' col='6' rows='2' cols='4'
                 class='otherthings' label="Other things to do" accesskey='o' 

@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["showWindow", "quit", "loadPage", "setWindow", "getWindow", "getDocument()", "getElementById", "setProp", "getProp", "alert", "logit"];
+var EXPORTED_SYMBOLS = ["showWindow", "quit", "loadPage", "reloadPage", "setWindow", "getWindow", "getDocument()", "getElementById", "setProp", "getProp", "alert", "logit"];
 
 var winutils = {};
 Components.utils.import("resource://modules/winutils.js", winutils);
@@ -70,6 +70,12 @@ function loadPage(page)
     // NB this kills global objects like timers - a new page needs to call setWindow().
     _window.location.replace(page);
 //        const path = _window.document.location.pathname;
+}
+
+function reloadPage(page)
+{
+    // NB this kills global objects like timers - a new page needs to call setWindow().
+    _window.location.reload(true);
 }
 
 var _props = {};

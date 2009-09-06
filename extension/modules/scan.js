@@ -91,11 +91,15 @@ function _navigateAndHighlight()
 {
     if (!g_pauseScan)
     {
+        const prevnode = g_nodes.current();
         _navigate(DIRECTIONS.FORWARD);
-        g_pauseScan = g_actions.onHighlight(g_nodes.current());
-        g_pendingTick = false;
-        if(g_pauseScan)
-          _logState('pause '+((g_nodes.current())?g_nodes.current().label:'none'));
+        if (prevnode != g_nodes.current())
+        {  // no point selecting if not changed
+            g_pauseScan = g_actions.onHighlight(g_nodes.current());
+            g_pendingTick = false;
+            if(g_pauseScan)
+              _logState('pause '+((g_nodes.current())?g_nodes.current().label:'none'));
+        }
     }
     else
     {

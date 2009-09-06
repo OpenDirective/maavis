@@ -37,6 +37,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'scanMode', "AUTO2SWITCH");
     _defaultSetting(g_userConfig, 'scanRate', "2500");
     _defaultSetting(g_userConfig, 'speakLabels', "yes");
+    _defaultSetting(g_userConfig, 'scanSetSize', "3x3");
     
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
 }

@@ -551,6 +551,17 @@
             this._nSelection = 0;
             this._currentKey = null;
             //setTimeout(function(){window.alert(that.children);}, 1);
+            
+            const selection = this.getElementsByTagName('selections')[0];
+            if  (selection)
+            {
+                this.selection = selection;
+                this.selection._page = undefined; // not paged
+                var itemCols = parseInt(selection.getAttribute('itemcols'));
+                var itemRows = parseInt(selection.getAttribute('itemrows'));
+                this.setSelectionsGrid(itemCols, itemRows);
+                this.selection.lastpage = 0;
+            }
         ]]>
         </constructor>
 
@@ -722,7 +733,7 @@
         </body>
       </method>
 
-     <method name="createKey">
+     <method name="_createKey">
         <parameter name='row' />
         <parameter name='col' />
         <parameter name='rows' />
@@ -732,6 +743,7 @@
         <parameter name='image_scale' />
         <parameter name='action' />
         <parameter name='crop' />
+        <parameter name='prompt' />
         <body><![CDATA[
            var key = document.createElement("touchkey");
            key.setAttribute("row", row);
@@ -750,63 +762,182 @@
            {
              key.setAttribute("image-scale", image_scale);
            }
+           if (prompt)
+           {
+             key.setAttribute("prompt", prompt);
+            }
            key.setAttribute("action", action);
-           this._stack.appendChild(key);
-           this._positionKey(key); // sets the image too
            return key
         ]]>
         </body>
       </method>
 
-     <method name="addSelectionItem">
+     <method name="createKey">
+        <parameter name='row' />
+        <parameter name='col' />
+        <parameter name='rows' />
+        <parameter name='cols' />
+        <parameter name='label' />
+        <parameter name='image' />
+        <parameter name='image_scale' />
+        <parameter name='action' />
+        <parameter name='crop' />
+        <body><![CDATA[
+           const  key = this._createKey(row,col,rows,cols,label,image,image_scale,action,crop);
+           this._stack.appendChild(key);
+           this._positionKey(key); // sets the image too
+        ]]>
+        </body>
+      </method>
+
+     <method name="setSelectionsGrid">
+        <parameter name='nCols' />
+        <parameter name='nRows' />
+        <body><![CDATA[
+            if  (!this.selection)
+                return;
+            const selection = this.selection;
+
+            if (selection.getAttribute('itemcols') != '')
+                nCols = parseInt(selection.getAttribute('itemcols'));
+            if (selection.getAttribute('itemrows') != '')
+                nRows = parseInt(selection.getAttribute('itemrows'));
+            if (isNaN(nCols) || nCols == 0)
+                nCols = 3;
+            if (isNaN(nRows) || nRows == 0)
+                nRows = 3;
+            
+            const cols = parseInt(selection.getAttribute('cols'));
+            const rows = parseInt(selection.getAttribute('rows'));
+            selection._itemcols = Math.floor(cols / nCols);     // warning property != attribute, internal useonly
+            selection._itemrows = Math.floor(rows / nRows);
+        ]]>
+        </body>
+      </method>
+
+     <method name="setSelectionsPage">
+        <parameter name='page' />
+        <body><![CDATA[
+           // NB call before adding items
+            if  (!this.selection)
+                return;
+                
+            page = (page) ? page : 0;
+            this.selection._page = page;
+            this.selection._moreKey = null;
+        ]]>
+        </body>
+      </method>
+
+     <method name="endSelectionsAdd">
+        <parameter name='page' />
+        <body><![CDATA[
+           // NB call before adding items
+            if  (!this.selection)
+                return;
+                
+            if( this.selection._moreKey && this.lastSelectionsPage == 0)
+            { // TOS this way means we can't ever fill the grid when 1 page
+                this._stack.removeChild(this.selection._moreKey);
+            }
+        ]]>
+        </body>
+      </method>
+
+    <property name="lastSelectionsPage"
+            onget="return this.selection.lastpage;"
+            readonly="true"/>
+
+     <method name="addSelectionsItem">
         <parameter name='label' />
         <parameter name='image' />
         <parameter name='image_scale' />
         <parameter name='action' />
         <parameter name='crop' />
         <parameter name='prompt' />
+        <parameter name='isMoreItem' />
         <body><![CDATA[
-            const selection = this.getElementsByTagName('selections')[0];
-            if  (!selection)
+            // NB  first call with isMoreItem set
+            
+            if  (!this.selection)
                 return;
-                
+            const selection = this.selection;
+
             const col = parseInt(selection.getAttribute('col'));
             const row = parseInt(selection.getAttribute('row'));
             const cols = parseInt(selection.getAttribute('cols'));
             const rows = parseInt(selection.getAttribute('rows'));
-            const itemcols = parseInt(selection.getAttribute('itemcols'));
-            const itemrows = parseInt(selection.getAttribute('itemrows'));
-            // l->r t->b
+            
+            const itemcols = selection._itemcols; // not sames as attribute
+            const itemrows = selection._itemrows;
             const nitemcols = Math.floor(cols / itemcols);
-            const nitems = nitemcols * this._nSelection;
-            const itemcol = (this._nSelection % nitemcols) * itemcols + col;
-            const itemrow = Math.floor(this._nSelection / nitemcols ) * itemrows + row;
-            this._nSelection ++;
+            const nitemrows = Math.floor(rows / itemrows);
 
-           var key = document.createElement("touchkey");
-           key.setAttribute("row", itemrow);
-           key.setAttribute("col", itemcol);
-           key.setAttribute("rows", itemrows);
-           key.setAttribute("cols", itemcols);
-           
-           key.setAttribute("label", label);
-           key.setAttribute("crop", crop);
-           key.setAttribute("prompt", prompt);
-           key.setAttribute("tabgroup", "1");
-           this._assignTabIndex(key);
+            const showMore = (selection._page !== undefined);
+            const pageitems = nitemcols * nitemrows - ((showMore) ? 1 : 0);
 
-            if (image)
-           {
-             key.setAttribute("image", image);
-           }
-           if (image_scale)
-           {
-             key.setAttribute("image-scale", image_scale);
-           }
-           key.setAttribute("action", action);
-           this._stack.insertBefore(key, this._firstPageKey);
-           this._positionKey(key); // sets the image too
-           return key
+            const whichpage = (selection._page === undefined) ? 0 : selection._page
+            const firstpageitem = whichpage * pageitems;
+            const lastpageitem =  ((whichpage + 1) * pageitems) - 1;
+
+            if (isMoreItem)
+            {
+                // just create and don't add to hierarchy or display
+                var key = this._createKey(0,0,0,0,label,image,image_scale,action,crop, prompt)
+                this.selection._moreKey = key;
+                return key;
+            }
+            else
+            {
+                const nSelection =  this._nSelection ++;
+            }
+
+            const page = Math.floor(nSelection / pageitems);
+            selection.lastpage = page;
+
+            if ((nSelection < firstpageitem) || (nSelection > lastpageitem))
+            {
+                return null; //not on page
+            }
+            else
+            {
+                key = this._createKey(0,0,0,0,label, image, image_scale, action, crop,prompt);
+            }
+
+            // l->r t->b layout
+            function calcItemPositions(nItem)
+            {  // closure
+                const pageitem = nItem - firstpageitem;
+                const itemcol = (pageitem % nitemcols) * itemcols + col;
+                const itemrow = Math.floor(pageitem / nitemcols ) * itemrows + row;
+                return {"col":itemcol, "row": itemrow};
+            }
+            const pos = calcItemPositions(nSelection);
+            key.setAttribute("row", pos.row);
+            key.setAttribute("col", pos.col);
+            key.setAttribute("rows", itemrows);
+            key.setAttribute("cols", itemcols);
+
+            const moreKey =  selection._moreKey;
+            if (showMore && nSelection == firstpageitem)
+            {
+                this._stack.insertBefore(selection._moreKey, this._firstPageKey);
+            }
+                
+            this._stack.insertBefore(key, selection._moreKey);
+            this._positionKey(key); // sets the image too
+            
+            if (showMore)
+            {
+                const posMoreKey = calcItemPositions(nSelection+1);
+                moreKey.setAttribute("row", posMoreKey.row);
+                moreKey.setAttribute("col", posMoreKey.col);
+                moreKey.setAttribute("rows", itemrows);
+                moreKey.setAttribute("cols", itemcols);
+                this._positionKey(moreKey); // sets the image too
+            }
+            
+            return key;
         ]]>
         </body>
       </method>

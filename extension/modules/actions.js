@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["loadActions", "showPage", "setHome", "goHome", "stopWindowName", "setQuit", "showCall"];
+var EXPORTED_SYMBOLS = ["loadActions", "showPage", "setHome", "goHome", "stopWindowName", "setQuit", "showCall", "SELECTIONS_PAGE_PROP"];
 
 const mainwindow = {};
 Components.utils.import("resource://modules/mainwindow.js", mainwindow);
@@ -16,6 +16,8 @@ const execute = {}
 Components.utils.import("resource://modules/execute.js", execute);
 const skype = {}
 Components.utils.import("resource://modules/skype.js", skype);
+
+const SELECTIONS_PAGE_PROP = 'selectionsPage';
 
 var g_strHomeUrl;
 function setHome(strUrl)
@@ -65,6 +67,17 @@ function showPage(page /*...*/)
     var pageURI = config.getPageUrl(fpage);
     
     mainwindow.loadPage(pageURI);
+}
+
+function nextSelectionsPage( /*...*/)
+{
+    var curpage =  mainwindow.getProp(SELECTIONS_PAGE_PROP);
+    curpage = parseInt(curpage);
+    curpage = (isNaN(curpage)) ? '0' : curpage;
+    const pad = window.document.getElementsByTagName('touchpad')[0];
+    curpage = (curpage >= pad.lastSelectionsPage) ? 0 : curpage+1;
+    mainwindow.setProp(SELECTIONS_PAGE_PROP, curpage.toString() );
+    mainwindow.reloadPage();
 }
 
     
@@ -127,7 +140,9 @@ function loadActions()
     action.setAction('configToggleNSwitches', function(){config.toggleNSwitches(); goHome()} , setContext);
     action.setAction('configToggleScanMode', function(){config.toggleScanMode(); goHome()} , setContext);
     //action.setAction('configToggleComplexity', function(){toggleComplexity() ; goHome();}, setContext);
- 
+
+    action.setAction('nextSelectionsPage', nextSelectionsPage, setContext);
+    
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);
 }
 

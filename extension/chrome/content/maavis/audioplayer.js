@@ -24,7 +24,7 @@ function loadPage()
 		{
             var key = null;
             if (page.config.userType == 'scan')
-                key =pad.addSelectionItem('More...', null, 0, null, 'center');
+                key =pad.addSelectionsItem('More...', null, 0, null, 'center');
             else
                 key = pad.createKey(row++, 0, 1, 6, 'More...', null, 0, null, 'center'); //TODO temp so old pages work
             key.className += " mediatrack";
@@ -42,7 +42,7 @@ function loadPage()
 				const action = 'mediaPlayItem|'+(row-1).toString();
                 if (page.config.userType == 'scan')
                 {
-                    key = pad.addSelectionItem(name, null, 0, action, 'center');
+                    key = pad.addSelectionsItem(name, null, 0, action, 'center');
                     row++;
                 }
                 else

@@ -111,7 +111,6 @@ const page =
                 {
                     obj.className += ' scankey';
                 }
-                
                 for (var key in _ns.nodeGen(pad.content.getElementsByTagName('touchkey')))
                     makeScankey(key);
                 for (var key in _ns.nodeGen(pad.content.getElementsByTagName('togglekey')))
@@ -170,6 +169,10 @@ const page =
 
         if (pad && page.config.userType == 'scan')
         {
+            const size = page.config.scanSetSize.split('x');
+            const cols = (isNaN(size[0])) ? '2' : size[0];
+            const rows = (isNaN(size[1])) ? '2' : size[1];
+            pad.setSelectionsGrid(cols, rows);
             function startScanning()
             {
                 const scan = {};
@@ -211,9 +214,17 @@ const page =
     addFolderKeys: function(container, folderURI, bDirs, alterItemCB)
     {    
         var nItem = 0;
-        
+
+        function getPromptFile(folder, baseName)
+        {
+            // look for a prompt file of form <item>_prompt{.*}
+            const re = new RegExp ('^'+baseName+'_prompt.*$', "i");
+            const promptFiles = file.getDirFiles(folder, re);
+            return (promptFiles.length) ? path.fileToURI(promptFiles[0]) : null;
+        }
+                
         var image = null;
-        function addItemKey(item, index)
+        function addItemKey(item)
         {
             try
             {
@@ -234,13 +245,12 @@ const page =
                 alterItemCB(cbItem);
             if (page.config.userType == 'scan') // TODO temp so old screens still work
             {
-                // look for a prompt file of form <item>_prompt{.*}
-                const baseName = fileItem.leafName.split('.')[0]; // assume single . for extension - pretty safe on win
-                const re = new RegExp ('^'+baseName+'_prompt.*$', "i");
-                const promptFiles = file.getDirFiles(fileItem.parent, re);
-                const prompt  = (promptFiles.length) ? path.fileToURI(promptFiles[0]) : null;
-                
-                var key = container.addSelectionItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
+                const prompt  = getPromptFile(fileItem.parent, itemName);
+                var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
+                if (key)
+                {
+                    key.className += ' scankey';
+                }
             }
             else
             {
@@ -258,10 +268,6 @@ const page =
                     col = 2 * width;
                 }
                 nItem += 1;
-                 }
-            if (page.config.userType == 'scan')
-            {
-                key.className += ' scankey'
             }
         }
     
@@ -269,9 +275,18 @@ const page =
     const path = {};
     Components.utils.import("resource://modules/path.js", path);
     const type = (bDirs) ? path.expandTypes.EXP_DIRS : path.expandTypes.EXP_FILES;
-    var arItems=[];
-    path.expandURI(folder, arItems, type, 5);
+
+        
+    var curpage = parseInt(mainwindow.getProp(actions.SELECTIONS_PAGE_PROP));
+    curpage = (!curpage || isNaN(curpage)) ? 0 : curpage; 
+    container.setSelectionsPage(curpage);
+    const scanKey = container.addSelectionsItem('More Items...', null, 1, 'nextSelectionsPage', null, null, true); // add the more item
+    scanKey.className += ' scankey';
+        
+    var arItems=[]; 
+    path.expandURI(folder, arItems, type);
     arItems.forEach(addItemKey);
+    container.endSelectionsAdd();
     }
 };
 
