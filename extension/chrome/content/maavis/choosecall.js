@@ -16,7 +16,7 @@ function loadPage()
         {
         }
     }
-    page.addFolderKeys(pad, "file:///%User%/Call/", false, mkItem);
+    page.addFolderKeys(pad, "file:///%UserDir%/Call/", false, mkItem);
 
 }
 

@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig", ];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig"];
 
 //TODO clean up this file
 
@@ -13,6 +13,11 @@ Components.utils.import("resource://modules/utils.js", utils);
 // dojo data will give us a better api for the long term 
 
 var g_user = 'Default';
+function setCurrentUser(user)
+{
+    g_user = user;
+}
+
 var g_userConfig;
 var g_commandLineConfig;
 
@@ -35,7 +40,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "no");
     _defaultSetting(g_userConfig, 'splashTime', "4");
-    _defaultSetting(g_userConfig, 'scanMode', "AUTO2SWITCH");
+    _defaultSetting(g_userConfig, 'scanMode', "AUTO2SWITCHAUTOSTART");
     _defaultSetting(g_userConfig, 'scanRate', "2500");
     _defaultSetting(g_userConfig, 'speakLabels', "yes");
     _defaultSetting(g_userConfig, 'scanSetSize', "3x3");
@@ -130,6 +135,17 @@ function _getMaavisDataDir()
     }
     return dir;
 }
+
+/*function getUsers()
+{
+    var userDir = _getMaavisDataDir();
+    userDir.append('Users');
+    
+    const re = new RegExp ('^(?!Default$).*$', "i");
+    const users = file.getDirFiles(userDir, re);
+    return users;
+}
+*/
 
 function getUserDataDir(user)
 { 
@@ -232,9 +248,15 @@ function reloadUserConfig()
 function parseURI(str)
 // translate keywords in URI  and convert \ to / 
 {
+    var usersDir = _getMaavisDataDir();
+    usersDir.append('Users');
+    
     if (!str)
         return str;
-            str = str.replace(/%User%/gi, getUserDataDir().path);
+    str = str.replace(/%UserName%/gi, g_user);
+    str = str.replace(/%UsersDir%/gi, usersDir.path);
+    str = str.replace(/%UserDir%/gi, getUserDataDir().path);
+    
     if (str.slice(0, 5).toLowerCase() == 'file:')
         str = str.replace(/\\/gi, '/'); 
     return str;
@@ -261,7 +283,7 @@ function getUserContacts()
     contactsDir.append('Call');
     const contactsURI = path.fileToURI(contactsDir);
     var arItems=[];
-    const b = path.expandURI(contactsURI, arItems, path.expandTypes.EXP_FILES, 5);
+    const b = path.expandURI(contactsURI, arItems, path.expandTypes.EXP_FILES, null, 5);
     var contacts = [];
     function addContact(item)
     {
@@ -284,122 +306,6 @@ function getUserContacts()
     return contacts;
 }
 
-
-/*
-function getUserConfigFile()
-{
-    var f = _getMaavisDataDir();
-    f.append("users.json");
-    return f;
-}
-
-function getUsers()
-{
-    if (!g_allUserConfig)
-    {
-        const userConfigFile = getUserConfigFile();
-        g_allUserConfig = _readConfig(userConfigFile).items;
-    }
-    var users = g_allUserConfig.map(function(o){return o.name});
-    return users;
-}
-
-function getUserDirFilenames(user, dirname)
-{
-    var dir = getUserDataDir(user);
-    dir.append(dirname);
-    const files = file.getDirFiles(dir);
-    const filenames = files.map(function(f){return f.leafName;});
-    return filenames;
-}
-
-function setCurrentUser(user)
-{ 
-    if (getUsers().indexOf(user) != -1 &&
-        g_currentUser != user)
-    {
-        g_currentUser = user;
-        g_currentUserConfig = g_allUserConfig.filter(function(e,i,a){return e.name == user})[0];
-        g_currentUserConfig.videos = getUserDirFilenames(g_currentUser, "Videos");
-        g_currentUserConfig.music = getUserDirFilenames(g_currentUser, "Music");
-    }   
-}
-*/
-
-/*
-function getComplexity()
-{
-    const files = getComplexityFiles("full");
-    return (areFileTimesTheSame(files.src, files.dst)) ? "full" : "reduced";
-}
-
-function areFileTimesTheSame(fileA, fileB)
-{
-   return fileA.lastModifiedTime == fileB.lastModifiedTime;
-}
-
-function getComplexityFiles(complexity)
-{
-    try 
-    {
-        const root = 'file:///' + path.getExtensionRootPath() + '\\chrome\\content\\';
-        const src = 'maavis_' + g_complexity;
-        const dst = 'maavis';
-        // todo remove hard coding
-        const ios = Components.classes["@mozilla.org/network/io-service;1"]
-                            .getService(Components.interfaces.nsIIOService);
-        const srcURI = ios.newURI(root+src, null, null);
-        const srcFile = srcURI.QueryInterface(Components.interfaces.nsIFileURL).file;
-        const dstURI = ios.newURI(root+dst, null, null);
-        const dstFile = dstURI.QueryInterface(Components.interfaces.nsIFileURL).file;
-        return {src: srcFile, dst: dstFile};
-    }
-    catch(e)
-    {
-        utils.logit("Can't get complexity files");
-        throw(e);
-        return {};        
-    }
-}
-
-
-var g_complexity = 'full';
-function toggleComplexity(g_complexity)
-{
-    g_complexity = (g_complexity == "reduced") ? "full" : 'reduced';
-
-    try 
-    {
-        files = getComplexityFiles();
-        files.dst.remove(true);
-        files.src.copyTo(null, 'maavis');
-    }
-    catch(e)
-    {
-        utils.logit("Can't change complexity");
-        throw (e);        
-    }
-}
-*/
-/*var g_appConfig = undefined;
-
-function getAppConfigFile()
-{
-    var f = _getMaavisDataDir();
-    f.append("config.json");
-    return f;
-}
-
-function getAppConfig()
-{
-    if (!g_appConfig)
-    {
-        const appConfigFile = getAppConfigFile();
-        g_appConfig = _readConfig(appConfigFile);
-    }
-    return g_appConfig;
-}
-*/
 
 /* no good as the cascade iscompletely messed up
 var g_currentSheet = null;

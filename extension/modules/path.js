@@ -138,8 +138,8 @@ function _getChooser( dir )
 }
 
 const expandTypes = { EXP_FILES: 0, EXP_DIRS: 1 };
-function expandURI(strURI, arURIs, type, max )
-{
+function expandURI(strURI, arURIs, type, re, max )
+{ //utils.logit(strURI);
     type = type || expandTypes.EXP_FILES;
     max = max || 0;
     
@@ -209,7 +209,7 @@ function expandURI(strURI, arURIs, type, max )
     }
 
     arURIs.length = 0;
-    var files = file.getDirFiles(fileURI);
+    var files = file.getDirFiles(fileURI, re);
     files.forEach(addFileURI);
     
     return true;

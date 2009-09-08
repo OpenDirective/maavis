@@ -28,13 +28,14 @@ const _ns =
     },
 
     config:{},
-
 }
 Components.utils.import("resource://modules/config.js", _ns.config);
 
 const page = 
 {
     config : _ns.config.regetUserConfig(),
+
+    user : null,
 
     _setColourStylesheet: function()
     {
@@ -211,7 +212,7 @@ const page =
 //        config.setCurrentUser(users[0]);
     },
 
-    addFolderKeys: function(container, folderURI, bDirs, alterItemCB)
+    addFolderKeys: function(container, folderURI, bDirs, alterItemCB, re)
     {    
         var nItem = 0;
 
@@ -275,7 +276,6 @@ const page =
     const path = {};
     Components.utils.import("resource://modules/path.js", path);
     const type = (bDirs) ? path.expandTypes.EXP_DIRS : path.expandTypes.EXP_FILES;
-
         
     var curpage = parseInt(mainwindow.getProp(actions.SELECTIONS_PAGE_PROP));
     curpage = (!curpage || isNaN(curpage)) ? 0 : curpage; 
@@ -284,7 +284,7 @@ const page =
     scanKey.className += ' scankey';
         
     var arItems=[]; 
-    path.expandURI(folder, arItems, type);
+    path.expandURI(folder, arItems, type, re);
     arItems.forEach(addItemKey);
     container.endSelectionsAdd();
     }

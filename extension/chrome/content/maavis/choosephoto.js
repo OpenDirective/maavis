@@ -6,7 +6,7 @@ function loadPage()
     {
         item.action = 'showPage|slideshow.xul,' + item.URI;
     }
-    page.addFolderKeys(pad, "file:///%User%/Photos/", true, mkItem);
+    page.addFolderKeys(pad, "file:///%UserDir%/Photos/", true, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);
