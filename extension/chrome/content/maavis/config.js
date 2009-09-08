@@ -1,7 +1,10 @@
+const config = {};
+Components.utils.import("resource://modules/config.js", config);
+
 function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
-
+    
     window.onunload = function(){ config.saveUserConfig();};
     
     function f()
@@ -26,10 +29,6 @@ function loadPage()
             document.getElementById("scanmode_btn").state = 'b';
     }
     window.setTimeout(f, 1); // so layout is correct
-    /*
-    if (actions.getComplexity() != "full") 
-        document.getElementById("complexity_btn").state = 'b';
-    */
 }
 
 window.addEventListener('load', loadPage, false);
