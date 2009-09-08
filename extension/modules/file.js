@@ -20,7 +20,7 @@ function readFileToString(file)
     }
     catch(err)
     {
-        utils.logit(err);
+        utils.logit(file.path+' '+err);
         return "";
     }
 

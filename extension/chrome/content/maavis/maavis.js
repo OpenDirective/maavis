@@ -10,12 +10,19 @@ else
 
 function playStartSound()
 {
-    if (page.config.playStartSound == 'yes')
+    const sound = page.config.startsoundURI;
+    if (page.config.playStartSound == 'yes' && sound)
     {
-        const player = document.getElementById('player');
-        const sound = page.config.startsoundURI;
-        if (sound)
-            player.onPlayerReady = function(){ player.play([sound]); };
+        var player = document.createElement('audioplayer');
+        player.setAttribute("top", "-1"); // off screen
+        player.setAttribute("left","0");
+        player.setAttribute("width","1");
+        player.setAttribute("height","1");
+        player.setAttribute("invisible","true");
+        player.setAttribute("id", 'startsoundPlayer');
+        document.getElementById("z").appendChild(player);
+        player.playOnce = 'true'; // these 2 calls need to be here to work - weird
+        player.onPlayerReady = function(){player.play(sound);}; 
     }
 }
 
@@ -23,6 +30,8 @@ function initWindow()
 {
     window.removeEventListener('load', initWindow, false);
 
+	playStartSound();
+    
     actions.loadActions();
 
     //const bConfig = Boolean(winutils.getWindowIntArgument(window, 1));
@@ -36,15 +45,13 @@ function initWindow()
     document.getElementById("promptMaavis").setAttribute("collapsed", (bConfig) ? "true" : "false")
     document.getElementById("promptSettings").setAttribute("collapsed", (!bConfig) ? "true" : "false")
 
-	playStartSound()
-
     if(!bConfig && page.config.useSkype == "yes")
     {
         skype.init();
     }
     skype.initJoys();
     
-    const splashtime = (bConfig) ? 2 : page.config.splashTime;
+    const splashtime = page.config.splashTime;
     mainwindow.showWindow(window, function(){actions.goHome();}, splashtime);
 }
 
