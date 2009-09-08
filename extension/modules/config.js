@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode"];
+var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig", ];
 
 //TODO clean up this file
 
@@ -13,7 +13,8 @@ Components.utils.import("resource://modules/utils.js", utils);
 // dojo data will give us a better api for the long term 
 
 var g_user = 'Default';
-var g_userConfig;//= {name: "Default", startsoundURI: null};
+var g_userConfig;
+var g_commandLineConfig;
 
 //TODO refactor out these app sepcific bits
 function _setConfigDefaults()
@@ -117,8 +118,16 @@ function getPageUrl(page)
 
 function _getMaavisDataDir()
 {
-    const dir = path.getUserDocsDir();
-    dir.append('Maavis Media');
+    const mediadir = getCommandLineConfig().mediaFolder;
+    if (mediadir != '')
+    {
+        var dir = path.getFile(mediadir);
+    }
+    else
+    {
+        dir = path.getUserDocsDir();
+        dir.append('Maavis Media');
+    }
     return dir;
 }
 
@@ -169,6 +178,19 @@ function _writeConfig(configObj, configFile)
         return; // avoid erasing it if error
     strConfig  = strConfig.replace(/,"/gi, ',\n\r"'); // crude pretty print
     file.writeStringToFile(strConfig, configFile);
+}
+
+function getCommandLineConfig()
+{
+    if (!g_commandLineConfig)
+    {
+        g_commandLineConfig = {};
+        const prefs = utils.getService("@mozilla.org/preferences-service;1", "nsIPrefBranch");
+        g_commandLineConfig.login = prefs.getBoolPref("maavis.commandline.login");
+        g_commandLineConfig.config = prefs.getBoolPref("maavis.commandline.config");
+        g_commandLineConfig.mediaFolder = prefs.getCharPref("maavis.commandline.mediafolder");
+    }
+    return g_commandLineConfig;
 }
 
 function getUserConfig()

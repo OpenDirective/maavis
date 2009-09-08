@@ -2,6 +2,8 @@ var winutils = {};
 Components.utils.import("resource://modules/winutils.js", winutils);
 var path = {};
 Components.utils.import("resource://modules/path.js", path);
+var config = {};
+Components.utils.import("resource://modules/config.js", config);
 	
 if (mainwindow.getProp("MaavisMainWindow") === undefined)
     mainwindow.setProp("MaavisMainWindow", "true");
@@ -37,8 +39,10 @@ function initWindow()
     //const bConfig = Boolean(winutils.getWindowIntArgument(window, 1));
     var prefs = Components.classes["@mozilla.org/preferences-service;1"].
     getService(Components.interfaces.nsIPrefBranch);
-    const bConfig = prefs.getBoolPref("maavis.commandline.config");
-    const home = (bConfig) ? "config.xul" : "home.xul"
+    
+    const bConfig = config.getCommandLineConfig().config;
+    const bLogin = config.getCommandLineConfig().login;
+    const home = (bConfig) ? "config.xul" : (bLogin)? "login.xul" : "home.xul"
     actions.setHome(home);
     
     // show correct info on home page

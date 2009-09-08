@@ -113,8 +113,20 @@ const myAppHandler = {
 	// TODO pass a parameters
 	prefs.setCharPref("maavis.commandline.maavispage", (bConfig) ? 'config.xul' : 'maavis.xul');
     }
+
+    try {
+      var mediafolder = cmdLine.handleFlagWithParam("mediafolder", false);
+      mediafolder = (mediafolder) ? mediafolder : '';
+      prefs.setCharPref("maavis.commandline.mediafolder", mediafolder);
+    }
+    catch (e) {
+      Components.utils.reportError("incorrect parameter passed to -mediafolder on the command line.");
+    }
+
+    var bLogin = cmdLine.handleFlag("login", false);
+    prefs.setBoolPref("maavis.commandline.login", bLogin);
     
-    // default is to open sim win in a chrome window
+    // default is to maavis in a chrome window
     prefs.setBoolPref("maavis.commandline.config", bConfig);
     if (!bNoKiosk && !uristr)
     {
@@ -132,6 +144,9 @@ const myAppHandler = {
   // and finally, the string should end with a newline
   helpInfo : "  -xulpage <uri>       XUL page to open in chrome window\n" +
                 "  -homepage <uri>   Home page to show in the browser\n"+
+                "  -config              display config settings\n"+
+                "  -login              display login pages\n"+
+                "  -mediafolder <folder>  where media live\n"+
                 "  -nokiosk          Don't use kiosk mode\n",
 
   /* nsIFactory */
