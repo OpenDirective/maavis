@@ -1,9 +1,9 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.3
-OutputBaseFilename=Maavis-0.1.3
-AppVersion=0.1.3
-VersioninfoVersion=0.1.3
+AppVerName=Maavis 0.1.4
+OutputBaseFilename=Maavis-0.1.4
+AppVersion=0.1.4
+VersioninfoVersion=0.1.4
 AppPublisher=Full Measure for the University Of Sheffield
 ; Developed by Steve Lee of Full Measure.
 AppCopyright=Copyright (C) 2008 The University Of Sheffield
@@ -15,6 +15,8 @@ DefaultGroupName=Maavis
 DefaultDirName={pf}\Maavis
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
+
+;Note the Firefox and Skype installer filenames are defined at the end of this file
 
 ;default compression
 ;Compression=lzma/max
@@ -28,7 +30,7 @@ InternalCompressLevel=ultra
 
 
 [Tasks]
-Name: "firefox"; Description: "Install Firefox 3.5.2 (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
+Name: "firefox"; Description: "Install Firefox 3.5.3 (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
 Name: "turnkey"; Description: "Run Maavis &automatically on login"; GroupDescription: "Additional icons:";
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Additional icons:";
 Name: "desktopiconmedia"; Description: "Put an icon on the desktop to &change Maavis photos, music and videos"; GroupDescription: "Additional icons:";
@@ -91,12 +93,12 @@ Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; pa
 
 [Run]
 ;Filename: "{app}\ReadMe.htm"; Description: "View Readme.htm"; Flags: shellexec skipifdoesntexist postinstall skipifsilent
-Filename: "{app}\installer\Firefox Setup 3.5.2.exe"; Description: "Install Firefox 3.5.2 Web browser"; Tasks: "firefox"
+Filename: "{app}\installer\{code:FirefoxInstaller}"; Description: "Install Firefox Web browser"; Tasks: "firefox"
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
 ;Filename: "{app}\installer\vlc-0.9.2-win32.exe";  Description: "Install VLC";
 
-Filename: "{app}\installer\SkypeSetup.exe";  Description: "Install Skype (required for Video Calls)"; Flags: postinstall
+Filename: "{app}\installer\{code:SkypeInstaller}";  Description: "Install Skype (required for Video Calls)"; Flags: postinstall
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"""; Description: "Run Maavis now"; Flags: postinstall skipifsilent
 
 
@@ -142,4 +144,22 @@ begin
   MaavisExtensionDir := ExpandConstant('{pf}\Maavis\extension\');
   SaveStringToFile(FFExtensionsDir + '\maavis@fullmeasure.co.uk', MaavisExtensionDir + #13#10, False);
 end;
+
+// Constants
+function FirefoxInstaller(Param: String): String;
+begin
+  Result := 'Firefox Setup 3.5.3.exe';
+end;
+
+function SkypeInstaller(Param: String): String;
+begin
+  Result := 'SkypeSetup.exe';
+end;
+
+// shame we can't use this as {code:} errors in first section
+function MaavisVersion(Param: String): String;
+begin
+  Result := '0.1.4';
+end;
+
 
