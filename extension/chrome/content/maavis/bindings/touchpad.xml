@@ -241,8 +241,8 @@
                         var i = document.createElement('image');
                         i.setAttribute('src', src);
                     }
-                    i.width = 100;//width;
-                    i.height = 100;//height;
+                    i.width = width;
+                    i.height = height;
                     i.setAttribute('class', 'touchkey-image');
                     if (imageFrame.firstChild)
                       imageFrame.replaceChild(i, imageFrame.firstChild);
