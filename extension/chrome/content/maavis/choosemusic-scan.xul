@@ -11,6 +11,7 @@
     <touchpad id="pad" flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
+                alwaysShowLabel='true'
                 label="Choose the music you want to hear" speakOnLoad='true'/>
                 
 	<selections row='1' col='0' rows='9' cols='7' />

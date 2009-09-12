@@ -1,38 +1,38 @@
-const config = {};
-Components.utils.import("resource://modules/config.js", config);
+// do this here so that page.config gets set correctly 
+page.user = mainwindow.getProp("args"); // is persisted in config module
 
 function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
 	
-    if (page.config.userType == 'scan') // TODO temp so old screens still work
+    const pad = mainwindow.getElementById("pad");
+    const showLabels  = (page.config.passwordItems != "images");
+    pad.setAttribute("showLabels", (showLabels) ? "true" : "false");
+    const showImages  = (page.config.passwordItems != "labels");
+    pad.setAttribute("showImages", (showImages) ? "true" : "false");
+
+   function mkItem( item )
     {
-        const pad = mainwindow.getElementById("pad");
-        function mkItem( item )
-        {
-            try
-            {   
-                if (item.name[0] == '!')
-                {
-                    item.name = item.name.slice(1);
-                    item.action = 'showPage|home.xul,'+user;
-                }
-                else
-                {
-                    item.action = 'showPage|login.xul,';
-                }
-                item.thumbURI = item.URI;
-            }
-            catch(e)
+        try
+        {   
+            if (item.name[0] == '!')
             {
+                item.name = item.name.slice(1);
+                item.action = 'showPage|home.xul';
             }
+            else
+            {
+                item.action = 'showPage|loginfail.xul';
+            }
+            item.thumbURI = item.URI;
         }
-        const user = mainwindow.getProp("args");
- 
-        page.addFolderKeys(pad, "file:///%UsersDir%/"+user+'/Passwords', false, mkItem);
+        catch(e)
+        {
+            utils.logit(e);
+        }
     }
+    
+    page.addFolderKeys(pad, 'file:///%UserDir%/Passwords', false, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);
-
-

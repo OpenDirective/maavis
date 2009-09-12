@@ -233,6 +233,7 @@
                     if (isSVG)
                     { 
                         i = that;
+                        utils.logit(i);
                     }
                     else
                     {
@@ -240,8 +241,8 @@
                         var i = document.createElement('image');
                         i.setAttribute('src', src);
                     }
-                    i.width = width;
-                    i.height = height;
+                    i.width = 100;//width;
+                    i.height = 100;//height;
                     i.setAttribute('class', 'touchkey-image');
                     if (imageFrame.firstChild)
                       imageFrame.replaceChild(i, imageFrame.firstChild);
@@ -258,7 +259,8 @@
                     i = document.createElementNS("http://www.w3.org/1999/xhtml", 'object');
                     i.type='image/svg+xml';
                     i.data=src;
-                    setTimeout(function(){setImageSizez.call(i)}, 1);
+                    setTimeout(function(){setImageSizez.call(i)}, 1000); // so also asynch
+                    //setImageSizez.call(i);
               }
               else
               {
@@ -358,7 +360,7 @@
    <content>
         <xul:vbox anonid='box' class="box-inherit touchkey-box" xbl:inherits="align,dir,pack,orient"
                 align="stretch" pack="center" flex="1">
-            <xul:vbox anonid='image-frame' flex='1' />
+            <xul:vbox anonid='image-frame' flex='0' />
             <xul:vbox anonid="label-box" flex='0' align="center">
                 <xul:label anonid='label' flex='1' class="touchkey-text" xbl:inherits="accesskey,crop"> </xul:label>
             </xul:vbox>

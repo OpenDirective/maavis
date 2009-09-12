@@ -9,9 +9,9 @@
     <script type="application/javascript" src="chrome://maavis/content/browser.js" />
 
     <touchpad id="pad" flex='1' rows='10' cols='10'>
-
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message' 
+                alwaysShowLabel='true'
                 label="Look at or read things" speakOnLoad='false'/>
                 
         <touchkey row='1' col='8' rows='2' cols='2'
@@ -20,7 +20,7 @@
 
         <touchkey row='3' col='8' rows='3' cols='2'
                 class='answer' label="Answer" accesskey='a'
- 		    image="file:///%User%Images/answer.jpeg" image-scale="1.0"
+                image="file:///%User%Images/answer.jpeg" image-scale="1.0"
                 action="voipAnswerCall" />
                 
         <browser id="browser" row='1' col='0' rows='8' cols='8' autoscroll="false" type="content-primary" style="margin:6px;"/>

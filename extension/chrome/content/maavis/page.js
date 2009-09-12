@@ -8,8 +8,6 @@ const utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
 const actions = {};
 Components.utils.import("resource://modules/actions.js", actions);
-var skype = {};
-Components.utils.import("resource://modules/skype.js", skype);
 
 const file= {};
 Components.utils.import("resource://modules/file.js", file);
@@ -27,15 +25,23 @@ const _ns =
         yield nodelist[i];
     },
 
-    config:{},
+    // module namespaces
+    config: {},
+    skype: {}
 }
 Components.utils.import("resource://modules/config.js", _ns.config);
+Components.utils.import("resource://modules/skype.js", _ns.skype);
 
 const page = 
 {
-    config : _ns.config.regetUserConfig(),
+    set config(u) {},
+    get config() { return _ns.config.getUserConfig(); },
 
-    user : null,
+    set user(u) {_ns.config.setCurrentUser(u);}, // perhaps not as clear as explicit set function
+    get user() {return _ns.config.regetUserConfig().name;},
+    
+    set login(b) {},
+    get login() {return _ns.config.getCommandLineConfig().login;},
 
     _setColourStylesheet: function()
     {
@@ -60,7 +66,14 @@ const page =
         const quitBtn = mainwindow.getWindow().document.getElementById("quit");
         if ("quitting" in quitBtn)
         {
-            mainwindow.quit(false);
+            if (page.login)
+            {
+                actions.showPage('login.xul');
+            }
+            else
+            {
+                mainwindow.quit(false);
+            }
         }
         else
         {
@@ -119,7 +132,7 @@ const page =
             }
         }
         
-        if (!skype.isAvailable())
+        if (!_ns.skype.isAvailable())
         {
             const answer = document.getElementsByClassName('answer')[0];
             if (answer !== undefined)
@@ -159,13 +172,13 @@ const page =
                     }
                     else
                     {
-                        skype.endCall();
+                        _ns.skype.endCall();
                     }
                 }
             }
-            skype.setCallStatusObserver(onSkypeCallStatus);
+            _ns.skype.setCallStatusObserver(onSkypeCallStatus);
 
-            window.addEventListener('unload', skype.endCall, false);
+            window.addEventListener('unload', _ns.skype.endCall, false);
         }
 
         if (pad && page.config.userType == 'scan')
@@ -183,12 +196,13 @@ const page =
                 function highlightItem(node)
                 {
                     node.focus();
-                    const speakLabels = (page.config.speakLabels == "yes");
+                    const speakLabels = (page.config.speakLabels == "yes" && 
+                                                    !(window.location.pathname.split('/')[2] == "password-scan.xul" && page.config.passwordItems == 'images')); // TODO fragile 
                     if (speakLabels)
                     {
                         setTimeout(function() {setTimeout(function(){node.playPrompt( scan.resumeScan );}, 1)}, 1); // need this to make screen refresh
-                   }
-                   return true; // pause scanning until scan.resume called to simulate sync calls
+                    }
+                   return speakLabels; // pause scanning until scan.resume called to simulate sync calls
                 }
                 scan.setHighlightFunc(highlightItem);
                 scan.setSelectFunc(function(node) {node.click();});
@@ -207,9 +221,7 @@ const page =
                                                     mainwindow.quit();
                                                 }
                                             }, false);
-            
-//        var users = config.getUsers();
-//        config.setCurrentUser(users[0]);
+
     },
 
     addFolderKeys: function(container, folderURI, bDirs, alterItemCB, re)

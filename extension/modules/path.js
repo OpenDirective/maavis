@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "ChromeURIToFileURI", "expandURI", "expandTypes", "getExtensionRootPath"];
+var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "ChromeURIToFileURI", "expandURI", "expandTypes", "getExtensionRootPath", "getThumbnailFile"];
 
 const THUMBFILENAME = "Thumbnail";
 const LINKFILENAME = "links.txt";
@@ -109,7 +109,7 @@ function getInstallationPath()
     return path + '/';
 }
 
-function _getThumbnailFile( dir )
+function getThumbnailFile( dir )
 {
     var items = dir.directoryEntries;
     while (items.hasMoreElements())
@@ -199,7 +199,7 @@ function expandURI(strURI, arURIs, type, re, max )
                     fileAdd.isDirectory())
         {
             // look for thumb
-            const thumbfile = _getThumbnailFile(fileAdd);
+            const thumbfile = getThumbnailFile(fileAdd);
             const chooser = _getChooser(fileAdd);
             const item = { URI: fileToURI(fileAdd), 
                                     thumbURI: ((thumbfile) ? fileToURI(thumbfile) : null),

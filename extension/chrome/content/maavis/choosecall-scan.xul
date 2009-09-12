@@ -11,7 +11,8 @@
     <touchpad id="pad" flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
-                label="Touch the picture of the person you want to call" speakOnLoad='true'/>
+                alwaysShowLabel='true'
+               label="Touch the picture of the person you want to call" speakOnLoad='true'/>
                 
         <selections row='1' col='0' rows='9' cols='7' />
  

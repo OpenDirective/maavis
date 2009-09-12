@@ -4,6 +4,8 @@ var path = {};
 Components.utils.import("resource://modules/path.js", path);
 var config = {};
 Components.utils.import("resource://modules/config.js", config);
+const skype = {};
+Components.utils.import("resource://modules/skype.js", skype);
 	
 if (mainwindow.getProp("MaavisMainWindow") === undefined)
     mainwindow.setProp("MaavisMainWindow", "true");
@@ -42,8 +44,9 @@ function initWindow()
     
     const bConfig = config.getCommandLineConfig().config;
     const bLogin = config.getCommandLineConfig().login;
-    const home = (bConfig) ? "config.xul" : (bLogin)? "login.xul" : "home.xul"
-    actions.setHome(home);
+    const startPage = (bConfig) ? "config.xul" : (bLogin)? "login.xul" : "home.xul"
+    const homePage = (bConfig) ? "config.xul" : "home.xul"
+    actions.setHome(homePage);
     
     // show correct info on home page
     document.getElementById("promptMaavis").setAttribute("collapsed", (bConfig) ? "true" : "false")
@@ -56,7 +59,7 @@ function initWindow()
     skype.initJoys();
     
     const splashtime = page.config.splashTime;
-    mainwindow.showWindow(window, function(){actions.goHome();}, splashtime);
+    mainwindow.showWindow(window, function(){actions.showPage(startPage);}, splashtime);
 }
 
 window.addEventListener('load', initWindow, false);

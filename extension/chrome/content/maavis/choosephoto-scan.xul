@@ -11,6 +11,7 @@
     <touchpad id="pad" flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
+                alwaysShowLabel='true'
                 label="Touch the album you want to look at" speakOnLoad='true'/>
                 
         <selections row='1' col='0' rows='9' cols='7' />

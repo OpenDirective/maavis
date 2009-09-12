@@ -13,13 +13,21 @@ Components.utils.import("resource://modules/utils.js", utils);
 // dojo data will give us a better api for the long term 
 
 var g_user = 'Default';
-function setCurrentUser(user)
-{
-    g_user = user;
-}
-
 var g_userConfig;
 var g_commandLineConfig;
+
+function setCurrentUser(user)
+{
+    g_user = (!user || user == '') ? 'Default' : user;
+    reloadUserConfig();
+    g_userConfig.name = user; // set name
+}
+
+function regetUserConfig()
+{
+    reloadUserConfig(); // so F5 rereads config file
+    return getUserConfig();
+}
 
 //TODO refactor out these app sepcific bits
 function _setConfigDefaults()
@@ -30,7 +38,6 @@ function _setConfigDefaults()
             obj[prop] = value;
     }
 
-    _defaultSetting(g_userConfig, "name", g_user);
     _defaultSetting(g_userConfig, "userType", 'scan');
     _defaultSetting(g_userConfig, 'startsoundURI', _getStartSoundURI());
     _defaultSetting(g_userConfig, 'theme', 'colour');
@@ -44,6 +51,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'scanRate', "2500");
     _defaultSetting(g_userConfig, 'speakLabels', "yes");
     _defaultSetting(g_userConfig, 'scanSetSize', "3x3");
+    _defaultSetting(g_userConfig, 'passwordItems', "images"); //images, labels or complete
     
     //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
 }
@@ -110,12 +118,6 @@ function toggleScanMode()
 
 // TODO exception handling
 
-function regetUserConfig()
-{
-    reloadUserConfig(); // so F5 rereads config file
-    return getUserConfig();
-}
-
 function getPageUrl(page)
 {
     return "chrome://maavis/content/" + page;
@@ -152,6 +154,7 @@ function getUserDataDir(user)
     var dir = _getMaavisDataDir();
     dir.append('Users');
     dir.append(g_user);
+//    utils.logit(dir.path);
     return dir;
 }
 
