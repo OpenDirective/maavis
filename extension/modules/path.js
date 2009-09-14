@@ -3,6 +3,7 @@ var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "
 const THUMBFILENAME = "Thumbnail";
 const LINKFILENAME = "links.txt";
 const CHOOSEFILEPREFIX = "_choose";
+const CHOOSECONFIGFILEBASE = "chooserconfig";
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -184,7 +185,8 @@ function expandURI(strURI, arURIs, type, re, max )
                 URIs.forEach(addURI);
             }
             else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase() ||
-                        fileAdd.leafName.slice(0,-4).toLowerCase() ==CHOOSEFILEPREFIX)
+                        fileAdd.leafName.slice(0,-4).toLowerCase() ==CHOOSEFILEPREFIX ||
+                        fileAdd.leafName.slice(0,-4).toLowerCase() == CHOOSECONFIGFILEBASE )
             {
                 //skip
             }
