@@ -14,17 +14,19 @@ function loadPage()
         avatar.image = path.fileToURI(thumbnail);
     }
 
+    const pad = mainwindow.getElementById("pad");
     if (!page.login)
     {
         const byeKey =  mainwindow.getElementById("quit");
         byeKey.setAttribute('hidden', 'true');
         const title =  mainwindow.getElementById("title");
         title.setAttribute('col', '0');
+        title.setAttribute('cols', '10');
+        pad.adjustKey(title);
     }
     
     if (page.config.userType == 'scan') // TODO temp so old screens still work
     {
-        const pad = mainwindow.getElementById("pad");
         page.addFolderKeys(pad, "file:///%UserDir%", true, null, /^(?!Passwords$).*$/i);
     }
 }

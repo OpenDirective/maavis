@@ -708,6 +708,14 @@
         </body>
       </method>
 
+     <method name="adjustKey">
+        <parameter name='key' />
+        <body><![CDATA[
+            this._positionKey(key);
+        ]]>
+        </body>
+      </method>
+
      <method name="_positionKey">
         <parameter name='key' />
         <body><![CDATA[
