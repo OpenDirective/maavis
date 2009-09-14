@@ -24,13 +24,22 @@ touchkey,
 togglekey,
 chatterkey
 {
-  color: pink;
+  color: white;
   background-color: #2C7DCF;
   border-color: darkblue;
   -moz-border-radius: 30px;
   margin:5px;
   border: 4px solid;
   font-size: 35px;
+}
+
+touchkey#avatar
+{
+  color: Darkblue;
+  background-color: lightblue;
+  border-color: darkblue;
+  -moz-border-radius: 30px;
+  font-size: 0px;
 }
 
 touchkey.otherthings,

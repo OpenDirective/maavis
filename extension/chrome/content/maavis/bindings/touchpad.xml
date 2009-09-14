@@ -76,6 +76,10 @@
                 onget="return this.getAttribute('alwaysShowLabel')"
                 onset="this.setAttribute('alwaysShowLabel', val); return val;"/>
 
+        <property name="alwaysShowImage"
+                onget="return this.getAttribute('alwaysShowImage')"
+                onset="this.setAttribute('alwaysShowImage', val); return val;"/>
+
         <property name="prompt"
                 onget="return this.getAttribute('prompt')"
                 onset="this.setAttribute('prompt', val); return val;"/>
@@ -100,9 +104,27 @@
            </setter>
         </property>
 
+        <property name="image"
+                onget="return this.getAttribute('image')" >
+            <setter><![CDATA[
+                this.setAttribute('image', val);
+                this._setImage();
+                return val;
+                ]]> 
+            </setter>
+        </property>
+
        <property name="_showLabel"
                 readonly="true"
                 onget='return (this.alwaysShowLabel || (this.obTouchPad.getAttribute("showLabels") == "true")) ;'/>
+                
+       <property name="_showImage"
+                readonly="true">
+                <getter><![CDATA[
+                return (this.hasAttribute('image') && (this.alwaysShowImage || (this.obTouchPad.getAttribute("showImages") == 'true')));
+                ]]>
+           </getter>
+        </property>
                 
         <property name="leftalignlabel"
                 onget="return this.getAttribute('leftalignlabel')">
@@ -135,8 +157,9 @@
         <body><![CDATA[
             const box = this._label_box.parentNode;
 
-            const bShowImage = (this.hasAttribute('image') && (this.obTouchPad.getAttribute("showImages") == 'true'));
             const bHoriz = ((this.width / this.height) > 2);
+            const bShowImage = this._showImage;
+            const bShowLabel = this._showlabel;
             if  (bHoriz)
             {
                 //const bHasImage = this.hasAttribute('image');
@@ -147,8 +170,8 @@
                 this._image_box.flex =  '0';
                 const boxw = box.boxObject.width;
                 this._label_box.flex = (bShowImage) ? '0' : '1';
-                this._image_box.width = (bShowImage && this._showLabel) ? boxw/4-5 : null;
-                this._label_box.width = (bShowImage && this._showLabel) ? 3*boxw/4-5 :null;
+                this._image_box.width = (bShowImage && bShowLabel) ? boxw/4-5 : null;
+                this._label_box.width = (bShowImage && bShowLabel) ? 3*boxw/4-5 :null;
             }
             else
             {
@@ -178,10 +201,10 @@
             ]]>
         </body>
       </method>
-
+      
       <method name="_setImage">
         <body><![CDATA[
-           if (this.obTouchPad.showImages != 'true') // skip stack
+           if (!this._showImage) // skip stack
             return;
             
           const scale = (this.hasAttribute('image-scale')) ? this.getAttribute('image-scale') : 1;
@@ -191,6 +214,7 @@
           var src = this.getAttribute('image');
           if (src)
           {
+              const HTML_NS = "http://www.w3.org/1999/xhtml";
               var config = {};
               Components.utils.import("resource://modules/config.js", config);
               src = config.parseURI(src); // TODO review bad design having this here
@@ -228,7 +252,6 @@
                 imageFrame.pack='center';
                 
                 const that = this;
-                const HTML_NS = "http://www.w3.org/1999/xhtml";
                 function setImageSize()
                 {
                     if (isSVG)
@@ -260,7 +283,7 @@
               if (isSVG)
               {
                     // no obvious way of getting at image size from file.
-                    i = document.createElementNS("http://www.w3.org/1999/xhtml", 'object');
+                    i = document.createElementNS(HTML_NS, 'object');
                     i.type='image/svg+xml';
                     i.data=src;
                     setTimeout(function(){setImageSizez.call(i);}, 1); // // only so asynch like img.onLoad

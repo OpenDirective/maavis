@@ -7,17 +7,19 @@ function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
 	
-/*    const avatarKey = mainwindow.getElementById("avatar");
+    const avatar = mainwindow.getElementById("avatar");
     const thumbnail = path.getThumbnailFile(config.getUserDataDir());
     if (thumbnail)
     {
-        avatarKey.image = thumbnail.path;
+        avatar.image = path.fileToURI(thumbnail);
     }
-*/
+
     if (!page.login)
     {
         const byeKey =  mainwindow.getElementById("quit");
         byeKey.setAttribute('hidden', 'true');
+        const title =  mainwindow.getElementById("title");
+        title.setAttribute('col', '0');
     }
     
     if (page.config.userType == 'scan') // TODO temp so old screens still work

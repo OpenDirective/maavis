@@ -9,12 +9,12 @@
     <script type="application/javascript" src="chrome://maavis/content/home.js" />
 
     <touchpad id='pad' flex='1' rows='10' cols='10' >
-        <chatterkey row='0' col='0' rows='1' cols='10'
+        <touchkey id='avatar' row='0' col='0' rows='1' cols='1' alwaysShowImage='true'/>
+        
+        <chatterkey id='title' row='0' col='1' rows='1' cols='9'
                 class='message'
                 alwaysShowLabel='true'
                 label="Touch the activity you want to do" speakOnLoad='true'/>
-                
-        <!--<touchkey id='avatar' row='0' col='0' rows='1' cols='1' />-->
                         
         <selections row='1' col='0' rows='9' cols='7' />
         

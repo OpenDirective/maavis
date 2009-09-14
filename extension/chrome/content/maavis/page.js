@@ -192,7 +192,7 @@ const page =
                 const scan = {};
                 Components.utils.import("resource://modules/scan.js", scan);
                 
-                scan.setSkipFunc(function(node) {return (node.hidden || node.disabled || (node.className.indexOf('scankey') == -1));});
+                scan.setSkipFunc(function(node) {return (node.id=='avatar'||node.hidden || node.disabled || (node.className.indexOf('scankey') == -1));});
                 function highlightItem(node)
                 {
                     node.focus();
