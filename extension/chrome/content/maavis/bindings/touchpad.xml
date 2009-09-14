@@ -228,22 +228,26 @@
                 imageFrame.pack='center';
                 
                 const that = this;
+                const HTML_NS = "http://www.w3.org/1999/xhtml";
                 function setImageSize()
                 {
                     if (isSVG)
                     { 
                         i = that;
-                        utils.logit(i);
+                        i.height = height; // TODO resolve this
+                        i.setAttributeNS(HTML_NS, 'height', height.toString());
+                        i.setAttributeNS(HTML_NS, 'width', width.toString());
+                        i.setAttribute('class', 'touchkey-svgimage');
                     }
                     else
                     {
                         // add child image (xul:image) not HTML to avoid display problems
                         var i = document.createElement('image');
                         i.setAttribute('src', src);
+                        i.width = width;
+                        i.height = height;
+                        i.setAttribute('class', 'touchkey-image');
                     }
-                    i.width = width;
-                    i.height = height;
-                    i.setAttribute('class', 'touchkey-image');
                     if (imageFrame.firstChild)
                       imageFrame.replaceChild(i, imageFrame.firstChild);
                     else
@@ -259,8 +263,7 @@
                     i = document.createElementNS("http://www.w3.org/1999/xhtml", 'object');
                     i.type='image/svg+xml';
                     i.data=src;
-                    setTimeout(function(){setImageSizez.call(i)}, 1000); // so also asynch
-                    //setImageSizez.call(i);
+                    setTimeout(function(){setImageSizez.call(i);}, 1); // // only so asynch like img.onLoad
               }
               else
               {

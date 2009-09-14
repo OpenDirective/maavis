@@ -25,6 +25,13 @@ chatterkey {
   margin: 0px;
 }
 
+.touchkey-svgimage 
+{
+  border: 0px solid transparent;
+/*  padding: 5px;  messes up width*/
+  margin: 0px;
+}
+
 .touchkey-text {
   margin: 3px !important;
   text-align: center;
