@@ -126,6 +126,9 @@ const myAppHandler = {
     var bLogin = cmdLine.handleFlag("login", false);
     prefs.setBoolPref("maavis.commandline.login", bLogin);
     
+    var bQuickStart = cmdLine.handleFlag("quickstart", false);
+    prefs.setBoolPref("maavis.commandline.quickstart", bQuickStart);
+    
     // default is to maavis in a chrome window
     prefs.setBoolPref("maavis.commandline.config", bConfig);
     if (!bNoKiosk && !uristr)
@@ -147,6 +150,7 @@ const myAppHandler = {
                 "  -config              display config settings\n"+
                 "  -login              display login pages\n"+
                 "  -mediafolder <folder>  where media live\n"+
+                "  -quickstart            don't display splash screen or play startsound\n"+
                 "  -nokiosk          Don't use kiosk mode\n",
 
   /* nsIFactory */

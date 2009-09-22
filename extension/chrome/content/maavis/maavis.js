@@ -15,7 +15,7 @@ else
 function playStartSound()
 {
     const sound = page.config.startsoundURI;
-    if (page.config.playStartSound == 'yes' && sound)
+    if (sound )
     {
         var player = document.createElement('audioplayer');
         player.setAttribute("top", "-1"); // off screen

@@ -39,21 +39,21 @@ function _setConfigDefaults()
     }
 
     _defaultSetting(g_userConfig, "userType", 'scan');
-    _defaultSetting(g_userConfig, 'startsoundURI', _getStartSoundURI());
     _defaultSetting(g_userConfig, 'theme', 'colour');
-    _defaultSetting(g_userConfig, 'playStartSound', 'yes');
     _defaultSetting(g_userConfig, 'speakTitles', "yes");
     _defaultSetting(g_userConfig, 'showLabels', "yes");
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "no");
-    _defaultSetting(g_userConfig, 'splashTime', "4");
-    _defaultSetting(g_userConfig, 'scanMode', "AUTO2SWITCHAUTOSTART");
+    _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCHAUTOSTART");
     _defaultSetting(g_userConfig, 'scanRate', "2500");
     _defaultSetting(g_userConfig, 'speakLabels', "yes");
     _defaultSetting(g_userConfig, 'scanSetSize', "3x3");
     _defaultSetting(g_userConfig, 'passwordItems', "images"); //images, labels or complete
+    _defaultSetting(g_userConfig, 'passwordSetSize', "5x3"); 
     
-    //userConfig.__defineGetter__("startsoundURI", _getStartSoundURI);
+    // these only apply to default user 
+    g_userConfig.__defineGetter__("startsoundURI", function(){ return (g_commandLineConfig.quickStart) ? null  : _getStartSoundURI();});
+    g_userConfig.__defineGetter__("splashTime", function(){ return (g_commandLineConfig.quickStart) ? 1 : 4000});
 }
 
 function toggleUserType()
@@ -160,7 +160,7 @@ function getUserDataDir(user)
 
 function _getStartSoundURI()
 {
-    var dir = getUserDataDir();
+    var dir = _getMaavisDataDir();
 	var items = dir.directoryEntries;
     while (items.hasMoreElements())
     {
@@ -206,6 +206,7 @@ function getCommandLineConfig()
         g_commandLineConfig = {};
         const prefs = utils.getService("@mozilla.org/preferences-service;1", "nsIPrefBranch");
         g_commandLineConfig.login = prefs.getBoolPref("maavis.commandline.login");
+        g_commandLineConfig.quickStart = prefs.getBoolPref("maavis.commandline.quickstart");
         g_commandLineConfig.config = prefs.getBoolPref("maavis.commandline.config");
         g_commandLineConfig.mediaFolder = prefs.getCharPref("maavis.commandline.mediafolder");
     }

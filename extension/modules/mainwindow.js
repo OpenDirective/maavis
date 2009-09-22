@@ -28,7 +28,7 @@ function showWindow(window, callback, splashtime)
         {
            callback(mwindow);// NOTE: there may be a fullscreen event we could use
         }
-        window.setTimeout(func, splashtime * 1000); // must be async to work and cover Windows task bar
+        window.setTimeout(func, splashtime); // must be async to work and cover Windows task bar
     }
 }
 
