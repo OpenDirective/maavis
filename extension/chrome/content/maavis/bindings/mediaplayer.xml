@@ -20,10 +20,11 @@
     </resources>
 
     <implementation>
-     <constructor><![CDATA[
+     <constructor>
+     <![CDATA[
         this._MINVOL = 0;
         this._MAXVOL = 200
-     
+
         this._setBroadcaster();
         this.setAttribute('playOnce', 'false');
         
@@ -36,22 +37,23 @@
          function showImage()
          {
             var e = document.createElementNS("http://www.w3.org/1999/xhtml", 'embed');
-            e.setAttribute('type', "application/x-vlc-plugin");
-            e.setAttribute('version', "VideoLAN.VLCPlugin.2");
-            e.setAttribute('id', "vlc");
-            e.setAttribute('class', "mediaplayer");
-            e.setAttributeNS('http://www.mozilla.org/xbl', 'inherits', 'top,left,width,height')
-            mythis.appendChild(e);
-
-            mythis._vlc = e;
-            
             e.setAttribute('top', mythis.getAttribute('top'));
             e.setAttribute('left', mythis.getAttribute('left'));
             e.setAttribute('height', mythis.getAttribute('height'));
             e.setAttribute('width', mythis.getAttribute('width'));
-            
+            e.setAttributeNS('http://www.mozilla.org/xbl', 'inherits', 'top,left,width,height')
             if(mythis.getAttribute('invisible') == 'true') // hiding bound obj means player not created
+            {
                 e.setAttribute('hidden', 'true');
+            }
+            
+            e.setAttribute('type', "application/x-vlc-plugin");
+            e.setAttribute('version', "VideoLAN.VLCPlugin.2");
+            e.setAttribute('id', "vlc");
+            e.setAttribute('class', "mediaplayer");
+            mythis.appendChild(e);
+
+            mythis._vlc = e;
             
             mythis._wasPlaying = false;
             mythis._broadcast("isPlaying", "false");
