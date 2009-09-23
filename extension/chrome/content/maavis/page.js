@@ -227,7 +227,8 @@ const page =
     },
 
     addFolderKeys: function(container, folderURI, bDirs, alterItemCB, re)
-    {    
+    { 
+
         var nItem = 0;
 
         function getPromptFile(folder, baseName)
@@ -241,31 +242,19 @@ const page =
         var image = null;
         function addItemKey(item)
         {
-            try
-            {
-                const fileItem = path.URIToFile(item.URI);
-            }
-            catch(err)
-            {
-                throw (err);
-                return;
-            }
-            //TODO remove assumption is local file URI
-            const itemName = (bDirs) ? fileItem.leafName : fileItem.leafName.slice(0, -4);
-           
             const chooser = (folderConfig) ? folderConfig['type'] : item.chooser;
-            const arg = (folderConfig && folderConfig.actions[itemName]) ? folderConfig.actions[itemName] : item.URI;
+            const arg = /*(folderConfig && folderConfig.actions[itemName]) ? folderConfig.actions[itemName] :*/ item.URI;
             const action = (chooser)  ? 'showPage|' + chooser + '.xul,' + arg : null;
-            var cbItem = { "URI": item.URI, 
-                                    "name": itemName, 
-									"thumbURI": item.thumbURI, 
+            var cbItem = { "name": item.name, 
+                                    "URI": item.URI,
+                                    "thumbURI": item.thumbURI, 
 									"action": action ,
                                     "arg": arg};
 			if (alterItemCB)
                 alterItemCB(cbItem);
             if (page.config.userType == 'scan') // TODO temp so old screens still work
             {
-                const prompt  = getPromptFile(fileItem.parent, itemName);
+                const prompt = getPromptFile(folder, item.name);
                 var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
                 if (key)
                 {
@@ -291,9 +280,12 @@ const page =
             }
         }
     
-        const folder = _ns.config.parseURI(folderURI);
         const path = {};
         Components.utils.import("resource://modules/path.js", path);
+
+        folderURI = _ns.config.parseURI(folderURI);
+        const folder = path.URIToFile(folderURI);
+        
         const type = (bDirs) ? path.expandTypes.EXP_DIRS : path.expandTypes.EXP_FILES;
             
         var curpage = parseInt(mainwindow.getProp(actions.SELECTIONS_PAGE_PROP));
@@ -302,36 +294,12 @@ const page =
         const scanKey = container.addSelectionsItem('More Items...', null, 1, 'nextSelectionsPage', null, null, true); // add the more item
         scanKey.className += ' scankey';
 
-        var folderConfig = page.readFolderConfig(folder);
+        var folderConfig = path.readFolderConfig(folder);
             
         var arItems=[]; 
-        path.expandURI(folder, arItems, type, re);
+        path.expandURI(folderURI, arItems, type, re);
         arItems.forEach(addItemKey);
         container.endSelectionsAdd();
-    },
-    
-    readFolderConfig: function(folderURI)
-    {
-        const file = {};
-        Components.utils.import("resource://modules/file.js", file);
-        const path = {};
-        Components.utils.import("resource://modules/path.js", path);
-
-        try
-        {
-            const folder = path.URIToFile(folderURI);
-            folder.append('chooserconfig.txt');
-            const arrLines = file.readFileLines(folder);
-            const type = arrLines.shift().split('=')[1]; // TODO very fragile
-            var config = {'type':type, actions:{}};
-            arrLines.forEach(function(el, i, ar) {var p = el.split('='); config.actions[p[0]] = p[1];})
-            return config;
-        }
-        catch (e)
-        {
-            //utils.logit(e);
-            return null;
-        }
     },
     
     get _pageName () { return window.location.pathname.split('/')[2]; },// TODO Fragile,

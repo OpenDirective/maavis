@@ -230,7 +230,7 @@ function getUserConfig()
         }
         catch (ex)
         {
-            throw new UserException("Error reading user config file \""+_getUserConfigFile().path+"\"");
+            //throw new UserException("Error reading user config file \""+_getUserConfigFile().path+"\"");
         }
         // set defaults 
         _setConfigDefaults();

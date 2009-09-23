@@ -5,10 +5,10 @@ function loadPage()
     const pad = mainwindow.getElementById("pad");
     function mkItem( item )
     {
+        item.action = 'progExec|'+item.arg;
         //item.thumbURI = item.URI;
-        item.action = 'showPage|browser.xul,'+item.arg;
     }
-    page.addFolderKeys(pad, "file:///%UserDir%/Information/", false, mkItem);
+    page.addFolderKeys(pad, "file:///%UserDir%/Programs/", false, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);

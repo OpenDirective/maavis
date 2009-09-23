@@ -43,7 +43,7 @@ function showPage(page /*...*/)
     {
         var str = config.parseURI(arguments[i])
         var ar=[];
-        if (path.expandURI(str, ar))
+        if (path.expandURI(str, ar)) //TODO need this?
         {
             ar.forEach(function(item){ args.push(item.URI); });
         }
@@ -144,6 +144,8 @@ function loadActions()
     action.setAction('nextSelectionsPage', nextSelectionsPage, setContext);
     
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);
+
+    action.setAction('custom', function(){ arguments[0]();  }, setContext); //TODO fragile
 }
 
 function showCall(bShow, partner)

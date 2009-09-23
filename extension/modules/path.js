@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "ChromeURIToFileURI", "expandURI", "expandTypes", "getExtensionRootPath", "getThumbnailFile"];
+var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "ChromeURIToFileURI", "expandURI", "expandTypes", "getExtensionRootPath", "getThumbnailFile", "readFolderConfig"];
 
 const THUMBFILENAME = "Thumbnail";
 const LINKFILENAME = "links.txt";
@@ -53,10 +53,17 @@ function fileToURI(file)
 
 function URIToFile(strURI)
 {
-    const ios = Components.classes["@mozilla.org/network/io-service;1"]
-                        .getService(Components.interfaces.nsIIOService);
-    const URI = ios.newURI(strURI, null, null);
-    const fileURI = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+    try
+    {
+        const ios = Components.classes["@mozilla.org/network/io-service;1"]
+                            .getService(Components.interfaces.nsIIOService);
+        const URI = ios.newURI(strURI, null, null);
+        const fileURI = URI.QueryInterface(Components.interfaces.nsIFileURL).file;
+    }
+    catch (e)
+    {
+        return null;
+    }
     return fileURI;
 }
 
@@ -138,12 +145,30 @@ function _getChooser( dir )
     }
 }
 
+function readFolderConfig(folder)
+{
+    try
+    {
+        const folder2 = getFile(folder.path); // make a copy
+        folder2.append(CHOOSECONFIGFILEBASE+'.txt');
+        const arrLines = file.readFileLines(folder2);
+        const type = arrLines.shift().split('=')[1]; // TODO very fragile
+        var config = {'type':type, 'items':{}};
+        arrLines.forEach(function(el, i, ar) {var p = el.split('='); config.items[p[0]] = p[1];})
+        return config;
+    }
+    catch (e)
+    {
+        //utils.logit(e);
+        return null;
+    }
+}
+    
 const expandTypes = { EXP_FILES: 0, EXP_DIRS: 1 };
 function expandURI(strURI, arURIs, type, re, max )
 { //utils.logit(strURI);
     type = type || expandTypes.EXP_FILES;
     max = max || 0;
-    
     try {
         const ios = Components.classes["@mozilla.org/network/io-service;1"]
                             .getService(Components.interfaces.nsIIOService);
@@ -173,26 +198,30 @@ function expandURI(strURI, arURIs, type, re, max )
                 (!max || arURIs.length < max) && 
                 fileAdd.isFile())
         {
-            var itemz = {};
+            var itemName = fileAdd.leafName.slice(0, -4);
             if (fileAdd.leafName.toLowerCase() == LINKFILENAME.toLowerCase())
             {
                 const URIs = file.readFileLines(fileAdd);
                 function addURI(URI)
                 {
-                    itemz = { URI: URI, thumbURI: null, choose: null };
+                    itemz = { name: null, URI: URI, thumbURI: null, chooser: null };
                     arURIs.push( itemz );
                 }
                 URIs.forEach(addURI);
             }
             else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase() ||
-                        fileAdd.leafName.slice(0,-4).toLowerCase() ==CHOOSEFILEPREFIX ||
-                        fileAdd.leafName.slice(0,-4).toLowerCase() == CHOOSECONFIGFILEBASE )
+                        fileAdd.leafName.slice(0,-4).toLowerCase() == CHOOSECONFIGFILEBASE ||
+                        fileAdd.leafName.indexOf(CHOOSEFILEPREFIX.toLowerCase()) == 0  )
             {
                 //skip
             }
+            else if ((items && itemName in items))
+            {
+                //utils.logit(itemName);
+            }
             else
             {
-                itemz = { URI: fileToURI(fileAdd), thumbURI: null, chooser: null };
+                itemz = { name: itemName, URI: fileToURI(fileAdd), thumbURI: null, chooser: null };
                 arURIs.push( itemz );
             }
         }
@@ -201,9 +230,11 @@ function expandURI(strURI, arURIs, type, re, max )
                     fileAdd.isDirectory())
         {
             // look for thumb
+            itemName = fileAdd.leafName ;
             const thumbfile = getThumbnailFile(fileAdd);
             const chooser = _getChooser(fileAdd);
-            const item = { URI: fileToURI(fileAdd), 
+            const item = { name: itemName,
+                                    URI: fileToURI(fileAdd), 
                                     thumbURI: ((thumbfile) ? fileToURI(thumbfile) : null),
                                     chooser: chooser};
             arURIs.push( item );
@@ -211,6 +242,28 @@ function expandURI(strURI, arURIs, type, re, max )
     }
 
     arURIs.length = 0;
+    
+    //items in config file go in first
+    var items = null;
+    if (type == expandTypes.EXP_FILES)
+    {
+        const folderConfig = readFolderConfig(fileURI);
+        if (folderConfig && ('items' in folderConfig))
+        {
+            var items = folderConfig.items;
+            for (itemName in items)
+            {
+                const reThumb = new RegExp ('^'+itemName+'\\..*$', "i");
+                const thumbFiles = file.getDirFiles(fileURI, reThumb);
+                const thumbURI = (thumbFiles.length) ? fileToURI(thumbFiles[0]) : null;
+                const uri = items[itemName];
+                var itemz = { name:itemName, URI: uri, thumbURI: thumbURI, chooser: null };
+                arURIs.push( itemz );
+            }
+        }
+    }
+
+    // then files
     var files = file.getDirFiles(fileURI, re);
     files.forEach(addFileURI);
     

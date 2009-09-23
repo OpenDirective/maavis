@@ -31,7 +31,7 @@ function exec(command)
 const g_pm = Components.classes["@senecac.on.ca/processmanager;1"].
         createInstance(Components.interfaces.IProcessManager);
 var g_poller = undefined;
-var c_chkProc = null;
+var g_chkProc = null;
 
 function pollProc()
 {
