@@ -37,8 +37,8 @@ const page =
     set config(u) {},
     get config() { return _ns.config.getUserConfig(); },
 
-    set user(u) {_ns.config.setCurrentUser(u);}, // perhaps not as clear as explicit set function
-    get user() {return _ns.config.regetUserConfig().name;},
+    set user(u) {_ns.config.setCurrentUser(u);},
+    get user() {return page.config.name;},
     
     set login(b) {},
     get login() {return _ns.config.getCommandLineConfig().login;},
@@ -183,10 +183,8 @@ const page =
 
         if (pad && page.config.userType == 'scan')
         {
-            const size = page.config.scanSetSize.split('x');
-            const cols = (isNaN(size[0])) ? '2' : size[0];
-            const rows = (isNaN(size[1])) ? '2' : size[1];
-            pad.setSelectionsGrid(cols, rows);
+            page._setGridSize(pad);
+            
             function startScanning()
             {
                 const scan = {};
@@ -197,7 +195,7 @@ const page =
                 {
                     node.focus();
                     const speakLabels = (page.config.speakLabels == "yes" && 
-                                                    !(window.location.pathname.split('/')[2] == "password-scan.xul" && page.config.passwordItems == 'images')); // TODO fragile 
+                                                    !(page._isPasswordPage && page.config.passwordItems == 'images')); // TODO fragile 
                     if (speakLabels)
                     {
                         setTimeout(function() {setTimeout(function(){node.playPrompt( scan.resumeScan );}, 1)}, 1); // need this to make screen refresh
@@ -219,6 +217,10 @@ const page =
                                                         || event.keyCode == 115/*ALT_F4*/) && event.altKey ) 
                                                 {
                                                     mainwindow.quit();
+                                                }
+                                                else if (event.keyCode == 116/*F5*/)
+                                                {
+                                                    page.user=page.user; // so F5 rereads use config file
                                                 }
                                             }, false);
 
@@ -330,6 +332,17 @@ const page =
             //utils.logit(e);
             return null;
         }
+    },
+    
+    get _pageName () { return window.location.pathname.split('/')[2]; },// TODO Fragile,
+    get _isPasswordPage () { return page._pageName  == "password-scan.xul"; },
+        
+    _setGridSize: function(pad)
+    {
+        const size = ((page._isPasswordPage) ? page.config.passwordSetSize : page.config.selectionsSetSize).split('x');
+        const cols = (isNaN(size[0])) ? '3' : size[0];
+        const rows = (isNaN(size[1])) ? '3' : size[1];
+        pad.setSelectionsGrid(cols, rows);
     }
     
 };

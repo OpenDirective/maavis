@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["getPageUrl", "getUserDataDir", "regetUserConfig", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "reloadUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig"];
+var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig"];
 
 //TODO clean up this file
 
@@ -8,6 +8,18 @@ var path = {};
 Components.utils.import("resource://modules/path.js", path);
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
+
+    
+function ConfigException (message)
+{
+  this.message=message;
+  this.name="ConfigException";
+}
+ConfigException.prototype.toString = function ()
+{
+  return this.name + ': "' + this.message + '"';
+}
+
 
 // for now we do synchronous all at once access direct to object
 // dojo data will give us a better api for the long term 
@@ -19,14 +31,7 @@ var g_commandLineConfig;
 function setCurrentUser(user)
 {
     g_user = (!user || user == '') ? 'Default' : user;
-    reloadUserConfig();
-    g_userConfig.name = user; // set name
-}
-
-function regetUserConfig()
-{
-    reloadUserConfig(); // so F5 rereads config file
-    return getUserConfig();
+    _reloadUserConfig();
 }
 
 //TODO refactor out these app sepcific bits
@@ -44,17 +49,18 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'showLabels', "yes");
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "no");
-    _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCHAUTOSTART");
+    _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCH");
     _defaultSetting(g_userConfig, 'scanRate', "2500");
     _defaultSetting(g_userConfig, 'speakLabels', "yes");
-    _defaultSetting(g_userConfig, 'scanSetSize', "3x3");
+    _defaultSetting(g_userConfig, 'selectionsSetSize', "3x3");
     _defaultSetting(g_userConfig, 'passwordItems', "images"); //images, labels or complete
-    _defaultSetting(g_userConfig, 'passwordSetSize', "5x3"); 
+    _defaultSetting(g_userConfig, 'passwordSetSize', "4x3"); 
     
-    // these only apply to default user 
+    // these aren't persisted 
     g_userConfig.__defineGetter__("startsoundURI", function(){ return (g_commandLineConfig.quickStart) ? null  : _getStartSoundURI();});
     g_userConfig.__defineGetter__("splashTime", function(){ return (g_commandLineConfig.quickStart) ? 1 : 4000});
-}
+    g_userConfig.__defineGetter__("name", function () { return g_user; });
+    }
 
 function toggleUserType()
 {
@@ -215,7 +221,7 @@ function getCommandLineConfig()
 
 function getUserConfig()
 {
-    if (!g_userConfig)
+    if (!g_userConfig) // cached
     {
         g_userConfig = {};
         try
@@ -224,6 +230,7 @@ function getUserConfig()
         }
         catch (ex)
         {
+            throw new UserException("Error reading user config file \""+_getUserConfigFile().path+"\"");
         }
         // set defaults 
         _setConfigDefaults();
@@ -239,14 +246,14 @@ function saveUserConfig()
         }
         catch (ex)
         {
-            return;
+            throw new UserException("Error writing user config file \""+_getUserConfigFile().path+"\"");
         }
  }
 
-function reloadUserConfig()
+function _reloadUserConfig()
 {
     g_userConfig = undefined;
-    getUserConfig();
+    return getUserConfig();
 }
 
 function parseURI(str)
