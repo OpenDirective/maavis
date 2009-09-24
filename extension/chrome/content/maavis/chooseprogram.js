@@ -5,8 +5,8 @@ function loadPage()
     const pad = mainwindow.getElementById("pad");
     function mkItem( item )
     {
+        //utils.logit(item.thumbURI +' '+ item.URI+' '+item.arg);
         item.action = 'progExec|'+item.arg;
-        //item.thumbURI = item.URI;
     }
     page.addFolderKeys(pad, "file:///%UserDir%/Programs/", false, mkItem);
 }

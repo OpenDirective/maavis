@@ -3,7 +3,8 @@ var EXPORTED_SYMBOLS = ["getFile", "getUserDocsDir", "fileToURI", "URIToFile", "
 const THUMBFILENAME = "Thumbnail";
 const LINKFILENAME = "links.txt";
 const CHOOSEFILEPREFIX = "_choose";
-const CHOOSECONFIGFILEBASE = "chooserconfig";
+const CONFIGFILE = "chooserconfig.txt";
+const ITEMSINI = "_items.ini";
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -62,6 +63,7 @@ function URIToFile(strURI)
     }
     catch (e)
     {
+        utils.logit(e);
         return null;
     }
     return fileURI;
@@ -150,20 +152,61 @@ function readFolderConfig(folder)
     try
     {
         const folder2 = getFile(folder.path); // make a copy
-        folder2.append(CHOOSECONFIGFILEBASE+'.txt');
+        folder2.append(CONFIGFILE);
         const arrLines = file.readFileLines(folder2);
         const type = arrLines.shift().split('=')[1]; // TODO very fragile
-        var config = {'type':type, 'items':{}};
-        arrLines.forEach(function(el, i, ar) {var p = el.split('='); config.items[p[0]] = p[1];})
+        var config = {'type':type};
         return config;
     }
     catch (e)
     {
-        //utils.logit(e);
+        utils.logit(e);
         return null;
     }
 }
-    
+
+function isImage(uri)
+{ // poormans version based on extension
+    try
+    {
+        const IMAGE_EXTENSIONS = ['bmp','png','apng','gif','jpg','xbm','svg'];
+        const filename = URIToFile(uri).leafName.toLowerCase();
+        const type = filename.split('.').pop(); // TODO will fail if more than one .
+    }
+    catch (e)
+    {
+        utils.logit(e);
+        return false;
+    }
+    return IMAGE_EXTENSIONS.indexOf(type) != -1;
+}
+
+function readItemsIni(folder)
+{
+    try
+    {
+        const folder2 = getFile(folder.path); // make a copy
+        folder2.append(ITEMSINI);
+        const arrLines = file.readFileLines(folder2);
+        var items = {}; // TODO array as need order
+        arrLines.forEach(function(el, i, ar)
+                                {
+                                    var p = el.split('=');
+                                    if (p[1] == '')
+                                    {
+                                        p[1] = undefined;
+                                    }
+                                    items[p[0]] = p[1];
+                                }); // TODO fragile
+        return items;
+    }
+    catch (e)
+    {
+        utils.logit(e);
+        return null;
+    }
+}
+
 const expandTypes = { EXP_FILES: 0, EXP_DIRS: 1 };
 function expandURI(strURI, arURIs, type, re, max )
 { //utils.logit(strURI);
@@ -204,24 +247,27 @@ function expandURI(strURI, arURIs, type, re, max )
                 const URIs = file.readFileLines(fileAdd);
                 function addURI(URI)
                 {
-                    itemz = { name: null, URI: URI, thumbURI: null, chooser: null };
+                    const thumbURI = isImage(URI) ? URI : null;
+                    itemz = { name: null, URI: URI, thumbURI: thumbURI, chooser: null };
                     arURIs.push( itemz );
                 }
                 URIs.forEach(addURI);
             }
             else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase() ||
-                        fileAdd.leafName.slice(0,-4).toLowerCase() == CHOOSECONFIGFILEBASE ||
+                        fileAdd.leafName == ITEMSINI ||
                         fileAdd.leafName.indexOf(CHOOSEFILEPREFIX.toLowerCase()) == 0  )
             {
                 //skip
             }
-            else if ((items && itemName in items))
+            else if (items && itemName in items)
             {
-                //utils.logit(itemName);
+                // skip as alread in given config file
             }
-            else
+            else 
             {
-                itemz = { name: itemName, URI: fileToURI(fileAdd), thumbURI: null, chooser: null };
+                const URI = fileToURI(fileAdd);
+                const thumbURI = isImage(URI) ? URI : null;
+                itemz = { name: itemName, URI: URI, thumbURI: thumbURI, chooser: null };
                 arURIs.push( itemz );
             }
         }
@@ -244,19 +290,20 @@ function expandURI(strURI, arURIs, type, re, max )
     arURIs.length = 0;
     
     //items in config file go in first
-    var items = null;
+    var items = null; 
     if (type == expandTypes.EXP_FILES)
     {
-        const folderConfig = readFolderConfig(fileURI);
-        if (folderConfig && ('items' in folderConfig))
+        items = readItemsIni(fileURI);
+        if (items)
         {
-            var items = folderConfig.items;
             for (itemName in items)
             {
                 const reThumb = new RegExp ('^'+itemName+'\\..*$', "i");
                 const thumbFiles = file.getDirFiles(fileURI, reThumb);
-                const thumbURI = (thumbFiles.length) ? fileToURI(thumbFiles[0]) : null;
-                const uri = items[itemName];
+                var thumbURI = (thumbFiles.length) ? fileToURI(thumbFiles[0]) : null;
+                var uri = (items[itemName]) ? items[itemName] : thumbURI;
+                if  (!thumbURI && isImage(uri)) 
+                    thumbURI = uri;
                 var itemz = { name:itemName, URI: uri, thumbURI: thumbURI, chooser: null };
                 arURIs.push( itemz );
             }

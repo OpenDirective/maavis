@@ -98,7 +98,7 @@ function fromJson(text)
 
 function isArray(obj)
 {
-    return obj.constructor.toString().indexOf("Array") != -1;
+    return obj && obj.constructor.toString().indexOf("Array") != -1;
 }
 
 function getService(klass, inteface)

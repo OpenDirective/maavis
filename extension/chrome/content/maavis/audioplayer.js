@@ -15,7 +15,6 @@ function loadPage()
 	
     function addButton(item)
     {
-
         if (row > MAXROWS)
 		{
             return;

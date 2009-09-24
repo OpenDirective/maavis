@@ -24,7 +24,6 @@ function loadPage()
             {
                 item.action = 'showPage|loginfail.xul';
             }
-            item.thumbURI = item.URI;
         }
         catch(e)
         {

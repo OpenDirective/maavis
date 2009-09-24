@@ -43,7 +43,7 @@ function showPage(page /*...*/)
     {
         var str = config.parseURI(arguments[i])
         var ar=[];
-        if (path.expandURI(str, ar)) //TODO need this?
+        if (path.expandURI(str, ar)) // parse files to page (for players)
         {
             ar.forEach(function(item){ args.push(item.URI); });
         }
