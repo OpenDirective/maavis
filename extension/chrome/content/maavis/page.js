@@ -147,7 +147,8 @@ const page =
                 if (status == "inprogress")
                 {
                     actions.showCall(true);
-                    execute.execSkype();
+                    const stopPage = (config.getUserConfig().userType == 'scan') ? null : config.getPageUrl("incall.xul");
+                    execute.execSkype(stopPage);
                 }
                 else if (status == "finished")
                 {

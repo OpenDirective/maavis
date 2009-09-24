@@ -16,6 +16,8 @@ const execute = {}
 Components.utils.import("resource://modules/execute.js", execute);
 const skype = {}
 Components.utils.import("resource://modules/skype.js", skype);
+const scan = {}
+Components.utils.import("resource://modules/scan.js", scan);
 
 const SELECTIONS_PAGE_PROP = 'selectionsPage';
 
@@ -126,8 +128,14 @@ function loadActions()
     action.setAction('voipAnswerCall', function(){ if (skype.isAvailable) skype.answerCall(); }, setContext);
     action.setAction('voipEndCall', function(){ if (skype.isAvailable) skype.endCall(); }, setContext);
 
-    action.setAction('progExec', execute.execProc, setContext);
-    action.setAction('progKill', execute.killProc, setContext);
+    function exec(prog)
+    {
+        scan.holdScan(3000, execute.killProc);
+        const page = (config.getUserConfig().userType == 'scan') ? null : config.getPageUrl("stop.xul");
+        execute.execProc(prog, page, scan.releaseScan);
+    }
+    action.setAction('progExec', exec, setContext);
+    action.setAction('progKill',  execute.killProc, setContext);
 
     action.setAction('configToggleTheme', function(){config.toggleTheme(); goHome()} , setContext);
     action.setAction('configTogglePlayStartSound', function(){config.togglePlayStartSound(); goHome()} , setContext);
@@ -145,7 +153,7 @@ function loadActions()
     
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);
 
-    action.setAction('custom', function(){ arguments[0]();  }, setContext); //TODO fragile
+    //action.setAction('custom', function(){ arguments[0]();  }, setContext); //TODO fragile
 }
 
 function showCall(bShow, partner)

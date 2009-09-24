@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["DIRECTIONS", "SCANMODES", "setSkipFunc",  "setHighlightFunc",  "setSelectFunc", "startScan", "resumeScan"];
+var EXPORTED_SYMBOLS = ["DIRECTIONS", "SCANMODES", "setSkipFunc",  "setHighlightFunc",  "setSelectFunc", "startScan", "holdScan", "releaseScan", "resumeScan"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -7,7 +7,7 @@ Components.utils.import("resource://modules/skype.js", skype);
 var ticker = {};
 Components.utils.import("resource://modules/ticker.js", ticker);
 
-const EVENTS = {"START":0, "TICK":1, "BUTTONDOWN":2, "BUTTONUP":3};
+const EVENTS = {"START":0, "TICK":1, "BUTTONDOWN":2, "BUTTONUP":3, "HOLD":1000, "RELEASE":1001};
 const DIRECTIONS = {"FORWARD":0, "BACKWARD":1};
 const SCANMODES = {"AUTO1SWITCH":0, "USER1SWITCH":1, "AUTO2SWITCH":2, "USER2SWITCH":3, "AUTO1SWITCHAUTOSTART":4};
 
@@ -124,6 +124,20 @@ function _tick()
     _onEvent(EVENTS.TICK, null, null);
 }
 
+var g_killTime = null;
+var g_onKill = null;
+function holdScan(killTime, onKill)
+{
+    g_killTime = killTime;
+    g_onKill = onKill;
+    _onEvent(EVENTS.HOLD, null, null);
+}
+
+function releaseScan()
+{
+    _onEvent(EVENTS.RELEASE, null, null);
+}
+
 function resumeScan()
 { // so can process immediatiately rather than waiting for next tick
     if (g_pauseScan)
@@ -172,10 +186,41 @@ function onJoyButtonStatus(status, joystick, button)
 }
 skype.setJoyStatusObserver(onJoyButtonStatus);
 
+var g_holding = false;
+var g_killTimeout = null;
 function _onEvent(event, joystick, button)
 {
     try
-    {  
+    { 
+        if (event == EVENTS.HOLD)
+        {
+            g_holding = true;
+            return;
+        }
+        else if (g_holding == true)
+        {
+             switch(event)
+            {
+                case EVENTS.BUTTONDOWN:
+                    g_killTimeout = window.setTimeout(g_onKill, g_killTime);  // TODO eat Button up
+                    break;
+                case EVENTS.BUTTONUP:
+                    if (g_killTimeout)
+                    {
+                        clearTimeout(g_killTimer);
+                        g_killTimeout = null;
+                    }
+                    break;
+                case EVENTS.RELEASE:
+                    g_holding = false;
+                    break;
+                default:
+                    break;
+            }
+            return;
+        }
+        
+        
         //TODO see if can make data driven
         switch(g_scanMode)
         {
@@ -196,7 +241,7 @@ function _onEvent(event, joystick, button)
                         {
                             _select();
                         }
-                    break;
+                        break;
                     default:
                         break;
                 }
@@ -220,7 +265,7 @@ function _onEvent(event, joystick, button)
                         {
                             _select();
                         }
-                    break;
+                        break;
                     default:
                         break;
                 }

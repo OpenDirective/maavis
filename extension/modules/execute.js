@@ -4,8 +4,6 @@ const mainwindow = {};
 Components.utils.import("resource://modules/mainwindow.js", mainwindow);
 const utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
-const config = {};
-Components.utils.import("resource://modules/config.js", config);
 const action = {}
 Components.utils.import("resource://modules/action.js", action);
 
@@ -67,10 +65,15 @@ function setContentVisibility(isVis)
 }
 
 var g_stopper = undefined;
+var g_onEnd = null;
 
-function setProcessRunningUI(page)
+function setProcessRunningUI(page, onEnd)
 {
-    g_stopper = window.open(page, stopWindowName, "chrome,top=0,left=0,titlebar=no,alwaysRaised" ); // can't be modal or interval not seen
+    if (page)
+    {
+        g_stopper = window.open(page, stopWindowName, "chrome,top=0,left=0,titlebar=no,alwaysRaised" ); // can't be modal or interval not seen
+    }
+    g_onEnd = onEnd;
     startProcPoller();
     setContentVisibility(false);
     window.setTimeout(setTopmost, 1000); //alow everything to start up
@@ -79,8 +82,15 @@ function setProcessRunningUI(page)
 function restoreUI()
 {
     stopProcPoller();
-    g_stopper.close();
+    if (g_stopper)
+    {
+        g_stopper.close();
+        g_stopper = undefined;
+    }
     setContentVisibility(true);
+    if (g_onEnd)
+        g_onEnd();
+    g_onEnd = null;
 }
 
 const stopWindowName = "Stop!";
@@ -89,7 +99,8 @@ function setTopmost()
 {
     if (g_pm.isRunning())
         g_pm.makeTopmost();
-    g_pm.makeMozWindowTopmost(stopWindowName); // as set by document.title or window title=
+    if (g_stopper)
+        g_pm.makeMozWindowTopmost(stopWindowName); // as set by document.title or window title=
 }
 
 var window = undefined;
@@ -100,7 +111,7 @@ function setContext()
     window = mainwindow.getWindow();// so in scope chain
 }
 
-function execProc(prog)
+function execProc(prog, page, onEnd)
 {
     setContext();
     
@@ -113,11 +124,12 @@ function execProc(prog)
     g_pm.start(prog)
 
     g_chkProc = true; // messy
-    setProcessRunningUI(config.getPageUrl("stop.xul"));
+    setProcessRunningUI(page, onEnd);
 }
 
 function killProc()
-{   setContext();
+{   
+    setContext();
     stopProcPoller();
     if (g_pm.isRunning())
     {
@@ -126,12 +138,11 @@ function killProc()
     restoreUI();
 }   
 
-function execSkype()
+function execSkype(page)
 {
     setContext();
     g_chkProc = false; // messy
-//    setProcessRunningUI(config.getPageUrl("incall.xul"));
-    setProcessRunningUI(config.getPageUrl("incall.xul"));
+    setProcessRunningUI(page);
 }
 
 function killSkype()
