@@ -207,6 +207,16 @@ function readItemsIni(folder)
     }
 }
 
+function in_casei(name, obj)
+// case insensitive in
+{
+    const nameLower = name.toLowerCase();
+    for (i in obj)
+        if (i.toLowerCase() == nameLower)
+            return true;
+    return false;
+}
+
 const expandTypes = { EXP_FILES: 0, EXP_DIRS: 1 };
 function expandURI(strURI, arURIs, type, re, max )
 { //utils.logit(strURI);
@@ -259,7 +269,7 @@ function expandURI(strURI, arURIs, type, re, max )
             {
                 //skip
             }
-            else if (items && itemName in items)
+            else if (items && in_casei(itemName, items))
             {
                 // skip as alread in given config file
             }
