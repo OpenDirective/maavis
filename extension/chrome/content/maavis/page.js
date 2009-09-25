@@ -124,7 +124,6 @@ const page =
                 function makeScankey(obj)
                 {
                     obj.className += ' scankey';
-                    utils.logit(obj.className);
                 }
                 for (var key in _ns.nodeGen(pad.content.getElementsByTagName('touchkey')))
                     makeScankey(key);
@@ -135,10 +134,13 @@ const page =
         
         if (!_ns.skype.isAvailable())
         {
-            const answer = pad.content.getElementsByClassName('answer scankey')[0];
-            if (answer !== undefined)
+            if (pad !== undefined)
             {
-                answer.collapsed = true;
+                const answer = pad.content.getElementsByClassName('answer scankey')[0];
+                if (answer !== undefined)
+                {
+                    answer.collapsed = true;
+                }
             }
         }
         else
