@@ -221,7 +221,7 @@ function _onEvent(event, joystick, button)
                     }
                     g_holding = false;
                     if (g_scanMode ==SCANMODES.AUTO1SWITCHAUTOSTART)
-                        g_ticker.toggle(); //start it again
+                        g_ticker.start(); //start it again
                     break;
                 default:
                     break;
