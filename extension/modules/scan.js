@@ -98,7 +98,9 @@ function _navigateAndHighlight()
             g_pauseScan = g_actions.onHighlight(g_nodes.current());
             g_pendingTick = false;
             if(g_pauseScan)
+            {
               _logState('pause '+((g_nodes.current())?g_nodes.current().label:'none'));
+            }
         }
     }
     else
@@ -202,24 +204,30 @@ function _onEvent(event, joystick, button)
              switch(event)
             {
                 case EVENTS.BUTTONDOWN:
-                    g_killTimeout = window.setTimeout(g_onKill, g_killTime);  // TODO eat Button up
+                    g_killTimeout = window.setTimeout(g_onKill, g_killTime);  // TODO eat Button up on timeout
                     break;
                 case EVENTS.BUTTONUP:
                     if (g_killTimeout)
                     {
-                        clearTimeout(g_killTimer);
+                        window.clearTimeout(g_killTimeout);
                         g_killTimeout = null;
                     }
                     break;
                 case EVENTS.RELEASE:
+                    if (g_killTimeout)
+                    {
+                        window.clearTimeout(g_killTimeout);
+                        g_killTimeout = null;
+                    }
                     g_holding = false;
+                    if (g_scanMode ==SCANMODES.AUTO1SWITCHAUTOSTART)
+                        g_ticker.toggle(); //start it again
                     break;
                 default:
                     break;
             }
             return;
         }
-        
         
         //TODO see if can make data driven
         switch(g_scanMode)
