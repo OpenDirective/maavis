@@ -15,3 +15,6 @@ pref("browser.startup.page", 0);
 pref("browser.link.open_external", 1);
 pref("browser.link.open_newwindow", 1);
 pref("browser.link.open_newwindow.restriction", 0);
+
+// attempt auto proxy detection
+pref("network.proxy.type", 4);    
