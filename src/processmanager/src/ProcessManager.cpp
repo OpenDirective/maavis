@@ -55,7 +55,7 @@ NS_IMETHODIMP ProcessManager::ShowTaskBar(PRBool bShow)
     {
         (void) ::SetWindowPos(hwndStartButton, NULL, 0, 0, 0, 0, flag );
         // force button to reappear - no idea why need this
-        (void) SendMessage(  hwndStartButton, WM_MOUSEMOVE, 0,  MAKELPARAM(5,5));
+        (void) SendMessage(hwndStartButton, WM_MOUSEMOVE, 0,  MAKELPARAM(5,5));
     }
 
   return NS_OK;
@@ -121,6 +121,9 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, const nsAString 
   
   // it's necessary to convert the type before passing it to CreateProcess
   char* file = ToNewUTF8String(filename); // free this later 
+  char* dir = (curdir == nULL) ? NULL : ToNewUTF8String(curdir); // free this later 
+  if (*dir == '\0')
+      dir = NULL;
 
   // Start the process 
   BOOL br = CreateProcess( NULL,   // No module name (use command line)
@@ -130,7 +133,7 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, const nsAString 
     FALSE,          // Set handle inheritance to FALSE
     0,              // No creation flags
     NULL,           // Use parent's environment block
-    NULL,           // Use parent's starting directory 
+    dir,           // Use parent's starting directory 
     &si,            // Pointer to STARTUPINFO structure
     &pi );         // Pointer to PROCESS_INFORMATION structure
   NS_Free(file);
