@@ -121,8 +121,8 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, const nsAString 
   
   // it's necessary to convert the type before passing it to CreateProcess
   char* file = ToNewUTF8String(filename); // free this later 
-  char* dir = (curdir == nULL) ? NULL : ToNewUTF8String(curdir); // free this later 
-  if (*dir == '\0')
+  char* dir = ToNewUTF8String(curdir); // free this later 
+  if (dir && *dir == '\0')
       dir = NULL;
 
   // Start the process 
@@ -214,6 +214,46 @@ NS_IMETHODIMP ProcessManager::IsRunning(PRBool *_retval NS_OUTPARAM)
   *_retval = (ec == STILL_ACTIVE); // nb if proc returns 259 we think it active - 'bug' in win32 api
   return NS_OK;
 }
+
+
+NS_IMETHODIMP ProcessManager::SendSyntheticKeyEvent(unsigned int  keycode, unsigned int  scancode,
+                                                                        PRBool alt, PRBool shift, PRBool ctrl)
+{
+    if (keycode)
+        scancode =  ::MapVirtualKey(keycode, MAPVK_VK_TO_VSC); 
+    else if (scancode)
+        keycode =  ::MapVirtualKey(scancode, MAPVK_VSC_TO_VK); 
+
+    if (alt)
+        keybd_event( VK_LMENU, ::MapVirtualKey(VK_LMENU, MAPVK_VK_TO_VSC), 0 , 0 );
+    if (shift)
+        keybd_event( VK_LSHIFT, ::MapVirtualKey(VK_LSHIFT, MAPVK_VK_TO_VSC), 0 , 0 );
+    if (ctrl)
+        keybd_event( VK_LCONTROL, ::MapVirtualKey(VK_LCONTROL, MAPVK_VK_TO_VSC), 0 , 0 );
+        
+  // Simulate a key press
+     keybd_event( keycode,
+                  scancode,
+                  /*KEYEVENTF_EXTENDEDKEY | */ 0,
+                  0 );
+
+  // Simulate a key release
+     keybd_event( keycode,
+                  scancode,
+                  /*KEYEVENTF_EXTENDEDKEY | */ KEYEVENTF_KEYUP,
+                  0);
+
+    if (alt)
+        keybd_event( VK_LMENU, ::MapVirtualKey(VK_LMENU, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0 );
+    if (shift)
+        keybd_event( VK_LSHIFT, ::MapVirtualKey(VK_LSHIFT, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0 );
+    if (ctrl)
+        keybd_event( VK_LCONTROL, ::MapVirtualKey(VK_LCONTROL, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0 );
+    
+  return NS_OK;
+}
+
+
 
 // This will result in a function named ProcessManagerConstructor.
 NS_GENERIC_FACTORY_CONSTRUCTOR(ProcessManager)

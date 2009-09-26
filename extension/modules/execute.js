@@ -147,6 +147,9 @@ function killProc()
     stopProcPoller();
     if (g_pm.isRunning())
     {
+        g_pm.sendSyntheticKeyEvent(0x73, null, true,false,false); //ALT F4
+        g_pm.sendSyntheticKeyEvent(0x1b, null, false,false,false);//ESC
+        g_pm.sendSyntheticKeyEvent(0x1b, null, false,false,false);
         g_pm.stop();
     }
     restoreUI();

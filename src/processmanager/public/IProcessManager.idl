@@ -10,4 +10,5 @@ interface IProcessManager: nsISupports
   void makeTopmost();
   void makeMozWindowTopmost(in AString name); // this doesn't really belong here
   void showTaskBar(in PRBool show); // this doesn't really belong here
+  void sendSyntheticKeyEvent(in unsigned long  keycode, in unsigned long scancode, in PRBool alt, in PRBool shift, in PRBool ctrl);
 };
