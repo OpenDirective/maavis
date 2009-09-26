@@ -4,9 +4,10 @@
 interface IProcessManager: nsISupports
 {
   readonly attribute unsigned long pid;
-  boolean start(in AString filename);
+  boolean start(in AString filename, in AString curdir);
   boolean stop();
   boolean isRunning();
   void makeTopmost();
   void makeMozWindowTopmost(in AString name); // this doesn't really belong here
+  void showTaskBar(in PRBool show); // this doesn't really belong here
 };

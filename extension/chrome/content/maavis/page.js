@@ -8,7 +8,6 @@ const utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
 const actions = {};
 Components.utils.import("resource://modules/actions.js", actions);
-
 const file= {};
 Components.utils.import("resource://modules/file.js", file);
 
@@ -101,6 +100,8 @@ const page =
         
         var execute = {};
         Components.utils.import("resource://modules/execute.js", execute);
+
+        document.title = execute.mainWindowName;
         
         actions.showCall(false);
         const that = this;

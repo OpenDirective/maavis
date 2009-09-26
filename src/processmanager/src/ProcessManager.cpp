@@ -45,6 +45,22 @@ static void makeWindowTopmost(HWND hwnd)
     ::SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING);
 }
 
+NS_IMETHODIMP ProcessManager::ShowTaskBar(PRBool bShow)
+{
+    const UINT flag = ((bShow) ? SWP_SHOWWINDOW : SWP_HIDEWINDOW) | SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOOWNERZORDER;
+    const HWND hwndStartButton = FindWindow("Button", "Start"); // only on Vista
+    const HWND hwndTaskBar = FindWindow("Shell_traywnd", "");
+    (void)::SetWindowPos(hwndTaskBar, NULL, 0, 0, 0, 0, flag);
+    if (hwndStartButton)
+    {
+        (void) ::SetWindowPos(hwndStartButton, NULL, 0, 0, 0, 0, flag );
+        // force button to reappear - no idea why need this
+        (void) SendMessage(  hwndStartButton, WM_MOUSEMOVE, 0,  MAKELPARAM(5,5));
+    }
+
+  return NS_OK;
+}
+
 static BOOL CALLBACK enumProc(HWND hwnd, LPARAM lParam)
 {
     if (!IsWindowVisible(hwnd) || IsIconic(hwnd))
@@ -90,7 +106,7 @@ NS_IMETHODIMP ProcessManager::MakeTopmost()
 }
 
 /* long start (in AString filename); */
-NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, PRBool *_retval NS_OUTPARAM)
+NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, const nsAString & curdir, PRBool *_retval NS_OUTPARAM)
 {
   if (mpid)     // single process allowed - nsIProcess was unclear on this
     return NS_ERROR_FAILURE;

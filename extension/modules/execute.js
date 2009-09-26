@@ -6,12 +6,13 @@ const utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
 const action = {}
 Components.utils.import("resource://modules/action.js", action);
+const path = {}
+Components.utils.import("resource://modules/path.js", path);
 
 function runProcess(path, args, block)
 // the native runner
 {
-    var process = Components.classes["@mozilla.org/process/util;1"].
-        createInstance(Components.interfaces.nsIProcess);
+    var process = utils.createInstance("@mozilla.org/process/util;1", "nsIProcess");
     process.init(path);
     process.run(block, args, args.length);
 }
@@ -19,15 +20,14 @@ function runProcess(path, args, block)
 function exec(command)
 // James Boston's improved runner (with tweaks from me)
 {
-    var pm = Components.classes["@senecac.on.ca/processmanager;1"].
-        createInstance(Components.interfaces.IProcessManager);
-    pm.start(command);
+    var pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    
+    pm.start(command, null);
     return pm;
 }
 
 // just a single process
-const g_pm = Components.classes["@senecac.on.ca/processmanager;1"].
-        createInstance(Components.interfaces.IProcessManager);
+const g_pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
 var g_poller = undefined;
 var g_chkProc = null;
 
@@ -46,6 +46,8 @@ function startProcPoller()
     if (!g_poller)
     {
         g_poller = window.setInterval( function(){ pollProc();}, 1000);
+        if (g_pm)
+            g_pm.showTaskBar(false); // hidetask bar immediately
     }
 }
 
@@ -87,6 +89,8 @@ function restoreUI()
         g_stopper.close();
         g_stopper = undefined;
     }
+    if( g_pm)
+        g_pm.showTaskBar(true); //show taksbar
     setContentVisibility(true);
     if (g_onEnd)
         g_onEnd();
@@ -98,7 +102,14 @@ const stopWindowName = "Stop!";
 function setTopmost()
 {
     if (g_pm.isRunning())
+    {
         g_pm.makeTopmost();
+        g_pm.showTaskBar(false); // hidetask bar
+    }
+    else
+    {
+        g_pm.showTaskBar(true); //show taksbar
+    }
     if (g_stopper)
         g_pm.makeMozWindowTopmost(stopWindowName); // as set by document.title or window title=
 }
@@ -121,7 +132,10 @@ function execProc(prog, page, onEnd)
         return;
     }
 
-    g_pm.start(prog)
+    const dirFile = path.getFile(prog);
+    const dir = dirFile.parent.path; // some programs need current dir setting to their dir
+    utils.logit(dir);
+    g_pm.start(prog, dir);
 
     g_chkProc = true; // messy
     setProcessRunningUI(page, onEnd);
