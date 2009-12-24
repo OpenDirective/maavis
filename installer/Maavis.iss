@@ -1,15 +1,14 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.6
-OutputBaseFilename=Maavis-0.1.6
-AppVersion=0.1.6
-VersioninfoVersion=0.1.6
-AppPublisher=Full Measure for the University Of Sheffield
+AppVerName=Maavis 0.1.7
+OutputBaseFilename=Maavis-0.1.7
+AppVersion=0.1.7
+VersioninfoVersion=0.1.7
 ; Developed by Steve Lee of Full Measure.
+AppPublisher=Full Measure for the University Of Sheffield
 AppCopyright=Copyright (C) 2008 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
-AppSupportURL=https://www.assembla.com/wiki/show/maavis
-AppUpdatesURL=https://www.assembla.com/wiki/show/maavis
+AppSupportURL=http://maavis.fullmeasure.co.uk
 DefaultGroupName=Maavis
 ;LicenseFile=GPL.txt
 DefaultDirName={pf}\Maavis
@@ -18,19 +17,12 @@ SetupIconFile=Maavis.ico
 
 ;Note the Firefox and Skype installer filenames are defined at the end of this file
 
-;default compression
-;Compression=lzma/max
-;SolidCompression=false
-;InternalCompressLevel=max
-
-; max compression - slower
-Compression=lzma/ultra
-SolidCompression=true
-InternalCompressLevel=ultra
+; max compression - slower, not recommended over around 100 MB
+;SolidCompression=true
 
 
 [Tasks]
-Name: "firefox"; Description: "Install Firefox 3.5.3 (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
+Name: "firefox"; Description: "Install Firefox (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
 Name: "turnkey"; Description: "Run Maavis &automatically on login"; GroupDescription: "Additional icons:";
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Additional icons:";
 Name: "desktoploginicon"; Description: "Put an icon on the desktop for Maavis &Login"; GroupDescription: "Additional icons:";
@@ -151,7 +143,7 @@ end;
 // Constants
 function FirefoxInstaller(Param: String): String;
 begin
-  Result := 'Firefox Setup 3.5.3.exe';
+  Result := 'Firefox Setup 3.5.6.exe';
 end;
 
 function SkypeInstaller(Param: String): String;
