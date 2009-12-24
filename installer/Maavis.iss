@@ -22,8 +22,9 @@ SetupIconFile=Maavis.ico
 
 
 [Tasks]
-Name: "firefox"; Description: "Install Firefox (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
+Name: "firefox"; Description: "Install &Firefox (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
 Name: "turnkey"; Description: "Run Maavis &automatically on login"; GroupDescription: "Additional icons:";
+Name: "media"; Description: "Install example &media"; GroupDescription: "Additional icons:";
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Additional icons:";
 Name: "desktoploginicon"; Description: "Put an icon on the desktop for Maavis &Login"; GroupDescription: "Additional icons:";
 Name: "desktopiconmedia"; Description: "Put an icon on the desktop to &change Maavis photos, music and videos"; GroupDescription: "Additional icons:";
@@ -49,7 +50,7 @@ Source: "..\extension\platform\dist\*"; DestDir: "{app}\extension\platform\dist"
 Source: ".\*"; DestDir: "{app}\installer"; Excludes: "Output"; Flags: ignoreversion
 
 ; Media
-;Source: "{userdocs}\Maavis Media"; DestDir: "{userdocs}\Maavis Media"; Flags: recursesubdirs ignoreversion
+Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
 
 
 [INI]
@@ -62,7 +63,7 @@ Filename: "{app}\MozillaEurope.url"; Section: "InternetShortcut"; Key: "URL"; St
 ; programs in start menu
 Name: "{group}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote "; Comment: "Run Maavis."; IconFilename: "{app}\Maavis.ico"
 Name: "{group}\Maavis Login"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote -login"; Comment: "Run Maavis Login."; IconFilename: "{app}\Maavis.ico"
-Name: "{group}\Maavis Media"; Filename: "explorer"; parameters: "{userdocs}\Maavis Media\Users\default"; Comment: "Open Media folder where photos, music and videos are found."; IconFilename: "{app}\Maavis.ico"
+Name: "{group}\Maavis Media"; Filename: "explorer"; parameters: "{userdocs}\MaavisMedia\Users\default"; Comment: "Open Media folder where photos, music and videos are found."; IconFilename: "{app}\Maavis.ico"
 Name: "{group}\Maavis Settings"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -config -no-remote"; Comment: "Change how Maavis looks and behaves"; IconFilename: "{app}\Maavis.ico"
 Name: "{group}\Speech Settings"; Filename: "control"; parameters: "speech"; Comment: "Change speech settings"
 ; web links in start menu
@@ -74,7 +75,7 @@ Name: "{group}\Full Measure website"; Filename: "{app}\FullMeasure.url"; Comment
 ; desktop - optional
 Name: "{userdesktop}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote"; Comment: "Run Maavis";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopicon
 Name: "{userdesktop}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote -login"; Comment: "Run Maavis Login";  IconFilename: "{app}\Maavis.ico"; Tasks: desktoploginicon
-Name: "{userdesktop}\Maavis Media"; Filename: "explorer"; parameters: "{userdocs}\Maavis Media\Users\default"; Comment: "Open Media folder where photos, music and videos are found.";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconmedia
+Name: "{userdesktop}\Maavis Media"; Filename: "explorer"; parameters: "{userdocs}\MaavisMedia\Users\default"; Comment: "Open Media folder where photos, music and videos are found.";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconmedia
 Name: "{userdesktop}\Maavis Settings"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -config -no-remote"; Comment: "Change how Maavis looks";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconcfg
 ;Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\Launch Maavis"; Filename: "{app}\Maavis.exe"; WorkingDir: "{userdocs}"; Comment: "Automatically narrates PowerPoint presentations"; Tasks: quicklaunchicon
 

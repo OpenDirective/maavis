@@ -139,7 +139,7 @@ function _getMaavisDataDir()
     else
     {
         dir = path.getUserDocsDir();
-        dir.append('Maavis Media');
+        dir.append('MaavisMedia');
     }
     return dir;
 }
