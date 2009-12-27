@@ -204,7 +204,10 @@ function _onEvent(event, joystick, button)
              switch(event)
             {
                 case EVENTS.BUTTONDOWN:
-                    g_killTimeout = window.setTimeout(g_onKill, g_killTime);  // TODO eat Button up on timeout
+                    if(g_onKill && g_killTime)
+                        g_killTimeout = window.setTimeout(g_onKill, g_killTime);  // TODO eat Button up on timeout
+                    else
+                        _onEvent(EVENTS.RELEASE, null, null);
                     break;
                 case EVENTS.BUTTONUP:
                     if (g_killTimeout)

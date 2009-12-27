@@ -123,6 +123,15 @@ const myAppHandler = {
       Components.utils.reportError("incorrect parameter passed to -mediafolder on the command line.");
     }
 
+    try {
+      var user = cmdLine.handleFlagWithParam("user", false);
+      user = (user) ? user : '';
+      prefs.setCharPref("maavis.commandline.user", user);
+    }
+    catch (e) {
+      Components.utils.reportError("incorrect parameter passed to -user on the command line.");
+    }
+
     var bLogin = cmdLine.handleFlag("login", false);
     prefs.setBoolPref("maavis.commandline.login", bLogin);
     
@@ -149,7 +158,8 @@ const myAppHandler = {
                 "  -homepage <uri>   Home page to show in the browser\n"+
                 "  -config              display config settings\n"+
                 "  -login              display login pages\n"+
-                "  -mediafolder <folder>  where media live\n"+
+                "  -mediafolder <folder>  location of media files\n"+
+                "  -user <user>  user\n"+
                 "  -quickstart            don't display splash screen or play startsound\n"+
                 "  -nokiosk          Don't use kiosk mode\n",
 

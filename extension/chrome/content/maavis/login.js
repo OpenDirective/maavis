@@ -16,7 +16,9 @@ function loadPage()
         {
         }
     }
-    page.addFolderKeys(pad, "file:///%UsersDir%", true, mkItem, /^(?!Default$).*$/i);
+    const nItems = page.addFolderKeys(pad, "file:///%UsersDir%", true, mkItem, /^(?!Default$).*$/i);
+    if (nItems == 0)
+        page.addFolderKeys(pad, "file:///%UsersDir%", true, mkItem, /^Default$/i);
 }
 
 window.addEventListener('load', loadPage, false);

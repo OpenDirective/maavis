@@ -303,7 +303,9 @@ const page =
         var arItems=[]; 
         path.expandURI(folderURI, arItems, type, re);
         arItems.forEach(addItemKey);
-        container.endSelectionsAdd();
+        if (arItems.length)
+            container.endSelectionsAdd();
+        return arItems.length;
     },
     
     get _pageName () { return window.location.pathname.split('/')[2]; },// TODO Fragile,

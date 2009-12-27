@@ -10,7 +10,6 @@ function loadPage()
     pad.setAttribute("showLabels", (showLabels) ? "true" : "false");
     const showImages  = (page.config.passwordItems != "labels");
     pad.setAttribute("showImages", (showImages) ? "true" : "false");
-
    function mkItem( item )
     {
         try
@@ -31,7 +30,14 @@ function loadPage()
         }
     }
     
-    page.addFolderKeys(pad, 'file:///%UserDir%/Passwords', false, mkItem);
+    try
+    {
+        page.addFolderKeys(pad, 'file:///%UserDir%/Passwords', false, mkItem);
+    }
+    catch (e)
+    {
+        actions.goHome();
+    } 
 }
 
 window.addEventListener('load', loadPage, false);

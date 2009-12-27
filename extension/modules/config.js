@@ -215,6 +215,7 @@ function getCommandLineConfig()
         g_commandLineConfig.quickStart = prefs.getBoolPref("maavis.commandline.quickstart");
         g_commandLineConfig.config = prefs.getBoolPref("maavis.commandline.config");
         g_commandLineConfig.mediaFolder = prefs.getCharPref("maavis.commandline.mediafolder");
+        g_commandLineConfig.user = prefs.getCharPref("maavis.commandline.user");
     }
     return g_commandLineConfig;
 }

@@ -37,15 +37,13 @@ function initWindow()
 	playStartSound();
     
     actions.loadActions();
-
-    //const bConfig = Boolean(winutils.getWindowIntArgument(window, 1));
-    var prefs = Components.classes["@mozilla.org/preferences-service;1"].
-    getService(Components.interfaces.nsIPrefBranch);
-    
     const bConfig = config.getCommandLineConfig().config;
     const bLogin = config.getCommandLineConfig().login;
-    const startPage = (bConfig) ? "config.xul" : (bLogin)? "login.xul" : "home.xul"
+    const user = config.getCommandLineConfig().user;
+    const startPage = (bConfig) ? "config.xul" : (bLogin && !user)? "login.xul" : (bLogin && user) ? "password.xul,"+user : "home.xul"
     const homePage = (bConfig) ? "config.xul" : "home.xul"
+    if (user && !bLogin)
+        page.user =user;
     actions.setHome(homePage);
     
     // show correct info on home page
@@ -61,6 +59,5 @@ function initWindow()
     const splashtime = page.config.splashTime;
     mainwindow.showWindow(window, function(){actions.showPage(startPage);}, splashtime);
 }
-
 window.addEventListener('load', initWindow, false);
 

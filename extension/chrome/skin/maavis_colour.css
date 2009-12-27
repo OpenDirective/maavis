@@ -5,7 +5,8 @@ window
 {
 	border: 0px;
 	background: lightgoldenrodyellow;
-	font-family: Verdana;
+	/*font-family: Verdana;*/
+	font-family:Comic Sans, Comic Sans MS, cursive;
 }
 
 window.transient

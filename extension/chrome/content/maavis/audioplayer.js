@@ -1,5 +1,7 @@
 var path = {};
 Components.utils.import("resource://modules/path.js", path);
+var scan = {};
+Components.utils.import("resource://modules/scan.js", scan);
 
 function loadPage()
 {
@@ -62,6 +64,7 @@ function loadPage()
     mrls.forEach(addButton);
 
     var player = document.getElementById('player');
+    scan.holdScan();
     player.onPlayerReady = function(){ player.play(mrls); };
  }
 

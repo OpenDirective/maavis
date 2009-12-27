@@ -132,11 +132,20 @@ function execProc(prog, page, onEnd)
         return;
     }
 
-    const dirFile = path.getFile(prog);
-    const dir = dirFile.parent.path; // some programs need current dir setting to their dir
-    utils.logit(dir);
-    g_pm.start(prog, dir);
+        utils.logit('exec: '+dir+' '+prog);
 
+    var dir = null;
+    try
+    {
+        const dirFile = path.getFile(prog);
+        dir = dirFile.parent.path; // some programs need current dir setting to their dir
+    }
+    catch (e)
+    {
+    }
+    //utils.logit('exec: '+dir+' '+prog);
+    g_pm.start(prog, dir);
+ 
     g_chkProc = true; // messy
     setProcessRunningUI(page, onEnd);
 }
