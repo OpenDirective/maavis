@@ -1,12 +1,12 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.7
-OutputBaseFilename=Maavis-0.1.7
-AppVersion=0.1.7
-VersioninfoVersion=0.1.7
+AppVerName=Maavis 0.1.8
+OutputBaseFilename=Maavis-0.1.8
+AppVersion=0.1.8
+VersioninfoVersion=0.1.8
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
-AppCopyright=Copyright (C) 2008 The University Of Sheffield
+AppCopyright=Copyright (C) 2008,2009 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
 DefaultGroupName=Maavis
@@ -20,15 +20,18 @@ SetupIconFile=Maavis.ico
 ; max compression - slower, not recommended over around 100 MB
 ;SolidCompression=true
 
+[Messages]
+WelcomeLabel1=This will install [name/ver].
+WelcomeLabel2=The Mozilla Firefox web browser will also be installed.%n%nIf you already use Firefox you must ensure it is not running.%n%nYou should close all other programs before continuing to install [name] for the current user.%n%nSkype can also be installed for video conferencing. To install Skype you must run this installer as administrator (right click on the icon).
+ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
-Name: "firefox"; Description: "Install &Firefox (required unless already installed)"; GroupDescription: "Required programs:"; Flags: "checkedonce"
-Name: "turnkey"; Description: "Run Maavis &automatically on login"; GroupDescription: "Additional icons:";
-Name: "media"; Description: "Install example &media"; GroupDescription: "Additional icons:";
-Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Additional icons:";
-Name: "desktoploginicon"; Description: "Put an icon on the desktop for Maavis &Login"; GroupDescription: "Additional icons:";
-Name: "desktopiconmedia"; Description: "Put an icon on the desktop to &change Maavis photos, music and videos"; GroupDescription: "Additional icons:";
-Name: "desktopiconcfg"; Description: "Put an icon on the desktop to change how Maavis &looks"; GroupDescription: "Additional icons:";
+Name: "firefox"; Description: "Install &Firefox. This is required unless you already have the correct version. You can always continue to use your current web browser. There is check box in the Firefox installer that controls if Firefox becomes your default browser."; Flags: "checkedonce"
+;Name: "media"; Description: "Install example &media for Maavis"; flags: "checkedonce"
+Name: "turnkey"; Description: "Run Maavis &automatically whenever this user logs on to Windows";
+Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Icons:";
+Name: "desktopiconmedia"; Description: "Put an icon on the desktop to &change Maavis photos, music and videos"; GroupDescription: "Icons:";
+Name: "desktopiconcfg"; Description: "Put an icon on the desktop to change how Maavis &looks"; GroupDescription: "Icons:";
 ;Name: quicklaunchicon; Description: "Create a &Quick Launch icon"; GroupDescription: "Additional icons:"; MinVersion: 0,5.01; Flags: unchecked
 
 
@@ -50,7 +53,8 @@ Source: "..\extension\platform\dist\*"; DestDir: "{app}\extension\platform\dist"
 Source: ".\*"; DestDir: "{app}\installer"; Excludes: "Output"; Flags: ignoreversion
 
 ; Media
-Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
+;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
+Source: "..\media\*"; DestDir: "{app}\media"; Flags: recursesubdirs ignoreversion;
 
 
 [INI]
@@ -74,7 +78,7 @@ Name: "{group}\Full Measure website"; Filename: "{app}\FullMeasure.url"; Comment
 
 ; desktop - optional
 Name: "{userdesktop}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote"; Comment: "Run Maavis";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopicon
-Name: "{userdesktop}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote -login"; Comment: "Run Maavis Login";  IconFilename: "{app}\Maavis.ico"; Tasks: desktoploginicon
+Name: "{userdesktop}\Maavis - user login"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote -login"; Comment: "Run Maavis with user login";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopicon
 Name: "{userdesktop}\Maavis Media"; Filename: "explorer"; parameters: "{userdocs}\MaavisMedia\Users\default"; Comment: "Open Media folder where photos, music and videos are found.";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconmedia
 Name: "{userdesktop}\Maavis Settings"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -config -no-remote"; Comment: "Change how Maavis looks";  IconFilename: "{app}\Maavis.ico"; Tasks: desktopiconcfg
 ;Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\Launch Maavis"; Filename: "{app}\Maavis.exe"; WorkingDir: "{userdocs}"; Comment: "Automatically narrates PowerPoint presentations"; Tasks: quicklaunchicon
@@ -84,7 +88,7 @@ Name: "{app}\Edit Styles"; Filename: "explorer"; Parameters:"{app}\extension\chr
 Name: "{app}\Edit Screens"; Filename: "explorer"; Parameters:"{app}\extension\chrome\content\Maavis"; Comment: "Edit Screens"
 
 ; create startup item so autoruns
-Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote"; Comment: "Run Maavis"; IconFilename: "{app}\Maavis.ico";  Tasks: turnkey
+Name: "{userstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P Maavis -no-remote"; Comment: "Run Maavis"; IconFilename: "{app}\Maavis.ico";  Tasks: turnkey
 
 
 [Run]
@@ -92,10 +96,9 @@ Name: "{commonstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; pa
 Filename: "{app}\installer\{code:FirefoxInstaller}"; Description: "Install Firefox Web browser"; Tasks: "firefox"
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
-;Filename: "{app}\installer\vlc-0.9.2-win32.exe";  Description: "Install VLC";
-
-Filename: "{app}\installer\{code:SkypeInstaller}";  Description: "Install Skype (required for Video Calls)"; Flags: postinstall
-Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"""; Description: "Run Maavis now"; Flags: postinstall skipifsilent
+Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MavisMedia\"""; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent
+Filename: "{app}\installer\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall
+Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -no-remote"; Description: "Run Maavis now."; Flags: postinstall skipifsilent
 
 
 [UninstallDelete]
@@ -153,9 +156,9 @@ begin
 end;
 
 // shame we can't use this as {code:} errors in first section
-function MaavisVersion(Param: String): String;
-begin
-  Result := '0.1.4';
-end;
+//function MaavisVersion(Param: String): String;
+//begin
+  //Result := '0.1.4';
+//end;
 
 
