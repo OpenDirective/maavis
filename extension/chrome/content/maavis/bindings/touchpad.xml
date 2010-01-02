@@ -185,8 +185,32 @@
         </body>
       </method>
 
+      <method name="_getTextExtent">
+        <parameter name='node' />
+        <parameter name='text' />
+        <body><![CDATA[
+            // find length of text in pixels
+            // TODO(SAL) bit hacky and fragile
+             var ib = document.createElement('hbox');
+             var i = document.createElement('label');
+             ib.appendChild(i);
+             this.obTouchPad.appendChild(ib); // needs to be root so not likely to be shrunk
+             ib.align='left';
+             var fntSize = window.getComputedStyle(node, null).getPropertyValue('font-size');
+             var style = 'font-size: '+fntSize+';';
+             var bgc=window.getComputedStyle(ib, null).getPropertyValue('background-color');
+             style += "color: "+bgc+";";
+             ib.setAttribute('style', style);
+             i.value = text; 
+             var len = i.clientWidth;
+             this.obTouchPad.removeChild(ib);
+             return len;
+           ]]>
+        </body>
+      </method>
 
-        <method name="_setLabel">
+
+      <method name="_setLabel">
         <body><![CDATA[
             // set the text of the label so it is wrapped
             // TODO prolly want to set/get property+attrib as well
@@ -196,8 +220,12 @@
             var label = this.obLabel;
             if (!label)
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
-			label.width = label.parentNode.width - 20 ;
-			label.value = this.getAttribute('label');
+			//label.width = label.parentNode.width - 20 ;
+            label.value = this.getAttribute('label');
+            if (this._getTextExtent(label.parentNode, label.value) > label.clientWidth)
+            {
+              label.setAttribute('style', "font-size: 75%;");
+            }
             ]]>
         </body>
       </method>
@@ -286,7 +314,7 @@
                     i = document.createElementNS(HTML_NS, 'object');
                     i.type='image/svg+xml';
                     i.data=src;
-                    setTimeout(function(){setImageSizez.call(i);}, 1); // // only so asynch like img.onLoad
+                    setTimeout(function(){setImageSizez.call(i);}, 1); // only so asynch like img.onLoad
               }
               else
               {
@@ -787,6 +815,7 @@
            key.setAttribute("rows", rows);
            key.setAttribute("cols", cols);
            key.setAttribute("label", label);
+           crop = crop || 'end';
            key.setAttribute("crop", crop);
            key.setAttribute("tabgroup", "1");
            this._assignTabIndex(key);
