@@ -285,7 +285,7 @@
                     if (isSVG)
                     { 
                         i = that;
-                        i.height = height; // TODO resolve this
+                        i.height = 0; // TODO resolve this
                         i.setAttributeNS(HTML_NS, 'height', height.toString());
                         i.setAttributeNS(HTML_NS, 'width', width.toString());
                         i.setAttribute('class', 'touchkey-svgimage');
@@ -303,9 +303,12 @@
                       imageFrame.replaceChild(i, imageFrame.firstChild);
                     else
                       imageFrame.appendChild(i);
+                    if (isSVG)
+                        setTimeout(function(){i.height = height;}) // TODO resolve this
                 }
                   
-                setTimeout(setImageSize, 1); // seem to need this as well
+                setImageSize();
+                //setTimeout(setImageSize, 1); // seem to need this as well
               }
               
               if (isSVG)
