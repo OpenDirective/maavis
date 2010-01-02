@@ -14,6 +14,7 @@ DefaultGroupName=Maavis
 DefaultDirName={pf}\Maavis
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
+UninstallIconFile=Maavis.ico
 
 ;Note the Firefox and Skype installer filenames are defined at the end of this file
 
@@ -22,7 +23,7 @@ SetupIconFile=Maavis.ico
 
 [Messages]
 WelcomeLabel1=This will install [name/ver].
-WelcomeLabel2=The Mozilla Firefox web browser will also be installed.%n%nIf you already use Firefox you must ensure it is not running.%n%nYou should close all other programs before continuing to install [name] for the current user.%n%nSkype can also be installed for video conferencing. To install Skype you must run this installer as administrator (right click on the icon).
+WelcomeLabel2=The Mozilla Firefox web browser will also be installed.%n%nIf you already use Firefox you must ensure it is not running.%n%nYou should close all other programs before continuing to install [name] for the current user.%n%nSkype can also be installed for video conferencing.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
@@ -50,7 +51,7 @@ Source: "..\extension\platform\dist\*"; DestDir: "{app}\extension\platform\dist"
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
 
 ; Installer stuff
-Source: ".\*"; DestDir: "{app}\installer"; Excludes: "Output"; Flags: ignoreversion
+Source: ".\*"; DestDir: "{app}\installer"; Excludes: "Output,*.iss,"; Flags: ignoreversion
 
 ; Media
 ;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
@@ -96,8 +97,8 @@ Name: "{userstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; para
 Filename: "{app}\installer\{code:FirefoxInstaller}"; Description: "Install Firefox Web browser"; Tasks: "firefox"
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
-Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MavisMedia\"""; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent
-Filename: "{app}\installer\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall
+Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MaavisMedia\"""; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent
+Filename: "{app}\installer\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -no-remote"; Description: "Run Maavis now."; Flags: postinstall skipifsilent
 
 
