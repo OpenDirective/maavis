@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig"];
+var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig"];
 
 //TODO clean up this file
 
@@ -65,6 +65,11 @@ function _setConfigDefaults()
 function toggleUserType()
 {
     g_userConfig.userType = (g_userConfig.userType == 'touch') ? 'scan' : 'touch';
+}
+
+function isValidMediaDir()
+{
+    return _getMaavisDataDir().exists();
 }
 
 function toggleTheme()
@@ -167,7 +172,7 @@ function getUserDataDir(user)
 function _getStartSoundURI()
 {
     var dir = _getMaavisDataDir();
-	var items = dir.directoryEntries;
+    var items = dir.directoryEntries;
     while (items.hasMoreElements())
     {
         var diritem = items.getNext().QueryInterface(Components.interfaces.nsIFile);

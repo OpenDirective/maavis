@@ -92,6 +92,12 @@ const page =
     {
         window.removeEventListener('load', page.initPage, false);
 
+        if (!_ns.config.isValidMediaDir())
+        {
+            window.alert('Maavis cannot find the Maavis Media Folder. Please check installation');
+            mainwindow.quit(false);
+        }
+
         mainwindow.setWindow(window);
 
         actions.setQuit(this.onQuit);
