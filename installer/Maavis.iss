@@ -23,7 +23,7 @@ UninstallIconFile=Maavis.ico
 
 [Messages]
 WelcomeLabel1=This will install [name/ver].
-WelcomeLabel2=The Mozilla Firefox web browser will also be installed.%n%nIf you already use Firefox you must ensure it is not running.%n%nYou should close all other programs before continuing to install [name] for the current user.%n%nSkype can also be installed for video conferencing.
+WelcomeLabel2=The Mozilla Firefox web browser will also be installed.%n%nIf you already use Firefox you must ensure it is not running.%n%nYou should close all other programs before continuing to install [name] for the current user.%n%nSkype can be installed to provide video conferencing.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
