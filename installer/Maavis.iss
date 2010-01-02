@@ -50,8 +50,9 @@ Source: "..\extension\platform\dist\*"; DestDir: "{app}\extension\platform\dist"
 ; copy the non debug version of prefs.js
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
 
-; Installer stuff
-Source: ".\*"; DestDir: "{app}\installer"; Excludes: "Output,*.iss,"; Flags: ignoreversion
+; Installers
+Source: ".\skype*"; DestDir: "{app}\installers"; Flags: ignoreversion
+Source: ".\firefox*"; DestDir: "{app}\installers"; Flags: ignoreversion
 
 ; Media
 ;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
@@ -94,11 +95,11 @@ Name: "{userstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; para
 
 [Run]
 ;Filename: "{app}\ReadMe.htm"; Description: "View Readme.htm"; Flags: shellexec skipifdoesntexist postinstall skipifsilent
-Filename: "{app}\installer\{code:FirefoxInstaller}"; Description: "Install Firefox Web browser"; Tasks: "firefox"
+Filename: "{app}\installers\{code:FirefoxInstaller}"; Description: "Install Firefox Web browser"; Tasks: "firefox"
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
 Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MaavisMedia\"""; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent
-Filename: "{app}\installer\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser
+Filename: "{app}\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -no-remote"; Description: "Run Maavis now."; Flags: postinstall skipifsilent
 
 
