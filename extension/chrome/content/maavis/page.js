@@ -107,7 +107,8 @@ const page =
         var execute = {};
         Components.utils.import("resource://modules/execute.js", execute);
 
-        document.title = execute.mainWindowName;
+        const userDisp = (page.config.name == 'Default') ? '' : page.config.name + ' : ';
+        document.title = 'Maavis : '+userDisp + page._pageName;
         
         actions.showCall(false);
         const that = this;
@@ -314,8 +315,8 @@ const page =
         return arItems.length;
     },
     
-    get _pageName () { return window.location.pathname.split('/')[2]; },// TODO Fragile,
-    get _isPasswordPage () { return page._pageName  == "password-scan.xul"; },
+    get _pageName () { return window.location.pathname.split('/')[2].split('.')[0]; },// TODO Fragile,
+    get _isPasswordPage () { return page._pageName  == "password-scan"; },
         
     _setGridSize: function(pad)
     {
