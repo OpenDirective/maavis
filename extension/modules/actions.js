@@ -128,11 +128,12 @@ function loadActions()
     action.setAction('voipAnswerCall', function(){ if (skype.isAvailable) skype.answerCall(); }, setContext);
     action.setAction('voipEndCall', function(){ if (skype.isAvailable) skype.endCall(); }, setContext);
 
-    function exec(prog)
+    function exec(progs)
     {
         scan.holdScan(3000, execute.killProc);
         const page = (config.getUserConfig().userType == 'scan') ? null : config.getPageUrl("stop.xul");
-        execute.execProc(prog, page, scan.releaseScan);
+        var arProgs = progs.split(';');
+        execute.execProgs(arProgs, page, scan.releaseScan);
     }
     action.setAction('progExec', exec, setContext);
     action.setAction('progKill',  execute.killProc, setContext);

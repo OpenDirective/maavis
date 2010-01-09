@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["exec", "execSkype", "killSkype", "setProcessRunningUI", "restoreUI", "execProc", "killProc", "stopWindowName" ];
+var EXPORTED_SYMBOLS = ["exec", "execSkype", "killSkype", "setProcessRunningUI", "restoreUI", "execProgs", "killProc", "stopWindowName" ];
 
 const mainwindow = {};
 Components.utils.import("resource://modules/mainwindow.js", mainwindow);
@@ -26,8 +26,75 @@ function exec(command)
     return pm;
 }
 
-// just a single process
-const g_pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+MODE_FIRST = 0
+function ProcessManager()
+{
+    this.mode = MODE_FIRST;
+    this.procs = [];
+}
+
+ProcessManager.prototype.addProg = function(prog)
+{
+    const pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    var dir = null;
+    try
+    {
+        const dirFile = path.getFile(prog);
+        dir = dirFile.parent.path; // some programs need current dir setting to their dir
+    }
+    catch (e)
+    {
+    }
+    //utils.logit('exec: '+dir+' '+prog);
+    pm.start(prog, dir);
+    this.procs.push(pm);
+}
+
+ProcessManager.prototype.runProgs = function(progs)
+{
+    const that = this;
+    progs.forEach(function(prog){that.addProg(prog);});
+}
+
+ProcessManager.prototype.isRunning = function()
+{
+    return this.procs.length && this.procs[0].isRunning();
+}
+
+ProcessManager.prototype.stop = function()
+{
+    const pm = this.procs.length && this.procs[0];
+    if (pm && pm.isRunning())
+    {
+        // be nice to first proc
+        pm.sendSyntheticKeyEvent(0x73, null, true,false,false); //ALT F4
+        pm.sendSyntheticKeyEvent(0x1b, null, false,false,false);//ESC
+        pm.sendSyntheticKeyEvent(0x1b, null, false,false,false);
+    }
+    this.procs.forEach(function(ob){ob.stop();}); // kill all the others
+    this.procs = [];
+}
+
+ProcessManager.prototype.makeTopmost = function()
+{
+    //this.procs.forEach(function(ob){ob.makeTopmost();});
+    if (this.procs.length)
+        this.procs[0].makeTopmost();
+}
+
+ProcessManager.prototype.showTaskBar = function(bShow)
+{
+    var pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    pm.showTaskBar(bShow);
+}
+
+ProcessManager.prototype.makeMozWindowTopmost = function(wndName)
+{
+    var pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    pm.makeMozWindowTopmost(wndName);
+}
+
+const g_pm = new ProcessManager();
 var g_poller = undefined;
 var g_chkProc = null;
 
@@ -46,8 +113,7 @@ function startProcPoller()
     if (!g_poller)
     {
         g_poller = window.setInterval( function(){ pollProc();}, 1000);
-        if (g_pm)
-            g_pm.showTaskBar(false); // hidetask bar immediately
+        g_pm.showTaskBar(false); // hidetask bar immediately
     }
 }
 
@@ -89,8 +155,7 @@ function restoreUI()
         g_stopper.close();
         g_stopper = undefined;
     }
-    if( g_pm)
-        g_pm.showTaskBar(true); //show taksbar
+    g_pm.showTaskBar(true); //show taksbar
     setContentVisibility(true);
     if (g_onEnd)
         g_onEnd();
@@ -122,30 +187,10 @@ function setContext()
     window = mainwindow.getWindow();// so in scope chain
 }
 
-function execProc(prog, page, onEnd)
+function execProgs(arProgs, page, onEnd)
 {
     setContext();
-    
-    if (g_pm.isRunning())
-    {
-        utils.logit("A process is already running");
-        return;
-    }
-
-        utils.logit('exec: '+dir+' '+prog);
-
-    var dir = null;
-    try
-    {
-        const dirFile = path.getFile(prog);
-        dir = dirFile.parent.path; // some programs need current dir setting to their dir
-    }
-    catch (e)
-    {
-    }
-    //utils.logit('exec: '+dir+' '+prog);
-    g_pm.start(prog, dir);
- 
+    g_pm.runProgs(arProgs);
     g_chkProc = true; // messy
     setProcessRunningUI(page, onEnd);
 }
@@ -154,13 +199,7 @@ function killProc()
 {   
     setContext();
     stopProcPoller();
-    if (g_pm.isRunning())
-    {
-        g_pm.sendSyntheticKeyEvent(0x73, null, true,false,false); //ALT F4
-        g_pm.sendSyntheticKeyEvent(0x1b, null, false,false,false);//ESC
-        g_pm.sendSyntheticKeyEvent(0x1b, null, false,false,false);
-        g_pm.stop();
-    }
+    g_pm.stop();
     restoreUI();
 }   
 
