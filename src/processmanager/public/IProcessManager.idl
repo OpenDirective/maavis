@@ -1,6 +1,6 @@
 #include "nsISupports.idl"
 
-[scriptable, uuid(af9c6848-a8f9-410e-bc88-9cbde7f4c72a)]
+[scriptable, uuid(096f237b-00f7-4046-a02b-388452da5d37)]
 interface IProcessManager: nsISupports
 {
   readonly attribute unsigned long pid;

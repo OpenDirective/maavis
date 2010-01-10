@@ -258,16 +258,16 @@ NS_IMETHODIMP ProcessManager::SendSyntheticKeyEvent(unsigned int  keycode, unsig
 // This will result in a function named ProcessManagerConstructor.
 NS_GENERIC_FACTORY_CONSTRUCTOR(ProcessManager)
 
-// 19f3ef5e-759f-49a4-88e3-ed27f9c83011 
+// c6f87b62-aeb6-46c1-b460-f3e5499c9a2a
 #define PROCESSMANAGER_CID \
-  {0x19f3ef5e, 0x759f, 0x49a4, \
-      { 0x88, 0xe3, 0xed, 0x27, 0xf9, 0xc8, 0x30, 0x11} }
+  {0xc6f87b62, 0xaeb6, 0x46c1, \
+      { 0xb4, 0x60, 0xf3, 0xe5, 0x49, 0x9c, 0x9a, 0x2a} }
 
 static const nsModuleComponentInfo components[] =
 {
   { "ProcessManager",
     PROCESSMANAGER_CID,
-    "@senecac.on.ca/processmanager;1",
+    "@fullmeasure.co.uk/processmanager;1",
     ProcessManagerConstructor
   }
 };

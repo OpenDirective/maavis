@@ -2,12 +2,12 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
  xmlns:em="http://www.mozilla.org/2004/em-rdf#">
   <Description about="urn:mozilla:install-manifest">
-   <em:id>processmanager@senecac.on.ca</em:id>
+   <em:id>processmanager@fullmeasure.co.uk</em:id>
     <em:name>processmanager</em:name>
-    <em:version>0.5</em:version>
+    <em:version>0.6</em:version>
     <em:creator>Steve Lee building on work by James Boston</em:creator>
     <em:description></em:description>
-    <em:homepageURL>http://zenit.senecac.on.ca/wiki</em:homepageURL>
+    <em:homepageURL>http://fullmeasure.co.uk</em:homepageURL>
     <em:targetApplication>
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id> <!-- firefox -->

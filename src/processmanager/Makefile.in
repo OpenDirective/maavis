@@ -14,7 +14,7 @@ DIRS		= public \
 XPI_NAME 	= processmanager
 
 # A Unique ID for your extension
-INSTALL_EXTENSION_ID	= processmanager@senecac.on.ca
+INSTALL_EXTENSION_ID	= processmanager@fullmeasure.co.uk
 
 # Will create a .xpi in /mozilla/$(MOZ_OBJDIR)/dist/xpi-stage/
 XPI_PKGNAME	= processmanager

@@ -20,7 +20,7 @@ function runProcess(path, args, block)
 function exec(command)
 // James Boston's improved runner (with tweaks from me)
 {
-    var pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    var pm = utils.createInstance("@fullmeasure.co.uk/processmanager;1", "IProcessManager");
     
     pm.start(command, null);
     return pm;
@@ -35,7 +35,7 @@ function ProcessManager()
 
 ProcessManager.prototype.addProg = function(prog)
 {
-    const pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    const pm = utils.createInstance("@fullmeasure.co.uk/processmanager;1", "IProcessManager");
     var dir = null;
     try
     {
@@ -84,13 +84,13 @@ ProcessManager.prototype.makeTopmost = function()
 
 ProcessManager.prototype.showTaskBar = function(bShow)
 {
-    var pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    var pm = utils.createInstance("@fullmeasure.co.uk/processmanager;1", "IProcessManager");
     pm.showTaskBar(bShow);
 }
 
 ProcessManager.prototype.makeMozWindowTopmost = function(wndName)
 {
-    var pm = utils.createInstance("@senecac.on.ca/processmanager;1", "IProcessManager");
+    var pm = utils.createInstance("@fullmeasure.co.uk/processmanager;1", "IProcessManager");
     pm.makeMozWindowTopmost(wndName);
 }
 
