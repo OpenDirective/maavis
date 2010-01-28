@@ -100,7 +100,7 @@ var g_chkProc = null;
 
 function pollProc()
 {
-    setTopmost();
+    setWindowLayout();
     if( g_chkProc && !g_pm.isRunning())
     {
         g_pm.stop();
@@ -144,7 +144,7 @@ function setProcessRunningUI(page, onEnd)
     g_onEnd = onEnd;
     startProcPoller();
     setContentVisibility(false);
-    window.setTimeout(setTopmost, 1000); //alow everything to start up
+    //window.setTimeout(setWindowLayout, 1000); //alow everything to start up
 }
 
 function restoreUI()
@@ -164,11 +164,11 @@ function restoreUI()
 
 const stopWindowName = "Stop!";
 
-function setTopmost()
+function setWindowLayout()
 {
     if (g_pm.isRunning())
     {
-        g_pm.makeTopmost();
+        //g_pm.makeTopmost();
         g_pm.showTaskBar(false); // hidetask bar
     }
     else

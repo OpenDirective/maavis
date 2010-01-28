@@ -117,6 +117,8 @@ NS_IMETHODIMP ProcessManager::Start(const nsAString & filename, const nsAString 
 
   ZeroMemory( &si, sizeof(si) );
   si.cb = sizeof(si);
+  si.dwFlags = STARTF_USESHOWWINDOW;
+  si.wShowWindow = SW_SHOWMAXIMIZED;
   ZeroMemory( &pi, sizeof(pi) );
   
   // it's necessary to convert the type before passing it to CreateProcess
@@ -258,16 +260,16 @@ NS_IMETHODIMP ProcessManager::SendSyntheticKeyEvent(unsigned int  keycode, unsig
 // This will result in a function named ProcessManagerConstructor.
 NS_GENERIC_FACTORY_CONSTRUCTOR(ProcessManager)
 
-// c6f87b62-aeb6-46c1-b460-f3e5499c9a2a
+// 19f3ef5e-759f-49a4-88e3-ed27f9c83011 
 #define PROCESSMANAGER_CID \
-  {0xc6f87b62, 0xaeb6, 0x46c1, \
-      { 0xb4, 0x60, 0xf3, 0xe5, 0x49, 0x9c, 0x9a, 0x2a} }
+  {0x19f3ef5e, 0x759f, 0x49a4, \
+      { 0x88, 0xe3, 0xed, 0x27, 0xf9, 0xc8, 0x30, 0x11} }
 
 static const nsModuleComponentInfo components[] =
 {
   { "ProcessManager",
     PROCESSMANAGER_CID,
-    "@fullmeasure.co.uk/processmanager;1",
+    "@\fullmeasure.co.uk/processmanager;1",
     ProcessManagerConstructor
   }
 };
