@@ -37,7 +37,7 @@ function initWindow()
 	playStartSound();
     
     actions.loadActions();
-    const bConfig = ssconfig.getCommandLineConfig().config;
+    const bConfig = config.getCommandLineConfig().config;
     const bLogin = config.getCommandLineConfig().login;
     const user = config.getCommandLineConfig().user;
     const startPage = (bConfig) ? "config.xul" : (bLogin && !user)? "login.xul" : (bLogin && user) ? "password.xul,"+user : "home.xul"
