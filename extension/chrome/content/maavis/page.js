@@ -263,31 +263,11 @@ const page =
                                     "arg": arg};
 			if (alterItemCB)
                 alterItemCB(cbItem);
-            if (page.config.userType == 'scan') // TODO temp so old screens still work
+            const prompt = getPromptFile(folder, item.name);
+            var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
+            if (key)
             {
-                const prompt = getPromptFile(folder, item.name);
-                var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
-                if (key)
-                {
-                    key.className += ' scankey';
-                }
-            }
-            else
-            {
-                var key = container.createKey(row, col, 4, 3, cbItem.name, cbItem.thumbURI, 0.8, cbItem.action);
-                var row, col;
-                const nRows = 2, width = 3, height = 4;
-                if (nItem < 4)
-                {
-                    row = (nItem < nRows) ? 1 : 1 + height;
-                    col = (nItem % nRows) * width;
-                }
-                else
-                {
-                    row = 1 + height;
-                    col = 2 * width;
-                }
-                nItem += 1;
+                key.className += ' scankey';
             }
         }
     

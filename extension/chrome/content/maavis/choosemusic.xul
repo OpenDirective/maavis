@@ -11,13 +11,16 @@
     <touchpad id="pad" flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
+                alwaysShowLabel='true'
                 label="Choose the music you want to hear" speakOnLoad='true'/>
                 
-        <touchkey row='1' col='6' rows='2' cols='4'
+	<selections row='1' col='0' rows='9' cols='7' />
+
+	<touchkey row='1' col='6' rows='2' cols='4'
                 class='otherthings' label="Other things to do" accesskey='o' 
                 action="goHome" />
 
-        <touchkey row='3' col='6' rows='2' cols='4'
+	<touchkey row='3' col='6' rows='2' cols='4'
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
                

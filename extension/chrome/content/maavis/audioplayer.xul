@@ -11,9 +11,12 @@
     <touchpad id='pad' flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message' 
+                alwaysShowLabel='true'
                 label="Listen to Music" speakOnLoad='false'/>
                 
-        <touchkey row='1' col='6' rows='2' cols='4'
+	<selections row='1' col='0' rows='9' cols='6' itemcols='1' itemrows='9' />
+
+	<touchkey row='1' col='6' rows='2' cols='4'
                 class='goback' label="Change Music Album" accesskey='c' 
                 action="showPage|choosemusic.xul" />
 

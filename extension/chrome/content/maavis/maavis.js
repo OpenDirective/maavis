@@ -37,13 +37,13 @@ function initWindow()
 	playStartSound();
     
     actions.loadActions();
-    const bConfig = config.getCommandLineConfig().config;
+    const bConfig = ssconfig.getCommandLineConfig().config;
     const bLogin = config.getCommandLineConfig().login;
     const user = config.getCommandLineConfig().user;
     const startPage = (bConfig) ? "config.xul" : (bLogin && !user)? "login.xul" : (bLogin && user) ? "password.xul,"+user : "home.xul"
     const homePage = (bConfig) ? "config.xul" : "home.xul"
     if (user && !bLogin)
-        page.user =user;
+        page.user = user;
     actions.setHome(homePage);
     
     // show correct info on home page

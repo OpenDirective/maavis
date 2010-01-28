@@ -24,10 +24,7 @@ function loadPage()
         else if (row == MAXROWS)
 		{
             var key = null;
-            if (page.config.userType == 'scan')
-                key =pad.addSelectionsItem('More...', null, 0, null, 'center');
-            else
-                key = pad.createKey(row++, 0, 1, 6, 'More...', null, 0, null, 'center'); //TODO temp so old pages work
+            key =pad.addSelectionsItem('More...', null, 0, null, 'center');
             key.className += " mediatrack";
             if (page.config.userType == 'scan')
             {
@@ -41,13 +38,8 @@ function loadPage()
 				const file = path.URIToFile(item);
 				const name = file.leafName.slice(0,-4);
 				const action = 'mediaPlayItem|'+(row-1).toString();
-                if (page.config.userType == 'scan')
-                {
-                    key = pad.addSelectionsItem(name, null, 0, action, 'center');
-                    row++;
-                }
-                else
-                    key = pad.createKey(row++, 0, 1, 6, name, null, 0, action, 'center');
+                key = pad.addSelectionsItem(name, null, 0, action, 'center');
+                row++;
 				key.className += " mediatrack";
                 if (page.config.userType == 'scan')
                 {

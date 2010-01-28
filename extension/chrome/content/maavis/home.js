@@ -25,10 +25,7 @@ function loadPage()
         pad.adjustKey(title);
     }
     
-    if (page.config.userType == 'scan') // TODO temp so old screens still work
-    {
-        page.addFolderKeys(pad, "file:///%UserDir%", true, null, /^(?!Passwords$).*$/i);
-    }
+    page.addFolderKeys(pad, "file:///%UserDir%", true, null, /^(?!Passwords$).*$/i);
 }
 
 window.addEventListener('load', loadPage, false);

@@ -11,8 +11,11 @@
     <touchpad id='pad' flex='1' rows='10' cols='10'>
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
+                alwaysShowLabel='true'
                 label="Touch the topic you want to read" speakOnLoad='true'/>
                 
+        <selections row='1' col='0' rows='9' cols='7' />
+        
         <touchkey row='1' col='6' rows='2' cols='4'
                 class='otherthings' label="Other things to do" accesskey='o' 
                 action="goHome" />
@@ -21,20 +24,6 @@
                 class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
                 
-        <touchkey row='1' col='0' rows='4' cols='3'
-                class='choice' label="Health information" accesskey='h'
-                action="showPage|browser.xul,http://www.nhsdirect.nhs.uk/" />
-        <touchkey row='1' col='3' rows='4' cols='3'
-                class='choice' label="Newspaper" accesskey='n' 
-                action="showPage|browser.xul,http://www.uk250.co.uk/newspaper" />
-        <touchkey row='5' col='0' rows='4' cols='3'
-                class='choice' label="Advocacy" accesskey='a' 
-                action="showPage|browser.xul,http://www.opaal.org.uk/" />
-        <touchkey row='5' col='3' rows='4' cols='3'
-                class='choice' label="British Museum" accesskey='m' 
-                action="showPage|browser.xul,http://www.britishmuseum.org/"
-                                                />
-
     </touchpad>
 
 </window>
