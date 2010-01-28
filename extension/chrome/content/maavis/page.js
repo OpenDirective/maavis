@@ -84,7 +84,8 @@ const page =
                 quitBtn.label = label;    
             }
             quitBtn.label = "Confirm "+ label;
-            setTimeout(resetExit, CONFIRM_EXIT_TIME);
+            if (page.config.userType != 'scan')
+                setTimeout(resetExit, CONFIRM_EXIT_TIME);
         }
     },
     
