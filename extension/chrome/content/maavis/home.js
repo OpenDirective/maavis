@@ -21,7 +21,7 @@ function loadPage()
         byeKey.setAttribute('hidden', 'true');
         /*const title =  mainwindow.getElementById("title");
         title.setAttribute('col', '0');
-        title.setAttribute('cols', '10');
+        title.setAttribute('cols', '10'); // assumes units in XUL
         pad.adjustKey(title);*/
     }
     

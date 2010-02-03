@@ -144,8 +144,9 @@ const page =
         if (!_ns.skype.isAvailable())
         {
             if (pad !== undefined)
-            {
-                const answer = pad.content.getElementsByClassName('answer scankey')[0];
+            {   
+                const klass = (page.config.userType == 'scan') ? 'answer scankey' : 'answer';
+                const answer = pad.content.getElementsByClassName(klass)[0];
                 if (answer !== undefined)
                 {
                     answer.collapsed = true;
