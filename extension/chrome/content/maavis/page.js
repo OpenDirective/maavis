@@ -194,9 +194,10 @@ const page =
             window.addEventListener('unload', _ns.skype.endCall, false);
         }
 
+        page._setGridSize(pad);
+
         if (pad && page.config.userType == 'scan')
         {
-            page._setGridSize(pad);
             
             function startScanning()
             {
