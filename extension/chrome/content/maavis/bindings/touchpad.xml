@@ -190,25 +190,39 @@
         <parameter name='text' />
         <body><![CDATA[
             // find length of text in pixels
-            // TODO(SAL) bit hacky and fragile
+            // TODO(SAL) bit hacky and fragile. Cache?
              var ib = document.createElement('hbox');
              var i = document.createElement('label');
+             ib.align='start';
+             ib.pack='start';
              ib.appendChild(i);
              this.obTouchPad.appendChild(ib); // needs to be root so not likely to be shrunk
-             ib.align='left';
              var fntSize = window.getComputedStyle(node, null).getPropertyValue('font-size');
-             var style = 'font-size: '+fntSize+';';
-             var bgc=window.getComputedStyle(ib, null).getPropertyValue('background-color');
-             style += "color: "+bgc+";";
+             var style = 'margin:0; padding:0; border:0; font-size: '+fntSize+';';
              ib.setAttribute('style', style);
-             i.value = text; 
-             var len = i.clientWidth;
+             i.value = text;
+             var sz = {cx:i.clientWidth,             
+                       cy:i.clientHeight};
              this.obTouchPad.removeChild(ib);
-             return len;
+             return sz;
            ]]>
         </body>
       </method>
 
+      <method name="_getContentExtent">
+        <parameter name='node' />
+        <body><![CDATA[
+             var cs = window.getComputedStyle(node, null);
+             var ph = cs.getPropertyValue('padding-left').slice(0,-2) // px
+                            + cs.getPropertyValue('padding-right').slice(0,-2);
+             var pv = cs.getPropertyValue('padding-top').slice(0,-2)
+                            + cs.getPropertyValue('padding-bottom').slice(0,-2);
+             var sz = {cx:node.clientWidth - ph,             
+                       cy:node.clientHeight - pv};
+             return sz;
+           ]]>
+        </body>
+      </method>
 
       <method name="_setLabel">
         <body><![CDATA[
@@ -220,9 +234,11 @@
             var label = this.obLabel;
             if (!label)
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
-			//label.width = label.parentNode.width - 20 ;
             label.value = this.getAttribute('label');
-            if (this._getTextExtent(label.parentNode, label.value) > label.clientWidth)
+            const szText = this._getTextExtent(label, label.value);
+            const szContent = this._getContentExtent(label);
+            //utils.logit(this.getAttribute('id')+': '+szContent.cx+'x'+szContent.cy+' '+szText.cx+'x'+szText.cy);
+            if ( (szText.cx > szContent.cx) || (szText.cy > szContent.cy))
             {
               label.setAttribute('style', "font-size: 75%;");
             }
@@ -739,6 +755,22 @@
         </body>
       </method>
 
+     <method name="_getKeySize">
+        <parameter name='key' />
+        <body><![CDATA[
+                const size = this._getGridCellDimensions();
+                const style = window.getComputedStyle(key,null);
+                const hmargin = parseInt(style.getPropertyValue('margin-left'))
+                              + parseInt(style.getPropertyValue('margin-right'));
+                const vmargin = parseInt(style.getPropertyValue('margin-top'))
+                              + parseInt(style.getPropertyValue('margin-bottom'));
+                const sz={cx:(key.rows * size.v) - vmargin,
+                          cy:(key.cols * size.h) - hmargin};
+                    return sz;
+                        ]]>
+        </body>
+      </method>
+
      <method name="adjustKey">
         <parameter name='key' />
         <body><![CDATA[
@@ -801,6 +833,7 @@
       </method>
 
      <method name="_createKey">
+        <parameter name='id' />
         <parameter name='row' />
         <parameter name='col' />
         <parameter name='rows' />
@@ -813,6 +846,7 @@
         <parameter name='prompt' />
         <body><![CDATA[
            var key = document.createElement("touchkey");
+           key.setAttribute("id", id);
            key.setAttribute("row", row);
            key.setAttribute("col", col);
            key.setAttribute("rows", rows);
@@ -840,24 +874,7 @@
         </body>
       </method>
 
-     <method name="createKey">
-        <parameter name='row' />
-        <parameter name='col' />
-        <parameter name='rows' />
-        <parameter name='cols' />
-        <parameter name='label' />
-        <parameter name='image' />
-        <parameter name='image_scale' />
-        <parameter name='action' />
-        <parameter name='crop' />
-        <body><![CDATA[
-           const  key = this._createKey(row,col,rows,cols,label,image,image_scale,action,crop);
-           this._stack.appendChild(key);
-           this._positionKey(key); // sets the image too
-        ]]>
-        </body>
-      </method>
-
+ 
      <method name="setSelectionsGrid">
         <parameter name='nCols' />
         <parameter name='nRows' />
@@ -951,7 +968,7 @@
             if (isMoreItem)
             {
                 // just create and don't add to hierarchy or display
-                var key = this._createKey(0,0,0,0,label,image,image_scale,action,crop, prompt)
+                var key = this._createKey('more',0,0,0,0,label,image,image_scale,action,crop, prompt)
                 this.selection._moreKey = key;
                 return key;
             }
@@ -969,7 +986,8 @@
             }
             else
             {
-                key = this._createKey(0,0,0,0,label, image, image_scale, action, crop,prompt);
+                const id = nSelection+':'+label;
+                key = this._createKey(id,0,0,0,0,label, image, image_scale, action, crop,prompt);
             }
 
             // l->r t->b layout

@@ -12,36 +12,36 @@
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message' 
                 alwaysShowLabel='true'
-                label="Look at or read things" speakOnLoad='false'/>
+                id="title" label="Look at or read things" speakOnLoad='false'/>
                 
         <touchkey row='1' col='8' rows='2' cols='2'
-                class='goback' label="Change Info" accesskey='o' 
+                id="back" class='goback' label="Change Info" 
                 action="showPage|chooseinfo.xul" />
 
         <touchkey row='3' col='8' rows='3' cols='2'
-                class='answer' label="Answer" accesskey='a'
-                image="file:///%User%Images/answer.jpeg" image-scale="1.0"
+                class='answer' label="Answer"
+                id="answer" image="file:///%User%Images/answer.jpeg" image-scale="1.0"
                 action="voipAnswerCall" />
                 
-        <browser id="browser" row='1' col='0' rows='8' cols='8' autoscroll="false" type="content-primary" style="margin:6px;"/>
+        <browser id="browser" row='1' col='0' rows='8' cols='8' autoscroll="false" type="content-primary" style="margin:2em;"/>
            
-        <touchkey id="news" row='9' col='0' rows='1' cols='2' 
-                    class='top' label="Smaller" action="browseZoomOut" accesskey='s'/>
-        <touchkey id="news" row='9' col='2' rows='1' cols='2' 
-                    class='top' label="Bigger" action="browseZoomIn" accesskey='l'/>
+        <touchkey id="smaller" row='9' col='0' rows='1' cols='2' 
+                    class='top' label="Smaller" action="browseZoomOut"/>
+        <touchkey id="bigger" row='9' col='2' rows='1' cols='2' 
+                    class='top' label="Bigger" action="browseZoomIn"/>
 
         <touchkey id="scrollU" row='6' col='8' rows='1' cols='2' 
-                    class='top' label="Up" action="browseScrollUp" accesskey='u'/>
+                    class='top' label="Up" action="browseScrollUp"/>
         <touchkey id="scrollD" row='7' col='8' rows='1' cols='2' 
-                    class='top' label="Down" action="browseScrollDown" accesskey='d'/>
+                    class='top' label="Down" action="browseScrollDown"/>
         <touchkey id="scrollL" row='8' col='8' rows='2' cols='1' 
-                    class='top' label="Left" action="browseScrollLeft" accesskey='l'/>
+                    class='top' label="Left" action="browseScrollLeft"/>
         <touchkey id="scrollR" row='8' col='9' rows='2' cols='1' 
-                    class='top' label="Right" action="browseScrollRight" accesskey='r'/>
+                    class='top' label="Right" action="browseScrollRight"/>
 
 
-        <touchkey id="news" row='9' col='4' rows='1' cols='4' 
-                    class='top' label="Previous page" action="browseBack" accesskey='k'/>
+        <touchkey id="prev" row='9' col='4' rows='1' cols='3' 
+                    class='top' label="Previous page" action="browseBack"/>
     </touchpad>
 
 </window>

@@ -5,7 +5,8 @@ window
 {
 	border: 0px;
 	background: lightgoldenrodyellow;
-	font-family: Verdana;
+	/*font-family: Verdana;*/
+	font-family:Comic Sans, Comic Sans MS, cursive;
 }
 
 window.transient
@@ -15,7 +16,7 @@ window.transient
 
 window.splash
 {
-	border: 0px;
+	border: 0em;
 	background: white;
 	font-size: larger;
 }
@@ -27,9 +28,17 @@ chatterkey
   color: black;
   background-color: white;
   -moz-border-radius: 30px;
-  margin:5px;
-  border: 4px solid;
-  font-size: 35px;
+  -moz-border-radius: 1.0em;
+  margin:.12em;
+  font-size: 2.2em;
+  border: .15em solid;
+}
+
+#scrollL,
+#scrollR,
+#back
+{
+	font-size: 1.9em;
 }
 
 touchkey.otherthings,
@@ -45,8 +54,15 @@ touchkey.answer
 {
 }
 
-chatterkey.message
+chatterkey.message,
+#avatar
 {
+}
+
+chatterkey.message .touchkey-box,
+#avatar .touchkey-box
+{
+  padding: 0em;	
 }
 
 touchkey[disabled="true"],
@@ -69,12 +85,26 @@ hbox.config_desc
 {
   color: black;
   background-color: white;
-  margin:5px;
+  margin:.2em;
   border: 0;
-  font-size: 35px;
 }
 
 browser
 {
 	overflow: hidden;
 }
+
+touchkey.scankey:focus,
+togglekey.scankey:focus,
+chatterkey.scankey:focus
+{
+ background-color: rgb(100,100,100);
+}
+
+touchkey:active,
+togglekey:active,
+chatterkey:active
+{
+ background-color: rgb(200,200,200);
+}
+

@@ -5,35 +5,35 @@ touchpad {
 touchkey,
 togglekey,
 chatterkey {
-  margin: 1px;
-  border: 4px solid;
+  margin: .12em;
+  border: .2em solid;
   border-color: darkblue;
   color: #2C7DCF;
   background-color: white;
-  font-size: 35px;
+  font-size: 3em;
 }
 
 .touchkey-box {
-  border: 0px solid transparent;
-  padding: 0px;
-  margin: 3px;
+  border: 0em solid transparent;
+  padding: 0.1em;
+  margin: 0.05em;
 }
 
 .touchkey-image {
-  border: 0px solid transparent;
-  padding: 5px;
-  margin: 0px;
+  border: 0em solid transparent;
+  padding: 0.1em;
+  margin: 0em;
 }
 
 .touchkey-svgimage 
 {
-  border: 0px solid transparent;
+  border: 0em solid transparent;
 /*  padding: 5px;  messes up width*/
-  margin: 0px;
+  margin: 0em;
 }
 
 .touchkey-text {
-  margin: 3px !important;
+  margin: .06em !important;
   text-align: center;
 }
 

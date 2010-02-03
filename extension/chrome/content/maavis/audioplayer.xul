@@ -12,16 +12,16 @@
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message' 
                 alwaysShowLabel='true'
-                label="Listen to Music" speakOnLoad='false'/>
+                id='key' label="Listen to Music" speakOnLoad='false'/>
                 
-	<selections row='1' col='0' rows='9' cols='6' itemcols='1' itemrows='9' />
+	<selections row='1' col='0' rows='9' cols='6' id='sel' itemcols='1' itemrows='9' />
 
 	<touchkey row='1' col='6' rows='2' cols='4'
-                class='goback' label="Change Music Album" accesskey='c' 
+                id='back' class='goback' label="Change Music Album" accesskey='c' 
                 action="showPage|choosemusic.xul" />
 
         <touchkey row='3' col='6' rows='2' cols='4'
-                class='answer' label="Answer" accesskey='a' 
+                id='answer' class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
 <!--
         <touchkey id="nowplaying" row='2' col='2' rows='2' cols='7'

@@ -12,16 +12,16 @@
         <chatterkey row='0' col='0' rows='1' cols='10'
                 class='message'
                 alwaysShowLabel='true'
-                label="Choose the music you want to hear" speakOnLoad='true'/>
+                id="title" label="Choose the music you want to hear" speakOnLoad='true'/>
                 
-	<selections row='1' col='0' rows='9' cols='7' />
+	<selections row='1' col='0' rows='9' cols='7' id="sels"/>
 
 	<touchkey row='1' col='6' rows='2' cols='4'
-                class='otherthings' label="Other things to do" accesskey='o' 
+                id="otherthings" class='otherthings' label="Other things to do" accesskey='o' 
                 action="goHome" />
 
 	<touchkey row='3' col='6' rows='2' cols='4'
-                class='answer' label="Answer" accesskey='a' 
+                id="answer" class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
                
     </touchpad>

@@ -56,17 +56,7 @@ function showPage(page /*...*/)
     }
     mainwindow.setProp("args", args); // pass args to new window
 
-    var fpage = page;
-    var prefs = utils.getService("@mozilla.org/preferences-service;1", "nsIPrefBranch");
-    const bConfig = prefs.getBoolPref("maavis.commandline.config");
-    if (!bConfig)
-    {
-        // get scan version of file
-        var arPage = fpage.split('.');
-        arPage[0] += (config.getUserConfig().userType == 'scan') ? '-scan' : '';
-        fpage = arPage.join('.');
-    }
-    var pageURI = config.getPageUrl(fpage);
+    var pageURI = config.getPageUrl(page);
     
     mainwindow.loadPage(pageURI);
 }

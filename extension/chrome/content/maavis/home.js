@@ -19,10 +19,10 @@ function loadPage()
     {
         const byeKey =  mainwindow.getElementById("quit");
         byeKey.setAttribute('hidden', 'true');
-        const title =  mainwindow.getElementById("title");
+        /*const title =  mainwindow.getElementById("title");
         title.setAttribute('col', '0');
         title.setAttribute('cols', '10');
-        pad.adjustKey(title);
+        pad.adjustKey(title);*/
     }
     
     page.addFolderKeys(pad, "file:///%UserDir%", true, null, /^(?!Passwords$).*$/i);
