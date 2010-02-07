@@ -16,7 +16,8 @@ function loadPage()
         {
         }
     }
-    page.addFolderKeys(pad, "file:///%UserDir%/Call/", false, mkItem);
+    const folder = mainwindow.getProp('FolderURI');
+    page.addFolderKeys(pad, folder, false, mkItem);
 
 }
 

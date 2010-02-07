@@ -26,15 +26,26 @@ function setHome(strUrl)
 { 
     g_strHomeUrl = strUrl;
 }
-function goHome()
-{ 
-    showPage(g_strHomeUrl);
-}
 
 var g_onQuit;
 function setQuit(onQuit)
 { 
     g_onQuit = onQuit;
+}
+
+function callUserFunct( funcName /* ... */)
+{
+    const func = mainwindow.getProp('actionsUserFunct_'+funcName);
+	if (func)
+	{
+		var args = [];
+		var i;
+		for (i=1; i < arguments.length; i++)
+		{
+			args = arguments[i];
+		}
+		func.apply(null, args);
+	}
 }
 
 function showPage(page /*...*/)
@@ -47,6 +58,10 @@ function showPage(page /*...*/)
         var ar=[];
         if (path.expandURI(str, ar)) // parse files to page (for players)
         {
+            if (i == 1);
+            {
+                args.folderURL = str; // save first arg for choosers TODO messy
+            }
             ar.forEach(function(item){ args.push(item.URI); });
         }
         else
@@ -55,10 +70,42 @@ function showPage(page /*...*/)
         }
     }
     mainwindow.setProp("args", args); // pass args to new window
-
-    var pageURI = config.getPageUrl(page);
+    args.selectionsPage = mainwindow.getProp(SELECTIONS_PAGE_PROP);
+    mainwindow.setProp(SELECTIONS_PAGE_PROP, undefined );
     
+    var stack = mainwindow.getProp('screenStack');
+    if (!stack)
+    {
+        stack = [];
+        mainwindow.setProp("screenStack", stack);
+    }
+    stack.push({page:page, args:args});
+    
+    var pageURI = config.getPageUrl(page);
     mainwindow.loadPage(pageURI);
+}
+
+function popPage()
+{
+    const stack = mainwindow.getProp('screenStack');
+    stack.pop();
+    const item = stack[stack.length-1];
+    if (!item)
+    {
+        goHome();
+    }
+    mainwindow.setProp("args", item.args); // pass args to new window
+    //mainwindow.setProp(SELECTIONS_PAGE_PROP, item.args.selectionsPage );
+    mainwindow.setProp(SELECTIONS_PAGE_PROP, undefined );
+    var pageURI = config.getPageUrl(item.page);
+    mainwindow.loadPage(pageURI);
+}
+
+function goHome()
+{ 
+    mainwindow.setProp("screenStack", []); //empty stack
+    mainwindow.setProp(SELECTIONS_PAGE_PROP, undefined );
+    showPage(g_strHomeUrl);
 }
 
 function nextSelectionsPage( /*...*/)
@@ -89,6 +136,9 @@ function loadActions()
     
     action.setAction('goHome', goHome, setContext);
     action.setAction('showPage', showPage, setContext);
+    action.setAction('popPage', popPage, setContext);
+
+	action.setAction('callUserFunct', callUserFunct, setContext);
 
     action.setAction('mediaPause', function(){ window.document.getElementById("player").togglePause()}, setContext);
     action.setAction('mediaRestart', function(){ window.document.getElementById("player").restart()}, setContext);

@@ -14,7 +14,6 @@ DefaultGroupName=Maavis
 DefaultDirName={pf}\Maavis
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
-UninstallIconFile=Maavis.ico
 
 ;Note the Firefox and Skype installer filenames are defined at the end of this file
 
@@ -29,7 +28,7 @@ ClickFinish=Click Finish to exit Setup after unchecking any of the following tha
 [Tasks]
 Name: "firefox"; Description: "Install &Firefox. This is required unless you already have the correct version. You can always continue to use your current web browser. There is check box in the Firefox installer that controls if Firefox becomes your default browser."; Flags: "checkedonce"
 ;Name: "media"; Description: "Install example &media for Maavis"; flags: "checkedonce"
-Name: "turnkey"; Description: "Run Maavis &automatically whenever this user logs on to Windows";
+Name: "turnkey"; Description: "Run Maavis &automatically whenever this user logs on to Windows"; Flags: unchecked
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Icons:";
 Name: "desktopiconmedia"; Description: "Put an icon on the desktop to &change Maavis photos, music and videos"; GroupDescription: "Icons:";
 Name: "desktopiconcfg"; Description: "Put an icon on the desktop to change how Maavis &looks"; GroupDescription: "Icons:";
@@ -99,7 +98,7 @@ Filename: "{app}\installers\{code:FirefoxInstaller}"; Description: "Install Fire
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
 Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MaavisMedia\"""; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent
-Filename: "{app}\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser
+Filename: "{app}\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser unchecked
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -no-remote"; Description: "Run Maavis now."; Flags: postinstall skipifsilent
 
 

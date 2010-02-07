@@ -8,7 +8,7 @@ function loadPage()
         //item.thumbURI = item.URI;
         item.action = 'showPage|browser.xul,'+item.arg;
     }
-    page.addFolderKeys(pad, "file:///%UserDir%/Information/", false, mkItem);
+    page.addFolderKeys(pad, page.args.folderURL, false, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);

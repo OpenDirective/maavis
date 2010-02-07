@@ -623,19 +623,17 @@
             this.setAttribute('showLabels', 'true')
             this.setAttribute('showImages', 'true')
             //this._tabGroupIndexs = {};
-            this._nSelection = 0;
             this._currentKey = null;
             //setTimeout(function(){window.alert(that.children);}, 1);
             
             const selection = this.getElementsByTagName('selections')[0];
-            if  (selection)
+            if (selection)
             {
                 this.selection = selection;
-                this.selection._page = undefined; // not paged
                 var itemCols = parseInt(selection.getAttribute('itemcols'));
                 var itemRows = parseInt(selection.getAttribute('itemrows'));
                 this.setSelectionsGrid(itemCols, itemRows);
-                this.selection.lastpage = 0;
+				this.emptySelections();
             }
         ]]>
         </constructor>
@@ -899,9 +897,10 @@
         ]]>
         </body>
       </method>
-
+	  
      <method name="setSelectionsPage">
         <parameter name='page' />
+        <parameter name='totitems' />
         <body><![CDATA[
            // NB call before adding items
             if  (!this.selection)
@@ -909,22 +908,8 @@
                 
             page = (page) ? page : 0;
             this.selection._page = page;
+            this.selection._totitems = totitems;
             this.selection._moreKey = null;
-        ]]>
-        </body>
-      </method>
-
-     <method name="endSelectionsAdd">
-        <parameter name='page' />
-        <body><![CDATA[
-           // NB call before adding items
-            if  (!this.selection)
-                return;
-                
-            if( this.selection._moreKey && this.lastSelectionsPage == 0)
-            { // TOS this way means we can't ever fill the grid when 1 page
-                this._stack.removeChild(this.selection._moreKey);
-            }
         ]]>
         </body>
       </method>
@@ -933,7 +918,32 @@
             onget="return this.selection.lastpage;"
             readonly="true"/>
 
-     <method name="addSelectionsItem">
+	<property name="selections"
+            onget="return this.selection.items;"
+            readonly="true"/>
+
+	<method name="emptySelections">
+		<body><![CDATA[
+		if (!this.selection)
+			return;
+		
+		const selection=this.selection;
+		selection._nSelection = 0;
+		selection._page = undefined; // not paged
+		selection.lastpage = 0;
+		selection._totitems = 0;
+		selection._moreKey = null;
+
+		if (selection.items)
+		{
+			selection.items.forEach(function(node) {node.parentNode.removeChild(node);} )
+		}
+		selection.items = [];
+		]]>
+		</body>
+	</method>
+    
+    <method name="addSelectionsItem">
         <parameter name='label' />
         <parameter name='image' />
         <parameter name='image_scale' />
@@ -941,12 +951,20 @@
         <parameter name='crop' />
         <parameter name='prompt' />
         <parameter name='isMoreItem' />
+        <parameter name='id' />
         <body><![CDATA[
             // NB  first call with isMoreItem set
             
             if  (!this.selection)
                 return;
             const selection = this.selection;
+            if (isMoreItem)
+            {
+                // just create and don't add to hierarchy or display
+                var key = this._createKey('more',0,0,0,0,label,image,image_scale,action,crop, prompt)
+                this.selection._moreKey = key;
+                return key;
+            }
 
             const col = parseInt(selection.getAttribute('col'));
             const row = parseInt(selection.getAttribute('row'));
@@ -955,28 +973,18 @@
             
             const itemcols = selection._itemcols; // not sames as attribute
             const itemrows = selection._itemrows;
+            const totitems = selection._totitems;
             const nitemcols = Math.floor(cols / itemcols);
             const nitemrows = Math.floor(rows / itemrows);
 
-            const showMore = (selection._page !== undefined);
-            const pageitems = nitemcols * nitemrows - ((showMore) ? 1 : 0);
-
             const whichpage = (selection._page === undefined) ? 0 : selection._page
+            const showMore = (selection._page !== undefined)
+                                && !(whichpage == 0 && totitems <= (nitemcols * nitemrows)); // last item fits on first page
+            const pageitems = nitemcols * nitemrows - ((showMore) ? 1 : 0);
             const firstpageitem = whichpage * pageitems;
             const lastpageitem =  ((whichpage + 1) * pageitems) - 1;
-
-            if (isMoreItem)
-            {
-                // just create and don't add to hierarchy or display
-                var key = this._createKey('more',0,0,0,0,label,image,image_scale,action,crop, prompt)
-                this.selection._moreKey = key;
-                return key;
-            }
-            else
-            {
-                const nSelection =  this._nSelection ++;
-            }
-
+            
+            const nSelection =  selection._nSelection ++;
             const page = Math.floor(nSelection / pageitems);
             selection.lastpage = page;
 
@@ -986,7 +994,7 @@
             }
             else
             {
-                const id = nSelection+':'+label;
+                id = (id === undefined) ? nSelection+':'+label : id;
                 key = this._createKey(id,0,0,0,0,label, image, image_scale, action, crop,prompt);
             }
 
@@ -1004,14 +1012,30 @@
             key.setAttribute("rows", itemrows);
             key.setAttribute("cols", itemcols);
 
-            const moreKey =  selection._moreKey;
-            if (showMore && nSelection == firstpageitem)
-            {
-                this._stack.insertBefore(selection._moreKey, this._firstPageKey);
+            const moreKey = selection._moreKey;
+            if (showMore)
+			{
+				if (nSelection == firstpageitem)
+				{
+					if (!this._firstPageKey)
+					{
+						this._stack.appendChild(moreKey);
+					}
+					else
+					{
+						this._stack.insertBefore(moreKey, this._firstPageKey);
+					}
+					selection.items.push(moreKey);
+				}
+                this._stack.insertBefore(key, moreKey);
             }
-                
-            this._stack.insertBefore(key, selection._moreKey);
-            this._positionKey(key); // sets the image too
+            else
+            {
+                this._stack.appendChild(key);
+            }			
+			selection.items.push(key)
+            
+			this._positionKey(key); // sets the image too
             
             if (showMore)
             {

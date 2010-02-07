@@ -6,7 +6,7 @@ function loadPage()
     {
         item.action = 'showPage|audioplayer.xul,'+item.URI;
     }
-    page.addFolderKeys(pad, "file:///%UserDir%/Music/", true, mkItem);
+    page.addFolderKeys(pad, page.args.folderURL, true, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);

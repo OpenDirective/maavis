@@ -8,7 +8,7 @@ function loadPage()
         //utils.logit(item.thumbURI +' '+ item.URI+' '+item.arg);
         item.action = 'progExec|'+item.arg;
     }
-    page.addFolderKeys(pad, "file:///%UserDir%/Programs/", false, mkItem);
+    page.addFolderKeys(pad, page.args.folderURL, false, mkItem);
 }
 
 window.addEventListener('load', loadPage, false);

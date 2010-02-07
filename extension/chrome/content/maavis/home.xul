@@ -18,7 +18,7 @@
                         
         <selections row='1' col='0' rows='9' cols='7' id="sels" />
         
-        <touchkey row='1' col='7' rows='2' cols='4'
+        <touchkey row='1' col='7' rows='2' cols='3'
                 id="quit" class='quit' label="Bye Maavis" 
                 action="logout" />
 

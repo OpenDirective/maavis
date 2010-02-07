@@ -77,6 +77,11 @@ chatterkey.message .touchkey-box,
   padding: 0em;	
 }
 
+#avatar .touchkey-box
+{
+  font-size:0em;
+}
+
 touchkey[disabled="true"],
 touchkey[disabled="true"]:hover:active {
   color: rgb(246,116,27);
@@ -98,6 +103,12 @@ touchkey.mediatrack
 {
   border-color: #2C7DCF;
   color: lightgrey;
+}
+
+touchkey.playingmediatrack
+{
+  border-color: #2C7DCF;
+  color: yellow;
 }
 
 hbox.config_desc

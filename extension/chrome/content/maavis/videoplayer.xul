@@ -16,7 +16,7 @@
                 
          <touchkey row='1' col='7' rows='1' cols='3'
                 class='goback' label="Change Videos" accesskey='o' 
-                action="showPage|choosevideo.xul" />
+                action="popPage" />
 
         <touchkey row='2' col='7' rows='2' cols='3'
                 class='answer' label="Answer" accesskey='a' 

@@ -16,7 +16,7 @@
                 
         <touchkey row='1' col='8' rows='2' cols='2'
                 id="back" class='goback' label="Change Info" 
-                action="showPage|chooseinfo.xul" />
+                action="popPage" />
 
         <touchkey row='3' col='8' rows='3' cols='2'
                 class='answer' label="Answer"

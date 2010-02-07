@@ -42,6 +42,23 @@ const page =
     set login(b) {},
     get login() {return _ns.config.getCommandLineConfig().login;},
 
+    set isScanUser() {},
+    get isScanUser() { return (page.config.userType == 'scan') },
+    
+    set args() {},
+    get args() { return mainwindow.getProp('args');},
+
+    set curSelectionsPage(n) { mainwindow.setProp(SELECTIONS_PAGE_PROP, n ); },
+    get curSelectionsPage() { var curpage = parseInt(mainwindow.getProp(actions.SELECTIONS_PAGE_PROP));
+                              curpage = (!curpage || isNaN(curpage)) ? 0 : curpage; 
+                              return curpage;
+                            },
+							
+	setUserAction:function (funcName, func)
+	{
+		mainwindow.setProp('actionsUserFunct_'+funcName, func);
+	},
+	
     _setColourStylesheet: function()
     {
         try 
@@ -60,7 +77,12 @@ const page =
         }
     },
 
-   onQuit: function()
+    _makeScanKey: function(obj)
+    {
+        obj.className += ' scankey';
+    },
+    
+    onQuit: function()
     {
         const quitBtn = mainwindow.getWindow().document.getElementById("quit");
         if ("quitting" in quitBtn)
@@ -84,7 +106,7 @@ const page =
                 quitBtn.label = label;    
             }
             quitBtn.label = "Confirm "+ label;
-            if (page.config.userType != 'scan')
+            if (page.isScanUser)
                 setTimeout(resetExit, CONFIRM_EXIT_TIME);
         }
     },
@@ -128,16 +150,12 @@ const page =
             const showImages = (page.config.showImages == "yes");
             pad.setAttribute("showImages", (showImages) ? "true" : "false");
            
-            if (page.config.userType == 'scan')
+            if (page.isScanUser)
             {
-                function makeScankey(obj)
-                {
-                    obj.className += ' scankey';
-                }
                 for (var key in _ns.nodeGen(pad.content.getElementsByTagName('touchkey')))
-                    makeScankey(key);
+                    this._makeScanKey(key);
                 for (var key in _ns.nodeGen(pad.content.getElementsByTagName('togglekey')))
-                    makeScankey(key);
+                    this._makeScanKey(key);
             }
         }
         
@@ -145,7 +163,7 @@ const page =
         {
             if (pad !== undefined)
             {   
-                const klass = (page.config.userType == 'scan') ? 'answer scankey' : 'answer';
+                const klass = (page.isScanUser) ? 'answer scankey' : 'answer'; // TODO refactor
                 const answer = pad.content.getElementsByClassName(klass)[0];
                 if (answer !== undefined)
                 {
@@ -194,9 +212,12 @@ const page =
             window.addEventListener('unload', _ns.skype.endCall, false);
         }
 
-        page._setGridSize(pad);
-
-        if (pad && page.config.userType == 'scan')
+        if (pad)
+        {
+            page._setGridSize(pad);
+        }
+        
+        if (pad && page.isScanUser)
         {
             
             function startScanning()
@@ -268,9 +289,9 @@ const page =
                 alterItemCB(cbItem);
             const prompt = getPromptFile(folder, item.name);
             var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
-            if (key)
+            if (key && page.isScanUser)
             {
-                key.className += ' scankey';
+                page._makeScanKey(key);
             }
         }
     
@@ -279,27 +300,24 @@ const page =
 
         folderURI = _ns.config.parseURI(folderURI);
         const folder = path.URIToFile(folderURI);
-        
         const type = (bDirs) ? path.expandTypes.EXP_DIRS : path.expandTypes.EXP_FILES;
-            
-        var curpage = parseInt(mainwindow.getProp(actions.SELECTIONS_PAGE_PROP));
-        curpage = (!curpage || isNaN(curpage)) ? 0 : curpage; 
-        container.setSelectionsPage(curpage);
-        const scanKey = container.addSelectionsItem('More Items...', null, 1, 'nextSelectionsPage', null, null, true); // add the more item
-        scanKey.className += ' scankey';
 
         var folderConfig = path.readFolderConfig(folder);
             
         var arItems=[]; 
         path.expandURI(folderURI, arItems, type, re);
+        container.setSelectionsPage(page.selectionsPage, arItems.length);
+        const scanKey = container.addSelectionsItem('More Items...', null, 1, 'nextSelectionsPage', null, null, true); // add the more item
+        if (page.isScanUser)
+        {
+            page._makeScanKey(scanKey);
+        }
         arItems.forEach(addItemKey);
-        if (arItems.length)
-            container.endSelectionsAdd();
         return arItems.length;
     },
     
     get _pageName () { return window.location.pathname.split('/')[2].split('.')[0]; },// TODO Fragile,
-    get _isPasswordPage () { return page._pageName  == "password-scan"; },
+    get _isPasswordPage () { return page._pageName  == "password"; },
         
     _setGridSize: function(pad)
     {
