@@ -8,13 +8,8 @@ function loadPage()
     const pad = mainwindow.getElementById("pad");
     function mkItem( item )
     {
-        try
-        {   
-            item.action = 'showPage|password.xul,'+item.name;
-        }
-        catch(e)
-        {
-        }
+		item.action = 'showPage|password.xul,'+item.name;
+		return true;
     }
     const nItems = page.addFolderKeys(pad, "file:///%UsersDir%", true, mkItem, /^(?!Default$).*$/i);
     if (nItems == 0)

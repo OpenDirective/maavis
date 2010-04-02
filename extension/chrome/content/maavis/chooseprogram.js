@@ -7,6 +7,7 @@ function loadPage()
     {
         //utils.logit(item.thumbURI +' '+ item.URI+' '+item.arg);
         item.action = 'progExec|'+item.arg;
+		return true;
     }
     page.addFolderKeys(pad, page.args.folderURL, false, mkItem);
 }

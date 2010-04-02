@@ -14,10 +14,11 @@ function loadPage()
         }
         catch(e)
         {
+			return false;
         }
+		return true;
     }
-    const folder = mainwindow.getProp('FolderURI');
-    page.addFolderKeys(pad, folder, false, mkItem);
+	page.addFolderKeys(pad, page.args.folderURL, false, mkItem);
 
 }
 

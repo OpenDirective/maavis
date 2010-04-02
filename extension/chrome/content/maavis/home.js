@@ -25,7 +25,13 @@ function loadPage()
         pad.adjustKey(title);*/
     }
     
-    page.addFolderKeys(pad, "file:///%UserDir%", true, null, /^(?!Passwords$).*$/i);
+	function mkItem( item ) 
+	{
+		// Don't show call page button if can not call
+		return (page.canCall || (item.action.indexOf('showPage|choosecall.xul') == -1));
+	}
+	
+    page.addFolderKeys(pad, "file:///%UserDir%", true, mkItem, /^(?!Passwords$).*$/i);
 }
 
 window.addEventListener('load', loadPage, false);

@@ -5,6 +5,7 @@ function loadPage()
     function mkItem( item )
     {
         item.action = 'showPage|audioplayer.xul,'+item.URI;
+		return true;
     }
     page.addFolderKeys(pad, page.args.folderURL, true, mkItem);
 }

@@ -10,7 +10,7 @@ function loadPage()
     pad.setAttribute("showLabels", (showLabels) ? "true" : "false");
     const showImages  = (page.config.passwordItems != "labels");
     pad.setAttribute("showImages", (showImages) ? "true" : "false");
-   function mkItem( item )
+    function mkItem( item )
     {
         try
         {   
@@ -28,6 +28,7 @@ function loadPage()
         {
             utils.logit(e);
         }
+		return true;
     }
     
     try

@@ -53,6 +53,8 @@ const page =
                               curpage = (!curpage || isNaN(curpage)) ? 0 : curpage; 
                               return curpage;
                             },
+	set canCall() {},
+	get canCall() { return _ns.skype.isAvailable; },
 							
 	setUserAction:function (funcName, func)
 	{
@@ -159,7 +161,7 @@ const page =
             }
         }
         
-        if (!_ns.skype.isAvailable())
+        if (!_ns.skype.isAvailable)
         {
             if (pad !== undefined)
             {   
@@ -263,7 +265,6 @@ const page =
 
     addFolderKeys: function(container, folderURI, bDirs, alterItemCB, re)
     { 
-
         var nItem = 0;
 
         function getPromptFile(folder, baseName)
@@ -285,9 +286,9 @@ const page =
                                     "thumbURI": item.thumbURI, 
 									"action": action ,
                                     "arg": arg};
-			if (alterItemCB)
-                alterItemCB(cbItem);
-            const prompt = getPromptFile(folder, item.name);
+			if (alterItemCB && !alterItemCB(cbItem))
+				return;
+			const prompt = getPromptFile(folder, item.name);
             var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
             if (key && page.isScanUser)
             {

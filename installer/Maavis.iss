@@ -1,9 +1,9 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.8
-OutputBaseFilename=Maavis-0.1.8
-AppVersion=0.1.8
-VersioninfoVersion=0.1.8
+AppVerName=Maavis 0.1.10
+OutputBaseFilename=Maavis-0.1.10
+AppVersion=0.1.10
+VersioninfoVersion=0.1.10
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
 AppCopyright=Copyright (C) 2008,2009 The University Of Sheffield
@@ -148,7 +148,7 @@ end;
 // Constants
 function FirefoxInstaller(Param: String): String;
 begin
-  Result := 'Firefox Setup 3.5.6.exe';
+  Result := 'Firefox Setup 3.5.9.exe';
 end;
 
 function SkypeInstaller(Param: String): String;
