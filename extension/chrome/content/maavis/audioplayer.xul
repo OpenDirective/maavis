@@ -23,11 +23,7 @@
         <touchkey row='3' col='6' rows='2' cols='4'
                 id='answer' class='answer' label="Answer" accesskey='a' 
                 action="voipAnswerCall" />
-<!--
-        <touchkey id="nowplaying" row='2' col='2' rows='2' cols='7'
-                class='player_item' label="" 
-                />
--->
+
         <togglekey id="pause" row='6' col='6' rows='2' cols='2'
                 class='player_pause' label='Play' labelB="Pause" accesskey='p' 
                 image='chrome://maavis/skin/playerbuttons/play.png' 

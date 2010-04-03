@@ -40,7 +40,6 @@ function loadPage()
 			}
 		}
 		
-		//const scanKey = pad.addSelectionsItem('More Items...', null, 1, 'nextSelectionsPage', null, null, true); // add the more item
 		const key = pad.addSelectionsItem('More music...', null, 0, 'callUserFunct|nextAudioPage', 'center', null, true, 'more');
 		key.className = "mediatrack";
 		if (page.isScanUser)
@@ -53,7 +52,6 @@ function loadPage()
 	
 	function onNextPage()
 	{
-	
 		const SELECTIONS_PAGE_PROP = 'selectionsPage';
 	    var curpage =  mainwindow.getProp(SELECTIONS_PAGE_PROP);
 		curpage = parseInt(curpage);

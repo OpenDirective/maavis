@@ -108,18 +108,6 @@ function goHome()
     showPage(g_strHomeUrl);
 }
 
-function nextSelectionsPage( /*...*/)
-{
-    var curpage =  mainwindow.getProp(SELECTIONS_PAGE_PROP);
-    curpage = parseInt(curpage);
-    curpage = (isNaN(curpage)) ? '0' : curpage;
-    const pad = window.document.getElementsByTagName('touchpad')[0];
-    curpage = (curpage >= pad.lastSelectionsPage) ? 0 : curpage+1;
-    mainwindow.setProp(SELECTIONS_PAGE_PROP, curpage.toString() );
-    mainwindow.reloadPage();
-}
-
-    
 var window = undefined;
 
 const that = this;
@@ -190,8 +178,6 @@ function loadActions()
     action.setAction('configToggleScanMode', function(){config.toggleScanMode(); goHome()} , setContext);
     //action.setAction('configToggleComplexity', function(){toggleComplexity() ; goHome();}, setContext);
 
-    action.setAction('nextSelectionsPage', nextSelectionsPage, setContext);
-    
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);
 
     //action.setAction('custom', function(){ arguments[0]();  }, setContext); //TODO fragile

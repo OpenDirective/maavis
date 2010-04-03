@@ -221,7 +221,6 @@ const page =
         
         if (pad && page.isScanUser)
         {
-            
             function startScanning()
             {
                 const scan = {};
@@ -265,8 +264,6 @@ const page =
 
     addFolderKeys: function(container, folderURI, bDirs, alterItemCB, re)
     { 
-        var nItem = 0;
-
         function getPromptFile(folder, baseName)
         {
             // look for a prompt file of form <item>_prompt{.*}
@@ -275,28 +272,7 @@ const page =
             return (promptFiles.length) ? path.fileToURI(promptFiles[0]) : null;
         }
                 
-        var image = null;
-        function addItemKey(item)
-        {
-            const chooser = (folderConfig) ? folderConfig['type'] : item.chooser;
-            const arg = /*(folderConfig && folderConfig.actions[itemName]) ? folderConfig.actions[itemName] :*/ item.URI;
-            const action = (chooser)  ? 'showPage|' + chooser + '.xul,' + arg : null;
-            var cbItem = { "name": item.name, 
-                                    "URI": item.URI,
-                                    "thumbURI": item.thumbURI, 
-									"action": action ,
-                                    "arg": arg};
-			if (alterItemCB && !alterItemCB(cbItem))
-				return;
-			const prompt = getPromptFile(folder, item.name);
-            var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
-            if (key && page.isScanUser)
-            {
-                page._makeScanKey(key);
-            }
-        }
-    
-        const path = {};
+		const path = {};
         Components.utils.import("resource://modules/path.js", path);
 
         folderURI = _ns.config.parseURI(folderURI);
@@ -307,13 +283,55 @@ const page =
             
         var arItems=[]; 
         path.expandURI(folderURI, arItems, type, re);
-        container.setSelectionsPage(page.selectionsPage, arItems.length);
-        const scanKey = container.addSelectionsItem('More Items...', null, 1, 'nextSelectionsPage', null, null, true); // add the more item
-        if (page.isScanUser)
-        {
-            page._makeScanKey(scanKey);
-        }
-        arItems.forEach(addItemKey);
+
+		function addPageItemKeys(items)
+		{
+			function addItemKey(item)
+			{
+				const chooser = (folderConfig) ? folderConfig['type'] : item.chooser;
+				const arg = /*(folderConfig && folderConfig.actions[itemName]) ? folderConfig.actions[itemName] :*/ item.URI;
+				const action = (chooser)  ? 'showPage|' + chooser + '.xul,' + arg : null;
+				var cbItem = { "name": item.name, 
+										"URI": item.URI,
+										"thumbURI": item.thumbURI, 
+										"action": action ,
+										"arg": arg};
+				if (alterItemCB && !alterItemCB(cbItem))
+					return;
+				const prompt = getPromptFile(folder, item.name);
+				var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
+				if (key && page.isScanUser)
+				{
+					page._makeScanKey(key);
+				}
+			}
+			const scanKey = container.addSelectionsItem('More Items...', null, 1, 'callUserFunct|nextSelectionsPage', null, null, true); // add the more item
+			if (page.isScanUser)
+			{
+				page._makeScanKey(scanKey);
+			}
+			items.forEach(addItemKey);
+		}
+		
+		function onNextSelectionsPage()
+		{ // closure - arItems, pad
+			const SELECTIONS_PAGE_PROP = 'selectionsPage';
+			const pad = window.document.getElementsByTagName('touchpad')[0];
+			var curpage =  mainwindow.getProp(SELECTIONS_PAGE_PROP);
+			utils.logit(curpage);
+			curpage = parseInt(curpage);
+			curpage = (isNaN(curpage)) ? '0' : curpage;
+			curpage = (curpage >= pad.lastSelectionsPage) ? 0 : curpage + 1;
+			mainwindow.setProp(SELECTIONS_PAGE_PROP, curpage.toString() );
+			
+			pad.emptySelections();
+			pad.setSelectionsPage(curpage, arItems.length);
+			addPageItemKeys(arItems);
+		}
+
+		onNextSelectionsPage();
+		page.setUserAction('nextSelectionsPage', onNextSelectionsPage);
+
         return arItems.length;
     },
     
