@@ -42,7 +42,7 @@ function _setConfigDefaults()
         if (! (prop in obj))
             obj[prop] = value;
     }
-
+    _defaultSetting(g_userConfig, 'playStartSound', "yes");
     _defaultSetting(g_userConfig, "userType", 'scan');
     _defaultSetting(g_userConfig, 'theme', 'colour');
     _defaultSetting(g_userConfig, 'speakTitles', "yes");
@@ -57,8 +57,8 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'passwordSetSize', "4x3"); 
     
     // these aren't persisted 
-    g_userConfig.__defineGetter__("startsoundURI", function(){ return (g_commandLineConfig.quickStart) ? null  : _getStartSoundURI();});
-    g_userConfig.__defineGetter__("splashTime", function(){ return (g_commandLineConfig.quickStart) ? 1 : 4000});
+    g_userConfig.__defineGetter__("startsoundURI", function(){ return (g_commandLineConfig.quickStart || g_userConfig.playStartSound == 'no') ? null  : _getStartSoundURI();});
+    g_userConfig.__defineGetter__("splashTime", function(){ return (g_commandLineConfig.quickStart) ? 1 : (g_userConfig.playStartSound == 'no') ? 1500 : 4000});
     g_userConfig.__defineGetter__("name", function () { return g_user; });
     }
 
@@ -160,7 +160,7 @@ function _getMaavisDataDir()
 }
 */
 
-function getUserDataDir(user)
+function getUserDataDir()
 { 
     var dir = _getMaavisDataDir();
     dir.append('Users');

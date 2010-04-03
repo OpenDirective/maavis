@@ -54,7 +54,7 @@ const page =
                               return curpage;
                             },
 	set canCall() {},
-	get canCall() { return _ns.skype.isAvailable; },
+	get canCall() { return _ns.skype.isAvailable(); },
 							
 	setUserAction:function (funcName, func)
 	{
@@ -161,7 +161,7 @@ const page =
             }
         }
         
-        if (!_ns.skype.isAvailable)
+        if (!_ns.skype.isAvailable())
         {
             if (pad !== undefined)
             {   

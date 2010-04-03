@@ -22,7 +22,7 @@
                 id="quit" class='quit' label="Bye Maavis" 
                 action="logout" />
 
-        <touchkey row='4' col='7' rows='3' cols='4'
+        <touchkey row='4' col='7' rows='3' cols='3'
                 id="answer" class='answer' label="Answer"  tabgroup='2'
                 action="voipAnswerCall" />
                 

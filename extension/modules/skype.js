@@ -10,8 +10,11 @@ const _id = 0;
 const _id2 = 1;
 var _csobserver = null;
 var _jsobserver = null;
-var isAvailable = false;
-
+var g_isAvailable = false;
+function isAvailable()
+{
+	return g_isAvailable;
+}
 
 function _checkInstalled()
 {
@@ -58,7 +61,7 @@ function init()
     _sendRequest('{"action": "launch"}');
     
     //TODO need a statemachine to track success/failure/shutdown
-    isAvailable = true;
+    g_isAvailable = true;
 }
 
 function setCallStatusObserver(ob)
@@ -68,19 +71,19 @@ function setCallStatusObserver(ob)
 
 function shutdown()
 {
-    if (!isAvailable)
+    if (!g_isAvailable)
         return;
         
     _proxy.removeObserver(_id);
     _proxy.send(_id, '{"action" : "shutdown"}');
     _proxy.shutdown();
     _proxy = null;
-    isAvailable = false;
+    g_isAvailable = false;
 }
 
 function call(who)
 {
-    if (!isAvailable)
+    if (!g_isAvailable)
         return;
         
     _sendRequest( { action: "call", who: who } );
@@ -88,7 +91,7 @@ function call(who)
 
 function endCall()
 {
-    if (!isAvailable)
+    if (!g_isAvailable)
         return;
         
     _sendRequest( { action: "endcall"} );
@@ -96,7 +99,7 @@ function endCall()
 
 function answerCall() 
 {
-    if (!isAvailable)
+    if (!g_isAvailable)
         return;
         
     _sendRequest( { action: "answercall"} );
