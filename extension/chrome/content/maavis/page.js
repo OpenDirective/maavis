@@ -318,7 +318,6 @@ const page =
 			const SELECTIONS_PAGE_PROP = 'selectionsPage';
 			const pad = window.document.getElementsByTagName('touchpad')[0];
 			var curpage =  mainwindow.getProp(SELECTIONS_PAGE_PROP);
-			utils.logit(curpage);
 			curpage = parseInt(curpage);
 			curpage = (isNaN(curpage)) ? '0' : curpage;
 			curpage = (curpage >= pad.lastSelectionsPage) ? 0 : curpage + 1;

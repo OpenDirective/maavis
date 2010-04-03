@@ -6,7 +6,7 @@ AppVersion=0.1.10
 VersioninfoVersion=0.1.10
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
-AppCopyright=Copyright (C) 2008,2009 The University Of Sheffield
+AppCopyright=Copyright (C) 2008,2009,2010 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
 DefaultGroupName=Maavis
