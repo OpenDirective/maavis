@@ -55,7 +55,7 @@ Source: ".\firefox*"; DestDir: "{app}\installers"; Flags: ignoreversion
 
 ; Media
 ;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
-Source: "..\media\*"; DestDir: "{app}\media"; Flags: recursesubdirs ignoreversion;
+Source: "..\media\*"; DestDir: "{app}\media"; Excludes: "Thumbs.db"; Flags: recursesubdirs ignoreversion;
 
 
 [INI]
