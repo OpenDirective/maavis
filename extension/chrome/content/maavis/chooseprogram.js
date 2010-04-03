@@ -5,7 +5,6 @@ function loadPage()
     const pad = mainwindow.getElementById("pad");
     function mkItem( item )
     {
-        //utils.logit(item.thumbURI +' '+ item.URI+' '+item.arg);
         item.action = 'progExec|'+item.arg;
 		return true;
     }

@@ -14,10 +14,11 @@ else
 
 function playStartSound()
 {
+	// user config is for 'Default'
     const sound = page.config.startsoundURI;
     if (sound )
-    {
-        var player = document.createElement('audioplayer');
+    { 
+		var player = document.createElement('audioplayer');
         player.setAttribute("top", "-1"); // off screen
         player.setAttribute("left","0");
         player.setAttribute("width","1");
@@ -40,7 +41,7 @@ function initWindow()
     const bConfig = config.getCommandLineConfig().config;
     const bLogin = config.getCommandLineConfig().login;
     const user = config.getCommandLineConfig().user;
-    const startPage = (bConfig) ? "config.xul" : (bLogin && !user)? "login.xul" : (bLogin && user) ? "password.xul,"+user : "home.xul"
+    const startPage = (bConfig && !user) ? "configuser.xul" : (bConfig) ? "config.xul,"+user : (bLogin && !user)? "login.xul" : (bLogin && user) ? "password.xul,"+user : "home.xul"
     const homePage = (bConfig) ? "config.xul" : "home.xul"
     if (user && !bLogin)
         page.user = user;
@@ -57,7 +58,8 @@ function initWindow()
     skype.initJoys();
     
     const splashtime = page.config.splashTime;
-    mainwindow.showWindow(window, function(){actions.showPage(startPage);}, splashtime);
+	var args = startPage.split(',');
+    mainwindow.showWindow(window, function(){actions.showPage(args[0], args[1]);}, splashtime);
 }
 window.addEventListener('load', initWindow, false);
 

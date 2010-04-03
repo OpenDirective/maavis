@@ -1,3 +1,6 @@
+// do this here so that page.config gets set correctly 
+page.user = mainwindow.getProp("args"); // is persisted in config module
+
 const config = {};
 Components.utils.import("resource://modules/config.js", config);
 
@@ -7,14 +10,24 @@ function loadPage()
     
     window.onunload = function(){ config.saveUserConfig();};
     
+    const title = mainwindow.getElementById("title");
+	title.label += ' for user ' + page.config.name;
+
     function f()
     {
+		if (page.config.name != 'Default')
+		{
+			document.getElementById("sound_btn").collapsed = true;
+		}
+		else
+		{
+			if ( page.config.playStartSound == "yes") 
+				document.getElementById("sound_btn").state = 'b';
+		}
         if ( page.config.userType == "touch") 
             document.getElementById("usertype_btn").state = 'b';
         if ( page.config.theme == "colour") 
             document.getElementById("theme_btn").state = 'b';
-        if ( page.config.playStartSound == "yes") 
-            document.getElementById("sound_btn").state = 'b';
         if ( page.config.speakTitles == "yes") 
             document.getElementById("speech_btn").state = 'b';
         if ( page.config.showLabels == "yes") 

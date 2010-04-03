@@ -8,28 +8,30 @@
     <script type="application/javascript" src="chrome://maavis/content/page.js" />
     <script type="application/javascript" src="chrome://maavis/content/config.js" />
 
+	<vbox id='z'>
+	</vbox>
     <touchpad flex='1' rows='10' cols='10'>
-        <chatterkey row='0' col='0' rows='1' cols='10'
+        <chatterkey id='title' row='0' col='0' rows='1' cols='10'
                 class='message'
-                label="Choose Maavis settings" spokenLabel="Choose Mavis settings" 
+                label="Choose Maavis settings" 
                 alwaysShowLabel='true' speakOnLoad='true'/>
                 
+        <togglekey id="sound_btn" row='1' col='0' rows='1' cols='6'
+                class='config_btn' label='Choose play start sound' labelB="Choose don't play start sound" accesskey='d' 
+                alwaysShowLabel='true' action="configTogglePlayStartSound" autoToggle='false' />
+
         <touchkey id='quit' row='1' col='6' rows='2' cols='4'
                 class='quit' label="Bye Settings" accesskey='b' 
                 alwaysShowLabel='true' action="logout" />
 
-        <togglekey id="usertype_btn" row='1' col='0' rows='1' cols='6'
+        <togglekey id="usertype_btn" row='2' col='0' rows='1' cols='6'
                 class='config_btn' label='Choose touch user' labelB="Choose scan user" accesskey='u' 
                 alwaysShowLabel='true' action="configToggleUserType" autoToggle='false' />
 
-        <togglekey id="theme_btn" row='2' col='0' rows='1' cols='6'
+        <togglekey id="theme_btn" row='3' col='0' rows='1' cols='6'
                 class='config_btn' label='Choose colour' labelB="Choose black and white" accesskey='c' 
                 alwaysShowLabel='true' action="configToggleTheme" autoToggle='false' />
-
-        <togglekey id="sound_btn" row='3' col='0' rows='1' cols='6'
-                class='config_btn' label='Choose play start sound' labelB="Choose don't play start sound" accesskey='d' 
-                alwaysShowLabel='true' action="configTogglePlayStartSound" autoToggle='false' />
-
+				
         <togglekey id="speech_btn" row='4' col='0' rows='1' cols='6'
                 class='config_btn' label='Choose speak page titles' labelB="Choose don't speak page titles" accesskey='s' 
                 alwaysShowLabel='true' action="configToggleSpeakTitles" autoToggle='false' />
