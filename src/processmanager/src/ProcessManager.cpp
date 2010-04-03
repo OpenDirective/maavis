@@ -269,7 +269,7 @@ static const nsModuleComponentInfo components[] =
 {
   { "ProcessManager",
     PROCESSMANAGER_CID,
-    "@\fullmeasure.co.uk/processmanager;1",
+    "@fullmeasure.co.uk/processmanager;1",
     ProcessManagerConstructor
   }
 };
