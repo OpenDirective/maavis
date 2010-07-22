@@ -242,6 +242,28 @@ const page =
                 scan.setSelectFunc(function(node) {node.click();});
                 setTimeout(function(){scan.startScan(page.config.scanMode, page.config.scanRate, pad.content.firstChild);}, 900); // a little delay for spoken title
             }
+			
+			// set pause key scan interaction
+			var pauseKey = document.getElementById('pause');
+			if (pauseKey)
+			{
+				var scan = {};
+				Components.utils.import("resource://modules/scan.js", scan);
+
+				var f = function(state)
+				{ 
+					if (state == 'a')
+					{
+						scan.releaseScan();
+					}
+					else
+					{
+						scan.holdScan();
+					}
+					scan.setCurrent(pauseKey);
+				}
+				pauseKey.onStateChange = f;
+			}
             setTimeout(startScanning,1); // so all selection buttons get added
         }
 

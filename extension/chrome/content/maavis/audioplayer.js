@@ -6,6 +6,7 @@ Components.utils.import("resource://modules/scan.js", scan);
 function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
+	window.addEventListener('unload', function(){scan.releaseScan();}, false);
 
     var mrls = mainwindow.getProp("args");
     
@@ -67,8 +68,6 @@ function loadPage()
 	onNextPage();
 	page.setUserAction('nextAudioPage', onNextPage);
 	
-    scan.holdScan();
-    
     var obs = document.createElement('observes');
     obs.setAttribute("element", 'player_bc'); // TODO do reduce coupling
     obs.setAttribute("attribute", 'nowPlaying');

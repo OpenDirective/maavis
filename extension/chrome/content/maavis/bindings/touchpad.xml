@@ -486,7 +486,11 @@
             onget="return this.getAttribute('autoToggle')"
             onset="this.setAttribute('autoToggle', val); return val;"/>
 
-     <method name="_toggleState">
+   <property name="onStateChange"   
+            onget="return this._onStateChangeFunc;// attrib converts everthing to a string"
+            onset="this._onStateChangeFunc = val; return val;"/>
+
+	<method name="_toggleState">
         <body>
         <![CDATA[
           if (!this.disabled) 
@@ -505,6 +509,10 @@
             this._setLabel()
             this.setAttribute('image', ((this.state == 'a') ? this.getAttribute('imageA') : this.getAttribute('imageB')));
             this._setImage();
+			if (this._onStateChangeFunc) 
+			{
+				this._onStateChangeFunc(this.state);
+			}
         ]]>
         </body>
       </method>

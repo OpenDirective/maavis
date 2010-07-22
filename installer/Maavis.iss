@@ -14,7 +14,7 @@ DefaultGroupName=Maavis
 DefaultDirName={pf}\Maavis
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
-DisableWelcomePage=yes
+;DisableWelcomePage=yes
 
 ;Note the Firefox and Skype installer filenames are defined at the end of this file
 
@@ -22,12 +22,12 @@ DisableWelcomePage=yes
 ;SolidCompression=true
 
 [Messages]
-WelcomeLabel1=This will install [name/ver].
-WelcomeLabel2=The Mozilla Firefox web browser will also be installed.%n%nIf you already use Firefox you must ensure it is not running.%n%nYou should close all other programs before continuing to install [name] for the current user.%n%nSkype can be installed to provide video conferencing.
+WelcomeLabel1=Notes for installing [name/ver].
+WelcomeLabel2=Maavis uses the Mozilla Firefox web browser and this will also be installed.%n%nYou can continue to use your current web browser and if you do not want Firefox to be your default browser you will need to uncheck this option in the Firefox installer. If you already use Firefox please check it is the latest version and you must ensure it is not running during this install.%n%nThis installer will also optionally install Skype to provide video conferencing.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
-Name: "firefox"; Description: "Install &Firefox. This is required unless you already have the correct version. You can always continue to use your current web browser. There is check box in the Firefox installer that controls if Firefox becomes your default browser."; Flags: "checkedonce"
+Name: "firefox"; Description: "Install &Firefox. This is required unless you already have the correct version installed. Please ensure you uncheck the option to 'run Firefox now'."; Flags: "checkedonce"
 ;Name: "media"; Description: "Install example &media for Maavis"; flags: "checkedonce"
 Name: "turnkey"; Description: "Run Maavis &automatically whenever this user logs on to Windows"; Flags: unchecked
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Icons:";

@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["DIRECTIONS", "SCANMODES", "setSkipFunc",  "setHighlightFunc",  "setSelectFunc", "startScan", "holdScan", "releaseScan", "resumeScan"];
+var EXPORTED_SYMBOLS = ["DIRECTIONS", "SCANMODES", "setSkipFunc",  "setHighlightFunc",  "setSelectFunc", "startScan", "holdScan", "releaseScan", "resumeScan", "setCurrent"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -87,6 +87,14 @@ function _navigate(direction)
     func.call(g_nodes);
 }
 
+function setCurrent(node)
+{	if (g_nodes) // TODO check in list
+	{	
+		g_nodes.currentNode = node;
+        g_pauseScan = g_actions.onHighlight(g_nodes.current());
+	}
+}
+
 function _navigateAndHighlight()
 {
     if (!g_pauseScan)
@@ -130,6 +138,7 @@ var g_killTime = null;
 var g_onKill = null;
 function holdScan(killTime, onKill)
 {
+    _logState('hold '+g_pendingTick);
     g_killTime = killTime;
     g_onKill = onKill;
     _onEvent(EVENTS.HOLD, null, null);
