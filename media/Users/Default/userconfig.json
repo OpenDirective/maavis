@@ -4,7 +4,7 @@
 "showLabels":"yes",
 "showImages":"yes",
 "useSkype":"yes",
-"scanMode":"AUTO1SWITCH",
+"scanMode":"AUTO1SWITCHAUTOSTART",
 "scanRate":"2500",
 "speakLabels":"yes",
 "selectionsSetSize":"2x3",
