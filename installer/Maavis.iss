@@ -6,7 +6,7 @@ AppVersion=0.1.11
 VersioninfoVersion=0.1.11
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
-AppCopyright=Copyright (C) 2008-2010 The University Of Sheffield
+AppCopyright=Copyright (C) 2008,2010 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
 DefaultGroupName=Maavis
@@ -23,11 +23,11 @@ SetupIconFile=Maavis.ico
 
 [Messages]
 WelcomeLabel1=Notes for installing [name/ver].
-WelcomeLabel2=Maavis uses the Mozilla Firefox web browser and this will also be installed.%n%nYou can continue to use your current web browser and if you do not want Firefox to be your default browser you will need to uncheck this option in the Firefox installer. If you already use Firefox please check it is the latest version and you must ensure it is not running during this install.%n%nThis installer will also optionally install Skype to provide video conferencing.
+WelcomeLabel2=Maavis uses the Mozilla Firefox web browser and this can install it for you.%n%nYou can continue to use your current web browser and if you do not want Firefox to be your default browser you will need to uncheck this option in the Firefox installer. If you already use Firefox please check it is the latest version and you must ensure it is not running during this install.%n%nThis installer will also optionally install Skype to provide video conferencing.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
-Name: "firefox"; Description: "Install &Firefox. This is required unless you already have the correct version installed. Please ensure you uncheck the option to 'run Firefox now'."; Flags: "checkedonce"
+Name: "firefox"; Description: "Install &Firefox. Check this unless you already have the correct version installed. Please ensure you uncheck the option to 'run Firefox now'."; Flags: "checkedonce"
 ;Name: "media"; Description: "Install example &media for Maavis"; flags: "checkedonce"
 Name: "turnkey"; Description: "Run Maavis &automatically whenever this user logs on to Windows"; Flags: unchecked
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Icons:";
@@ -98,7 +98,7 @@ Name: "{userstartup}\Maavis"; Filename: "{pf}\Mozilla Firefox\firefox.exe"; para
 Filename: "{app}\installers\{code:FirefoxInstaller}"; Description: "Install Firefox Web browser"; Tasks: "firefox"
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
-Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MaavisMedia\"""; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent
+Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MaavisMedia\"""; StatusMsg: "Installing media..."; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent runhidden
 Filename: "{app}\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser unchecked
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -no-remote"; Description: "Run Maavis now."; Flags: postinstall skipifsilent
 

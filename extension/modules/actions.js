@@ -199,7 +199,7 @@ function showCall(bShow, partner)
                 if (enable)
                 {
                     ac.oldLabel = ac.label;
-                    ac.label += "\n" + text;
+                    ac.label += " \n" + text;
                 }
                 else if (!enable && ac.oldLabel)
                 {

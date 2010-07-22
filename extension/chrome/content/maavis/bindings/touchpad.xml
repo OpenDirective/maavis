@@ -510,8 +510,9 @@
             this.setAttribute('image', ((this.state == 'a') ? this.getAttribute('imageA') : this.getAttribute('imageB')));
             this._setImage();
 			if (this._onStateChangeFunc) 
-			{
-				this._onStateChangeFunc(this.state);
+			{	
+				var that = this;
+				window.setTimeout(function(){that._onStateChangeFunc(that.state);}, 1);
 			}
         ]]>
         </body>

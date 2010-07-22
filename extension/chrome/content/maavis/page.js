@@ -161,17 +161,17 @@ const page =
             }
         }
         
+		if (pad !== undefined)
+		{   
+			const klass = (page.isScanUser) ? 'answer scankey' : 'answer'; // TODO refactor
+			const answer = pad.content.getElementsByClassName(klass)[0];
+			if (answer !== undefined)
+			{
+				answer.collapsed = true;
+			}
+		}
         if (!_ns.skype.isAvailable())
         {
-            if (pad !== undefined)
-            {   
-                const klass = (page.isScanUser) ? 'answer scankey' : 'answer'; // TODO refactor
-                const answer = pad.content.getElementsByClassName(klass)[0];
-                if (answer !== undefined)
-                {
-                    answer.collapsed = true;
-                }
-            }
         }
         else
         {
@@ -186,6 +186,7 @@ const page =
                 {
                     actions.showCall(false);
                     execute.killSkype();
+					answer.collapsed = true;
                 }
                 else if (status == "incoming")
                 {
@@ -196,6 +197,7 @@ const page =
                     var contact = config.getUserContacts().filter(isIn);
                     if (contact.length != 0)
                     {
+						answer.collapsed = false;
                         actions.showCall(true, partner);
                         const player = document.getElementById("player");
                         if (player && player.isPlaying == 'true')
