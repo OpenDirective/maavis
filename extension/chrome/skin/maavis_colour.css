@@ -71,7 +71,16 @@ chatterkey.message,
   border-color: darkblue;
 }
 
+chatterkey.caption,
+#avatar
+{
+  color: Darkblue;
+  background-color: lightblue;
+  border-color: white;
+}
+
 chatterkey.message .touchkey-box,
+chatterkey.caption .touchkey-box,
 #avatar .touchkey-box
 {
   padding: 0em;	

@@ -26,6 +26,10 @@
 
         this._setBroadcaster();
         
+		var captionId = this.getAttribute('captionId');
+		if (captionId)
+			this._caption = document.getElementById(captionId);
+		
         //var frame= document.getAnonymousElementByAttribute(this, 'anonid', 'frame');
         var mythis = this    
         function showImage()
@@ -133,6 +137,22 @@
             
         const img = document.getAnonymousElementByAttribute(this, 'anonid', 'img1');
         img.image = this._playlist[this._item];
+		
+		if (this._caption)
+		{
+			var text = this._playlist[this._item];	
+			var re = /[\/]/;
+			var file = text.split(re).pop();
+			if (file)
+			{
+				var lastdot = file.lastIndexOf('.');
+				if (lastdot >= 0)
+				{
+					var caption = file.slice(0, lastdot);
+					this._caption.label = decodeURIComponent(caption);
+				}
+			}
+		}
         ]]>
     </body>
     </method>
