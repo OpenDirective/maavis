@@ -1,12 +1,12 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.10
-OutputBaseFilename=Maavis-0.1.10
-AppVersion=0.1.10
-VersioninfoVersion=0.1.10
+AppVerName=Maavis 0.1.11
+OutputBaseFilename=Maavis-0.1.11
+AppVersion=0.1.11
+VersioninfoVersion=0.1.11
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
-AppCopyright=Copyright (C) 2008,2009,2010 The University Of Sheffield
+AppCopyright=Copyright (C) 2008-2010 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
 DefaultGroupName=Maavis
@@ -14,6 +14,7 @@ DefaultGroupName=Maavis
 DefaultDirName={pf}\Maavis
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
+DisableWelcomePage=yes
 
 ;Note the Firefox and Skype installer filenames are defined at the end of this file
 
@@ -148,7 +149,7 @@ end;
 // Constants
 function FirefoxInstaller(Param: String): String;
 begin
-  Result := 'Firefox Setup 3.5.9.exe';
+  Result := 'Firefox Setup 3.5.11.exe';
 end;
 
 function SkypeInstaller(Param: String): String;
