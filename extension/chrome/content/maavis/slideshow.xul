@@ -40,7 +40,7 @@
 
         <slideshow id="player" row='1' col='0' rows='8' cols='7' captionId="caption"/>
 		
-        <chatterkey id='caption' row='9' col='0' rows='1' cols='7'
+        <chatterkey id='caption' row='9' col='1' rows='1' cols='5'
                 class='caption' 
                 alwaysShowLabel='true'
                 label="" speakOnLoad='false'/>
