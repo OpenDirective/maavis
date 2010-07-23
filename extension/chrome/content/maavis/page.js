@@ -223,11 +223,11 @@ const page =
         
         if (pad && page.isScanUser)
         {
+			const scan = {};
+			Components.utils.import("resource://modules/scan.js", scan);
+			
             function startScanning()
             {
-                const scan = {};
-                Components.utils.import("resource://modules/scan.js", scan);
-                
                 scan.setSkipFunc(function(node) {return (node.id=='avatar'||node.hidden || node.disabled || (node.className.indexOf('scankey') == -1));});
                 function highlightItem(node)
                 {
@@ -249,9 +249,6 @@ const page =
 			var pauseKey = document.getElementById('pause');
 			if (pauseKey)
 			{
-				var scan = {};
-				Components.utils.import("resource://modules/scan.js", scan);
-
 				var f = function(state)
 				{ 
 					if (state == 'a')

@@ -23,11 +23,11 @@ SetupIconFile=Maavis.ico
 
 [Messages]
 WelcomeLabel1=Notes for installing [name/ver].
-WelcomeLabel2=Maavis uses the Mozilla Firefox web browser and this can install it for you.%n%nYou can continue to use your current web browser and if you do not want Firefox to be your default browser you will need to uncheck this option in the Firefox installer. If you already use Firefox please check it is the latest version and you must ensure it is not running during this install.%n%nThis installer will also optionally install Skype to provide video conferencing.
+WelcomeLabel2=Maavis uses the Mozilla Firefox web browser and you will be given an option to install it.%n%nYou can continue to use your current web browser. If you do not want Firefox to be your default browser you should uncheck the option in the Firefox installer. If you already use Firefox please check it is the latest version and you must ensure it is not running during installation.%n%nSkype can optionally be installed to provide video conferencing.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
-Name: "firefox"; Description: "Install &Firefox. Check this unless you already have the correct version installed. Please ensure you uncheck the option to 'run Firefox now'."; Flags: "checkedonce"
+Name: "firefox"; Description: "Install &Firefox. Check this unless you already have the correct version installed. Please ensure you uncheck the option to 'Launch Firefox now'."; Flags: "checkedonce"
 ;Name: "media"; Description: "Install example &media for Maavis"; flags: "checkedonce"
 Name: "turnkey"; Description: "Run Maavis &automatically whenever this user logs on to Windows"; Flags: unchecked
 Name: "desktopicon"; Description: "Put an icon on the desktop for &Maavis"; GroupDescription: "Icons:";
