@@ -108,6 +108,12 @@ function goHome()
     showPage(g_strHomeUrl);
 }
 
+function _refreshPage()
+{
+   showPage(g_strHomeUrl);
+}
+
+
 var window = undefined;
 
 const that = this;
@@ -166,17 +172,17 @@ function loadActions()
     action.setAction('progExec', exec, setContext);
     action.setAction('progKill',  execute.killProc, setContext);
 
-    action.setAction('configToggleTheme', function(){config.toggleTheme(); goHome()} , setContext);
-    action.setAction('configTogglePlayStartSound', function(){config.togglePlayStartSound(); goHome()} , setContext);
-    action.setAction('configToggleSpeakTitles', function(){config.toggleSpeakTitles(); goHome()} , setContext);
-    action.setAction('configToggleSpeakLabels', function(){config.toggleSpeakLabels(); goHome()} , setContext);
-    action.setAction('configToggleShowLabels', function(){config.toggleShowLabels(); goHome()} , setContext);
-    action.setAction('configToggleShowImages', function(){config.toggleShowImages(); goHome()} , setContext);
-    action.setAction('configToggleUseSkype', function(){config.toggleUseSkype(); goHome()} , setContext);
-    action.setAction('configToggleUserType', function(){config.toggleUserType(); goHome()} , setContext);
-    action.setAction('configToggleNSwitches', function(){config.toggleNSwitches(); goHome()} , setContext);
-    action.setAction('configToggleScanMode', function(){config.toggleScanMode(); goHome()} , setContext);
-    //action.setAction('configToggleComplexity', function(){toggleComplexity() ; goHome();}, setContext);
+    action.setAction('configToggleTheme', function(){config.toggleTheme(); _refreshPage();} , setContext);
+    action.setAction('configTogglePlayStartSound', function(){config.togglePlayStartSound(); _refreshPage();} , setContext);
+    action.setAction('configToggleSpeakTitles', function(){config.toggleSpeakTitles(); _refreshPage();} , setContext);
+    action.setAction('configToggleSpeakLabels', function(){config.toggleSpeakLabels(); _refreshPage();} , setContext);
+    action.setAction('configToggleShowLabels', function(){config.toggleShowLabels(); _refreshPage();} , setContext);
+    action.setAction('configToggleShowImages', function(){config.toggleShowImages(); _refreshPage();} , setContext);
+    action.setAction('configToggleUseSkype', function(){config.toggleUseSkype(); _refreshPage();} , setContext);
+    action.setAction('configToggleUserType', function(){config.toggleUserType(); _refreshPage();} , setContext);
+    action.setAction('configToggleNSwitches', function(){config.toggleNSwitches();_refreshPage();} , setContext);
+    action.setAction('configToggleScanMode', function(){config.toggleScanMode(); _refreshPage();} , setContext);
+    //action.setAction('configToggleComplexity', function(){toggleComplexity() ; _refreshPage();}, setContext);
 
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);
 

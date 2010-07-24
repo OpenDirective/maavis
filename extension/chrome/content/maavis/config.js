@@ -1,14 +1,19 @@
 // do this here so that page.config gets set correctly 
-page.user = mainwindow.getProp("args"); // is persisted in config module
+const user = mainwindow.getProp("args");
+if (user != '')
+{
+	page.user = user; // is persisted in config module
+}
 
 const config = {};
 Components.utils.import("resource://modules/config.js", config);
 
 function loadPage()
 {
+
     window.removeEventListener('load', loadPage, false);
     
-    window.onunload = function(){ config.saveUserConfig();};
+    window.onunload = function(){config.saveUserConfig();};
     
     const title = mainwindow.getElementById("title");
 	title.label += ' for user ' + page.config.name;
