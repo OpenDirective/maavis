@@ -53,7 +53,7 @@ ProcessManager.prototype.addProg = function(prog)
 ProcessManager.prototype.runProgs = function(progs)
 {
     const that = this;
-    progs.forEach(function(prog){that.addProg(prog);});
+    progs.forEach(function(prog){that.addProg(prog.trim());});
 }
 
 ProcessManager.prototype.isRunning = function()
