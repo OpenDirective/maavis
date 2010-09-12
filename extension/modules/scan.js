@@ -9,7 +9,7 @@ Components.utils.import("resource://modules/ticker.js", ticker);
 
 const EVENTS = {"START":0, "TICK":1, "BUTTONDOWN":2, "BUTTONUP":3, "HOLD":1000, "RELEASE":1001};
 const DIRECTIONS = {"FORWARD":0, "BACKWARD":1};
-const SCANMODES = {"AUTO1SWITCH":0, "USER1SWITCH":1, "AUTO2SWITCH":2, "USER2SWITCH":3, "AUTO1SWITCHAUTOSTART":4};
+const SCANMODES = {"AUTO1SWITCH":0, "USER1SWITCH":1, "AUTO2SWITCH":2, "USER2SWITCH":3, "AUTO1SWITCHAUTOSTART":4, "AUTO2SWITCHAUTOSTART":5};
 
 function _logState(what)
 {
@@ -357,6 +357,32 @@ function _onEvent(event, joystick, button)
                     case EVENTS.BUTTONUP:
                         if (button == 0)
                             g_ticker.stop();
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case SCANMODES.AUTO2SWITCHAUTOSTART: // switch 1 to start, switch 2 to select
+                switch(event)
+                {
+                    case EVENTS.START:
+						g_ticker.start();
+                        _navigateAndHighlight();
+                        break
+                    case EVENTS.TICK:
+                        _navigateAndHighlight();
+                        break
+                    case EVENTS.BUTTONDOWN:
+                        if (button == 0)
+                        {
+                            g_ticker.start();
+                             _navigateAndHighlight();
+                        }
+                        else if (button == 1)
+                        {
+                            g_ticker.stop();
+                            _select();
+                        }
                         break;
                     default:
                         break;

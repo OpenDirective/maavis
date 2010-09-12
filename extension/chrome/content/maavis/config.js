@@ -29,8 +29,6 @@ function loadPage()
 			if ( page.config.playStartSound == "yes") 
 				document.getElementById("sound_btn").state = 'b';
 		}
-        if ( page.config.userType == "touch") 
-            document.getElementById("usertype_btn").state = 'b';
         if ( page.config.theme == "colour") 
             document.getElementById("theme_btn").state = 'b';
         if ( page.config.speakTitles == "yes") 
@@ -41,10 +39,21 @@ function loadPage()
             document.getElementById("showimages_btn").state = 'b';
         if ( page.config.useSkype == "yes") 
             document.getElementById("skype_btn").state = 'b';
-        if ( page.config.scanMode == "USER1SWITCH" || page.config.scanMode == "AUTO1SWITCH") 
+        if ( page.config.userType == "touch") 
+            document.getElementById("usertype_btn").state = 'b';
+        if ( page.config.scanMode == "USER1SWITCH" || page.config.scanMode == "AUTO1SWITCH" || page.config.scanMode == "AUTO1SWITCHAUTOSTART") 
             document.getElementById("nswitches_btn").state = 'b';
-        if ( page.config.scanMode == "AUTO1SWITCH" || page.config.scanMode == "AUTO2SWITCH") 
+        if ( page.config.scanMode == "AUTO1SWITCH" || page.config.scanMode == "AUTO2SWITCH"
+				|| page.config.scanMode == "AUTO1SWITCHAUTOSTART" || page.config.scanMode == "AUTO2SWITCHAUTOSTART")
+		{
             document.getElementById("scanmode_btn").state = 'b';
+			if ( page.config.scanMode == "AUTO1SWITCHAUTOSTART" || page.config.scanMode == "AUTO2SWITCHAUTOSTART") 
+				document.getElementById("scanstart_btn").state = 'b';
+		}
+		else
+		{
+            document.getElementById("scanstart_btn").collapsed = true;
+		}
     }
     window.setTimeout(f, 1); // so layout is correct
 }

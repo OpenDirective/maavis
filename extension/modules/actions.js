@@ -176,12 +176,14 @@ function loadActions()
     action.setAction('configTogglePlayStartSound', function(){config.togglePlayStartSound(); _refreshPage();} , setContext);
     action.setAction('configToggleSpeakTitles', function(){config.toggleSpeakTitles(); _refreshPage();} , setContext);
     action.setAction('configToggleSpeakLabels', function(){config.toggleSpeakLabels(); _refreshPage();} , setContext);
+    action.setAction('configToggleSpeakActions', function(){config.toggleSpeakActions(); _refreshPage();} , setContext);
     action.setAction('configToggleShowLabels', function(){config.toggleShowLabels(); _refreshPage();} , setContext);
     action.setAction('configToggleShowImages', function(){config.toggleShowImages(); _refreshPage();} , setContext);
     action.setAction('configToggleUseSkype', function(){config.toggleUseSkype(); _refreshPage();} , setContext);
     action.setAction('configToggleUserType', function(){config.toggleUserType(); _refreshPage();} , setContext);
     action.setAction('configToggleNSwitches', function(){config.toggleNSwitches();_refreshPage();} , setContext);
     action.setAction('configToggleScanMode', function(){config.toggleScanMode(); _refreshPage();} , setContext);
+    action.setAction('configToggleScanStart', function(){config.toggleScanStart(); _refreshPage();} , setContext);
     //action.setAction('configToggleComplexity', function(){toggleComplexity() ; _refreshPage();}, setContext);
 
     action.setAction('logout', function(){ if (g_onQuit) g_onQuit();}, setContext);

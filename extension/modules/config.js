@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "getCommandLineConfig"];
+var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleSpeakActions", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "toggleScanStart", "getCommandLineConfig"];
 
 //TODO clean up this file
 
@@ -43,18 +43,18 @@ function _setConfigDefaults()
             obj[prop] = value;
     }
     _defaultSetting(g_userConfig, 'playStartSound', "yes");
-    _defaultSetting(g_userConfig, "userType", 'scan');
     _defaultSetting(g_userConfig, 'theme', 'colour');
     _defaultSetting(g_userConfig, 'speakTitles', "yes");
     _defaultSetting(g_userConfig, 'showLabels', "yes");
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "no");
-    _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCH");
-    _defaultSetting(g_userConfig, 'scanRate', "2500");
     _defaultSetting(g_userConfig, 'speakLabels', "yes");
     _defaultSetting(g_userConfig, 'selectionsSetSize', "3x3");
     _defaultSetting(g_userConfig, 'passwordItems', "images"); //images, labels or complete
     _defaultSetting(g_userConfig, 'passwordSetSize', "4x3"); 
+    _defaultSetting(g_userConfig, "userType", 'scan');
+    _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCH");
+    _defaultSetting(g_userConfig, 'scanRate', "2500");
     
     // these aren't persisted 
     g_userConfig.__defineGetter__("startsoundURI", function(){ return (g_commandLineConfig.quickStart || g_userConfig.playStartSound == 'no') ? null  : _getStartSoundURI();});
@@ -92,6 +92,11 @@ function toggleSpeakLabels()
     g_userConfig.speakLabels= (g_userConfig.speakLabels == 'yes') ? 'no' : 'yes';
 }
 
+function toggleSpeakActions()
+{
+    g_userConfig.speakActions= (g_userConfig.speakActions == 'yes') ? 'no' : 'yes';
+}
+
 function toggleShowLabels()
 {
     g_userConfig.showLabels= (g_userConfig.showLabels == 'yes') ? 'no' : 'yes';
@@ -111,9 +116,12 @@ function toggleNSwitches()
 {
     utils.logit(g_userConfig.scanMode);
     g_userConfig.scanMode = ( g_userConfig.scanMode == "USER1SWITCH" ) ? "USER2SWITCH" : 
-                                            ( g_userConfig.scanMode == "AUTO1SWITCH" ) ? "AUTO2SWITCH" :
                                             ( g_userConfig.scanMode == "USER2SWITCH") ? "USER1SWITCH" :
-                                                "USER1SWITCH" ; 
+                                            ( g_userConfig.scanMode == "AUTO1SWITCH" ) ? "AUTO2SWITCH" :
+                                            ( g_userConfig.scanMode == "AUTO2SWITCH") ? "AUTO1SWITCH" :
+                                            ( g_userConfig.scanMode == "AUTO1SWITCHAUTOSTART") ? "AUTO2SWITCHAUTOSTART" :
+                                            ( g_userConfig.scanMode == "AUTO2SWITCHAUTOSTART") ? "AUTO1SWITCHAUTOSTART" :
+                                                g_userConfig.scanMode ; 
     utils.logit(g_userConfig.scanMode);
 }
 
@@ -121,9 +129,21 @@ function toggleScanMode()
 {
     utils.logit(g_userConfig.scanMode);
     g_userConfig.scanMode = ( g_userConfig.scanMode == "USER1SWITCH" ) ? "AUTO1SWITCH" : 
-                                            ( g_userConfig.scanMode == "AUTO1SWITCH" ) ? "USER1SWITCH" :
+                                            ( g_userConfig.scanMode == "AUTO1SWITCH" || g_userConfig.scanMode == "AUTO1SWITCHAUTOSTART") ? "USER1SWITCH" :
                                             ( g_userConfig.scanMode == "USER2SWITCH") ? "AUTO2SWITCH" :
-                                                "USER2SWITCH" ;
+                                            ( g_userConfig.scanMode == "AUTO2SWITCH" || g_userConfig.scanMode == "AUTO2SWITCHAUTOSTART") ? "USER2SWITCH" :
+                                                g_userConfig.scanMode ;
+    utils.logit(g_userConfig.scanMode);
+}
+
+function toggleScanStart()
+{
+    utils.logit(g_userConfig.scanMode);
+    g_userConfig.scanMode = ( g_userConfig.scanMode == "AUTO1SWITCH" ) ? "AUTO1SWITCHAUTOSTART" : 
+                                            ( g_userConfig.scanMode == "AUTO2SWITCH" ) ? "AUTO2SWITCHAUTOSTART" :
+                                            ( g_userConfig.scanMode == "AUTO1SWITCHAUTOSTART") ? "AUTO1SWITCH" :
+                                            ( g_userConfig.scanMode == "AUTO2SWITCHAUTOSTART") ? "AUTO2SWITCH" :
+                                                g_userConfig.scanMode ;
     utils.logit(g_userConfig.scanMode);
 }
 
