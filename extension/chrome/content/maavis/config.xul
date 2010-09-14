@@ -28,7 +28,7 @@
                 class='config_btn' label='Choose speak page titles' labelB="Choose don't speak page titles" accesskey='s' 
                 alwaysShowLabel='true' action="configToggleSpeakTitles" autoToggle='false' />
 
-        <togglekey id="speeckaction_btn" row='4' col='0' rows='1' cols='5'
+        <togglekey id="speakactions_btn" row='4' col='0' rows='1' cols='5'
                 class='config_btn' label='Choose speak actions' labelB="Choose don't speak actions" accesskey='a' 
                 alwaysShowLabel='true' action="configToggleSpeakActions" autoToggle='false' />
 

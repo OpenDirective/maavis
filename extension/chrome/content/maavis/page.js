@@ -151,7 +151,9 @@ const page =
             pad.setAttribute("showLabels", (showLabels) ? "true" : "false");
             const showImages = (page.config.showImages == "yes");
             pad.setAttribute("showImages", (showImages) ? "true" : "false");
-           
+            const speakActions = (page.config.speakActions == "yes");
+			pad.setAttribute("speakActions", (speakActions) ? "true" : "false");
+			           
             if (page.isScanUser)
             {
                 for (var key in _ns.nodeGen(pad.content.getElementsByTagName('touchkey')))

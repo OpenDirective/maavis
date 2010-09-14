@@ -147,7 +147,11 @@
                 const action = new Action(this.getAttribute('action'));
                 //var win = window;
                 //this.addEventListener('command', function(){ win.setTimeout(action.execute, 1);}, false);
-                this.addEventListener('command', function(){ action.execute();}, false);
+				
+				var that = this;
+				var fnAction = (this.obTouchPad.speakActions != 'true') ? function(){ action.execute();}
+																		 : function(){ that.playPrompt(); action.execute();} ;
+                this.addEventListener('command', fnAction, false);
             }
             ]]>
         </body>
@@ -666,6 +670,10 @@
       <property name="showLabels"
                 onget="return this.getAttribute('showLabels')"
                 onset="this.setAttribute('showLabels', val); return val;"/>
+                
+        <property name="speakActions"
+                onget="return this.getAttribute('speakActions')"
+                onset="this.setAttribute('speakActions', val); return val;"/>
                 
      <method name="_assignTabIndex">
         <parameter name='key' />

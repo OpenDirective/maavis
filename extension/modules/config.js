@@ -45,6 +45,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'playStartSound', "yes");
     _defaultSetting(g_userConfig, 'theme', 'colour');
     _defaultSetting(g_userConfig, 'speakTitles', "yes");
+    _defaultSetting(g_userConfig, 'speakActions', "no");
     _defaultSetting(g_userConfig, 'showLabels', "yes");
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "no");
@@ -82,6 +83,11 @@ function toggleSpeakTitles()
     g_userConfig.speakTitles= (g_userConfig.speakTitles == 'yes') ? 'no' : 'yes';
 }
 
+function toggleSpeakActions()
+{
+    g_userConfig.speakActions= (g_userConfig.speakActions == 'yes') ? 'no' : 'yes';
+}
+
 function togglePlayStartSound()
 {
     g_userConfig.playStartSound = (g_userConfig.playStartSound == 'yes') ? 'no' : 'yes';
@@ -90,11 +96,6 @@ function togglePlayStartSound()
 function toggleSpeakLabels()
 {
     g_userConfig.speakLabels= (g_userConfig.speakLabels == 'yes') ? 'no' : 'yes';
-}
-
-function toggleSpeakActions()
-{
-    g_userConfig.speakActions= (g_userConfig.speakActions == 'yes') ? 'no' : 'yes';
 }
 
 function toggleShowLabels()
