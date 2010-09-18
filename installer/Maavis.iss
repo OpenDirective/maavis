@@ -149,7 +149,7 @@ end;
 // Constants
 function FirefoxInstaller(Param: String): String;
 begin
-  Result := 'Firefox Setup 3.5.12.exe';
+  Result := 'Firefox Setup 3.5.13.exe';
 end;
 
 function SkypeInstaller(Param: String): String;
