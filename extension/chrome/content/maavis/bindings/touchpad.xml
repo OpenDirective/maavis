@@ -141,17 +141,18 @@
 
         <method name="_setAction">
         <body><![CDATA[
-           if (this.hasAttribute('action') && this.getAttribute("action"))
+			if (this.obTouchPad.speakOnActivate == 'true')
+			{
+				var that = this;
+                this.addEventListener('command', function(){ that.playPrompt(); }, false);
+			}
+			if (this.hasAttribute('action') && this.getAttribute("action"))
             { 
                 Components.utils.import("resource://modules/action.js");
                 const action = new Action(this.getAttribute('action'));
                 //var win = window;
                 //this.addEventListener('command', function(){ win.setTimeout(action.execute, 1);}, false);
-				
-				var that = this;
-				var fnAction = (this.obTouchPad.speakActions != 'true') ? function(){ action.execute();}
-																		 : function(){ that.playPrompt(); action.execute();} ;
-                this.addEventListener('command', fnAction, false);
+                this.addEventListener('command', function(){ action.execute(); }, false);
             }
             ]]>
         </body>
@@ -671,9 +672,9 @@
                 onget="return this.getAttribute('showLabels')"
                 onset="this.setAttribute('showLabels', val); return val;"/>
                 
-        <property name="speakActions"
-                onget="return this.getAttribute('speakActions')"
-                onset="this.setAttribute('speakActions', val); return val;"/>
+        <property name="speakOnActivate"
+                onget="return this.getAttribute('speakOnActivate')"
+                onset="this.setAttribute('speakOnActivate', val); return val;"/>
                 
      <method name="_assignTabIndex">
         <parameter name='key' />

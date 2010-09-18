@@ -17,11 +17,11 @@
         <selections row='1' col='0' rows='9' cols='7' />
             
         <touchkey row='1' col='6' rows='2' cols='4'
-                class='otherthings' label="Other things to do" accesskey='o' 
+                class='otherthings' label="Other things to do" 
                 action="goHome" />
 
         <touchkey row='3' col='6' rows='2' cols='4'
-                class='answer' label="Answer" accesskey='a' 
+                class='answer' label="Answer"
                 action="voipAnswerCall" />
     </touchpad>
 

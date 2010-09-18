@@ -33,7 +33,7 @@ function loadPage()
             document.getElementById("theme_btn").state = 'b';
         if ( page.config.speakTitles == "yes") 
             document.getElementById("speech_btn").state = 'b';
-        if ( page.config.speakActions == "yes") 
+        if ( page.config.speakOnActivate == "yes") 
             document.getElementById("speakactions_btn").state = 'b';
         if ( page.config.showLabels == "yes") 
             document.getElementById("showlabels_btn").state = 'b';

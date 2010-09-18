@@ -29,7 +29,7 @@
                 alwaysShowLabel='true' action="configToggleSpeakTitles" autoToggle='false' />
 
         <togglekey id="speakactions_btn" row='4' col='0' rows='1' cols='5'
-                class='config_btn' label='Choose speak actions' labelB="Choose don't speak actions" accesskey='a' 
+                class='config_btn' label='Choose speak on activate' labelB="Choose don't speak on activate" accesskey='a' 
                 alwaysShowLabel='true' action="configToggleSpeakActions" autoToggle='false' />
 
         <togglekey id="showlabels_btn" row='5' col='0' rows='1' cols='5'

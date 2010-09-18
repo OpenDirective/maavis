@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleSpeakActions", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "toggleScanStart", "getCommandLineConfig"];
+var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleSpeakOnActivate", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "toggleScanStart", "getCommandLineConfig"];
 
 //TODO clean up this file
 
@@ -45,7 +45,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, 'playStartSound', "yes");
     _defaultSetting(g_userConfig, 'theme', 'colour');
     _defaultSetting(g_userConfig, 'speakTitles', "yes");
-    _defaultSetting(g_userConfig, 'speakActions', "no");
+    _defaultSetting(g_userConfig, 'speakOnActivate', "no");
     _defaultSetting(g_userConfig, 'showLabels', "yes");
     _defaultSetting(g_userConfig, 'showImages', "yes");
     _defaultSetting(g_userConfig, 'useSkype', "no");
@@ -83,9 +83,9 @@ function toggleSpeakTitles()
     g_userConfig.speakTitles= (g_userConfig.speakTitles == 'yes') ? 'no' : 'yes';
 }
 
-function toggleSpeakActions()
+function toggleSpeakOnActivate()
 {
-    g_userConfig.speakActions= (g_userConfig.speakActions == 'yes') ? 'no' : 'yes';
+    g_userConfig.speakOnActivate= (g_userConfig.speakOnActivate == 'yes') ? 'no' : 'yes';
 }
 
 function togglePlayStartSound()

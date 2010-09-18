@@ -17,31 +17,31 @@
 	<selections row='1' col='0' rows='9' cols='6' id='sel' itemcols='1' itemrows='9' />
 
 	<touchkey row='1' col='6' rows='2' cols='4'
-                id='back' class='goback' label="Change Music Album" accesskey='c' 
+                id='back' class='goback' label="Change Music Album"
                 action="popPage" />
 
         <touchkey row='3' col='6' rows='2' cols='4'
-                id='answer' class='answer' label="Answer" accesskey='a' 
+                id='answer' class='answer' label="Answer" 
                 action="voipAnswerCall" />
 
         <togglekey id="pause" row='6' col='6' rows='2' cols='2'
-                class='player_pause' label='Play' labelB="Pause" accesskey='p' 
+                class='player_pause' label='Play' labelB="Pause"
                 image='chrome://maavis/skin/playerbuttons/play.png' 
                 imageB='chrome://maavis/skin/playerbuttons/pause.png' 
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
 
         <touchkey id="next" row='6' col='8' rows='2' cols='2'
-                class='player_next' label="Play next" accesskey='p' 
+                class='player_next' label="Play next" 
                 image='chrome://maavis/skin/playerbuttons/forward.png' 
                 action="mediaNext" />
                 
         <touchkey id="quieter" row='8' col='6' rows='2' cols='2'
-                class='player_incvol' label="Quieter" accesskey='q' 
+                class='player_incvol' label="Quieter" 
                 image='chrome://maavis/skin/playerbuttons/quieter.png' 
                 action="masterVolumeQuieter" />
                 
         <touchkey id="louder" row='8' col='8' rows='2' cols='2'
-                class='player_incvol' label="Louder" accesskey='l' 
+                class='player_incvol' label="Louder" 
                 image='chrome://maavis/skin/playerbuttons/louder.png' 
                 action="masterVolumeLouder" />
 

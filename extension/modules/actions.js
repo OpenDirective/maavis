@@ -176,7 +176,7 @@ function loadActions()
     action.setAction('configTogglePlayStartSound', function(){config.togglePlayStartSound(); _refreshPage();} , setContext);
     action.setAction('configToggleSpeakTitles', function(){config.toggleSpeakTitles(); _refreshPage();} , setContext);
     action.setAction('configToggleSpeakLabels', function(){config.toggleSpeakLabels(); _refreshPage();} , setContext);
-    action.setAction('configToggleSpeakActions', function(){config.toggleSpeakActions(); _refreshPage();} , setContext);
+    action.setAction('configToggleSpeakOnActivate', function(){config.toggleSpeakOnActivate(); _refreshPage();} , setContext);
     action.setAction('configToggleShowLabels', function(){config.toggleShowLabels(); _refreshPage();} , setContext);
     action.setAction('configToggleShowImages', function(){config.toggleShowImages(); _refreshPage();} , setContext);
     action.setAction('configToggleUseSkype', function(){config.toggleUseSkype(); _refreshPage();} , setContext);
