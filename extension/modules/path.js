@@ -247,11 +247,17 @@ function expandURI(strURI, arURIs, type, re, max )
             return;
          }
      
+		const regx = /(\d+;)*(.*)/i;
+		var itemName = regx.exec(fileAdd.leafName)[2];  // drop any leading 'nnn;' to allow sorting by windows
+		var arMatch = regx.exec(fileAdd.leafName);  // drop any leading 'nnn;' to allow sorting by windows
+		utils.logit( itemName+' - '+ arMatch[0] +', '+ arMatch[1]+', '+ arMatch[2]);
+			
         if ((type == expandTypes.EXP_FILES) &&
                 (!max || arURIs.length < max) && 
                 fileAdd.isFile())
         {
-            var itemName = fileAdd.leafName.slice(0, -4);
+			itemName = itemName.slice(0, -4);
+			
             if (fileAdd.leafName.toLowerCase() == LINKFILENAME.toLowerCase())
             {
                 const URIs = file.readFileLines(fileAdd);
@@ -286,7 +292,6 @@ function expandURI(strURI, arURIs, type, re, max )
                     fileAdd.isDirectory())
         {
             // look for thumb
-            itemName = fileAdd.leafName ;
             const thumbfile = getThumbnailFile(fileAdd);
             const chooser = _getChooser(fileAdd);
             const item = { name: itemName,
