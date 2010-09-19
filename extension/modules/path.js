@@ -249,8 +249,6 @@ function expandURI(strURI, arURIs, type, re, max )
      
 		const regx = /(\d+;)*(.*)/i;
 		var itemName = regx.exec(fileAdd.leafName)[2];  // drop any leading 'nnn;' to allow sorting by windows
-		var arMatch = regx.exec(fileAdd.leafName);  // drop any leading 'nnn;' to allow sorting by windows
-		utils.logit( itemName+' - '+ arMatch[0] +', '+ arMatch[1]+', '+ arMatch[2]);
 			
         if ((type == expandTypes.EXP_FILES) &&
                 (!max || arURIs.length < max) && 
