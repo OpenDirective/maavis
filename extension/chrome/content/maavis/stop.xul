@@ -3,15 +3,16 @@
 
 <window xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
         xmlns:html = "http://www.w3.org/1999/xhtml"
-        class="transient"
+        class="transient" 
+		width='200px' height='150px'
         >
 
     <script type="application/javascript" src="chrome://maavis/content/stop.js" />
 
-    <touchpad flex='1' rows='1' cols='1'>
-        <touchkey id="call" row='0' col='0' rows='1' cols='1' 
+    <touchpad flex='1' rows='1' cols='1' >
+        <touchkey id="call" row='0' col='0' rows='1' cols='1'
                     class='stop_button' label="Finish" 
-                    action="progKill" accesskey='s' />
+                    action="progKill" />
     </touchpad>
 
 </window>
