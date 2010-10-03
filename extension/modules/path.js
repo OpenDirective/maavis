@@ -5,6 +5,7 @@ const LINKFILENAME = "links.txt";
 const CHOOSEFILEPREFIX = "_choose";
 const CONFIGFILE = "chooserconfig.txt";
 const ITEMSINI = "_items.ini";
+const THUMBS = "Thumbs.db";
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -269,6 +270,7 @@ function expandURI(strURI, arURIs, type, re, max )
             }
             else if (fileAdd.leafName.slice(0,-4).toLowerCase() == THUMBFILENAME.toLowerCase() ||
                         fileAdd.leafName == ITEMSINI ||
+                        fileAdd.leafName == THUMBS ||
                         fileAdd.leafName.indexOf(CHOOSEFILEPREFIX.toLowerCase()) == 0  )
             {
                 //skip

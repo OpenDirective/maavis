@@ -51,8 +51,8 @@ Source: "..\extension\platform\dist\*"; DestDir: "{app}\extension\platform\dist"
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
 
 ; Installers
-Source: ".\skype*"; DestDir: "{app}\installers"; Flags: ignoreversion
-Source: ".\firefox*"; DestDir: "{app}\installers"; Flags: ignoreversion
+Source: ".\3rdParty\skype*"; DestDir: "{app}\installers"; Flags: ignoreversion
+Source: ".\3rdParty\firefox*"; DestDir: "{app}\installers"; Flags: ignoreversion
 
 ; Media
 ;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
@@ -60,7 +60,7 @@ Source: "..\media\*"; DestDir: "{app}\media"; Excludes: "Thumbs.db"; Flags: recu
 
 
 [INI]
-Filename: "{app}\Maavis.url"; Section: "InternetShortcut"; Key: "URL"; String: "www.maavis.co.uk"
+Filename: "{app}\Maavis.url"; Section: "InternetShortcut"; Key: "URL"; String: "maavis.fullmeasure.co.uk"
 Filename: "{app}\ACT.url"; Section: "InternetShortcut"; Key: "URL"; String: "www.actprogramme.org.uk"
 Filename: "{app}\FullMeasure.url"; Section: "InternetShortcut"; Key: "URL"; String: "fullmeasure.co.uk"
 Filename: "{app}\MozillaEurope.url"; Section: "InternetShortcut"; Key: "URL"; String: "www.mozilla-europe.org"

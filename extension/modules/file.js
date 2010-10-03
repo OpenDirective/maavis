@@ -86,15 +86,22 @@ function readFileLines(file)
 {
     var fis = Components.classes["@mozilla.org/network/file-input-stream;1"]
                             .createInstance(Components.interfaces.nsIFileInputStream);
-    fis.init(file, -1, 0, 0);
-
+    try
+    {
+        fis.init(file, -1, 0, 0);
+    } 
+    catch (e)
+    {
+        return [];
+    }
+    
     var charset = /* Need to find out what the character encoding is. Using UTF-8 for this example: */ "UTF-8";
     var is = Components.classes["@mozilla.org/intl/converter-input-stream;1"]
                        .createInstance(Components.interfaces.nsIConverterInputStream);
     is.init(fis, charset, 1024, 0xFFFD);
 
-    var lines = [];
     if (is instanceof Components.interfaces.nsIUnicharLineInputStream) {
+      var lines = [];
       var line = {};
       var cont;
       do {
