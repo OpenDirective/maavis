@@ -42,7 +42,7 @@ Source: "Maavis.ico"; DestDir: "{app}\Other\Src"; Flags: ignoreversion
 ;Source: "..\extension\platform\dist\*"; DestDir: "{app}\App\platform\dist\extension"; Flags: ignoreversion
 Source: "..\extension\platform\dist\*"; DestDir: "{app}\App\extension\platform\dist"; Flags: recursesubdirs ignoreversion
 
-Source: "*.cmd"; DestDir: "{app}\..\*"; Flags: ignoreversion
+Source: "*.cmd"; DestDir: "{app}\.."; Flags: ignoreversion
 
 ; copy the non debug version of prefs.js
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
