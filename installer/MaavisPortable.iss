@@ -10,8 +10,8 @@ AppCopyright=Copyright (C) 2008,2010 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
 ;LicenseFile=GPL.txt
-DefaultDirName={userdesktop}\MaavisPortable
-UsePreviousAppDir=yes
+DefaultDirName={userdesktop}
+AppendDefaultDirName=no
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
 Uninstallable=no
@@ -24,7 +24,7 @@ Uninstallable=no
 
 [Messages]
 WelcomeLabel1=Notes for installing [name/ver].
-WelcomeLabel2=This portable version of Maavis is designed to be installed on a memory stick. This installer simply copies Maavis files ready to be run, and does perform a normal WIndows 'install' as it is not required.%n%nSkype can optionally be installed to provide video conferencing.
+WelcomeLabel2=The portable version of Maavis is designed to be installed on a memory stick and so can be run without beng installed on the computer. Thus this 'installer' simply copies Maavis files ready to be run.%n%nSkype can optionally be installed to provide video conferencing.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
@@ -32,23 +32,23 @@ ClickFinish=Click Finish to exit Setup after unchecking any of the following tha
 
 [Files]
 ; we might expect *.* to copy *this* file too but looks Inno like writes to temp file 1st so not a problem
-Source: "MaavisPortable\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion
-Source: "3rdParty\FirefoxPortable\*"; DestDir: "{app}\App\FirefoxPortable"; Flags: recursesubdirs ignoreversion
-Source: "..\extension\*"; DestDir: "{app}\App\extension"; Excludes: "\platform"; Flags: recursesubdirs ignoreversion
-Source: "Credits and attribution.txt"; DestDir: "{app}\Other\Src"; Flags: ignoreversion
-Source: "Maavis.ico"; DestDir: "{app}\Other\Src"; Flags: ignoreversion
+Source: "MaavisPortable\*"; DestDir: "{app}\MaavisPortable"; Flags: recursesubdirs ignoreversion
+Source: "3rdParty\FirefoxPortable\*"; DestDir: "{app}\MaavisPortable\App\FirefoxPortable"; Flags: recursesubdirs ignoreversion
+Source: "..\extension\*"; DestDir: "{app}\MaavisPortable\App\extension"; Excludes: "\platform"; Flags: recursesubdirs ignoreversion
+Source: "Credits and attribution.txt"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
+Source: "Maavis.ico"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
 
 ; MaavisSkypeServer
 ;Source: "..\extension\platform\dist\*"; DestDir: "{app}\App\platform\dist\extension"; Flags: ignoreversion
-Source: "..\extension\platform\dist\*"; DestDir: "{app}\App\extension\platform\dist"; Flags: recursesubdirs ignoreversion
+Source: "..\extension\platform\dist\*"; DestDir: "{app}\MaavisPortable\App\extension\platform\dist"; Flags: recursesubdirs ignoreversion
 
-Source: "*.cmd"; DestDir: "{app}\.."; Flags: ignoreversion
+Source: "*.cmd"; DestDir: "{app}"; Flags: ignoreversion
 
 ; copy the non debug version of prefs.js
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
 
 ; Installers
-Source: ".\3rdParty\skype*"; DestDir: "{app}\Other\installers"; Flags: ignoreversion
+;Source: ".\3rdParty\skype*"; DestDir: "{app}\MaavisPortable\Other\installers"; Flags: ignoreversion
 
 ; Media
 ;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
@@ -60,7 +60,7 @@ Source: "..\media\*"; DestDir: "{app}\MaavisMedia"; Excludes: "Thumbs.db"; Flags
 [Icons]
 
 [Run]
-Filename: "{app}\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser unchecked
+Filename: "{app}\MaavisPortable\Other\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser unchecked
 
 [code]
 function SkypeInstaller(Param: String): String;
