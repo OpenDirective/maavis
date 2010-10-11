@@ -112,7 +112,9 @@ serverProxy=
         try {
             const useSource = false; // use the python source or the py2exe dist
             var args, prog;
-            if (useSource)
+			
+			utils.logit(utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists());
+            if (useSource || !utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists())
             {
                 prog = "c:\\python25\\python.exe -i "; // -i keeps window open at python prompt
                 args = utils.buildPath(null, 'platform', 'outfox.py').path + " " + port;
@@ -128,6 +130,7 @@ serverProxy=
 	    // set the failure flag so all future observers receive the error
         
     	    this.failed = '{"action" : "failed-init", "description" : "Outfox failed to initialize."}';
+			utils.logit('Outfox failed to run');
             utils.logit(e);
         }
     },
