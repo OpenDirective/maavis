@@ -9,7 +9,14 @@ function loadPage()
         {   
             const name = item.name.split('-');
             item.name = utils.trim(name[0]);
-            item.action = 'voipCall|' + utils.trim(name[1]);
+            if (item.name == 'Skype Video Test')
+            {
+                item.action = 'voipVideoTest';
+            }
+            else
+            {
+                item.action = 'voipCall|' + utils.trim(name[1]);
+            }
             item.thumbURI = item.URI;
         }
         catch(e)

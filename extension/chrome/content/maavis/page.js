@@ -179,16 +179,33 @@ const page =
         {
             function onSkypeCallStatus(status, partner)
             { 
+                utils.logit(status);
                 if (status == "inprogress")
                 {
                     actions.showCall(true);
-                    execute.execSkype();
+                    execute.execSkype('incall.xul');
                 }
                 else if (status == "finished")
                 {
                     actions.showCall(false);
                     execute.killSkype();
 					answer.collapsed = true;
+                    if (page.isScanUser)
+                    {
+                        scan.releaseScan();
+                    }
+                }
+                else if (status == "ringing")
+                {
+                    if (page.isScanUser)
+                    {
+                        const endcall = pad.content.getElementsByClassName('endcallbutton scankey')[0];
+                        if (endcall.getAttribute('hidden') == 'false')
+                        {
+                            scan.holdScan();
+                            scan.setCurrent(endcall);
+                        }
+                    }
                 }
                 else if (status == "incoming")
                 {
@@ -199,7 +216,12 @@ const page =
                     var contact = config.getUserContacts().filter(isIn);
                     if (contact.length != 0)
                     {
-						answer.collapsed = false;
+                        answer.collapsed = false;
+                        if (page.isScanUser)
+                        {
+                            scan.holdScan();
+                            scan.setCurrent(answer);
+                        }
                         actions.showCall(true, partner);
                         const player = document.getElementById("player");
                         if (player && player.isPlaying == 'true')

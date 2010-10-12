@@ -52,6 +52,9 @@ class ChannelController(ChannelBase):
     def do_answercall(self, cmd):
         self.skype.answerCall()
 
+    def do_videoTest(self, cmd):
+        self.skype.videoTest()
+        
     def do_enablejoys(self, cmd):
         pass
 
@@ -62,7 +65,11 @@ class ChannelController(ChannelBase):
 
 
 import Skype4Py
-import winGuiAuto as wga
+import win32gui
+import win32con
+from time import sleep
+from SendKeys import SendKeys
+        
 
 class Skype(object):
     def __init__(self):
@@ -83,16 +90,23 @@ class Skype(object):
             self.skype.OnCallVideoReceiveStatusChanged = self.OnCallVideoReceive
             self.skype.OnCallVideoSendStatusChanged = self.OnCallVideoSend
             self.skype.OnCallVideoStatusChanged = self.OnCallVideo
+            self.skype.OnError = self.OnError
+
+            #these 2 are for debug info
+            #self.skype.OnClientWindowState = self.OnClientWindowState
+            #self.skype.OnCommand = self.OnCommand
             
             # Starting Skype if it's not running already..
             if not self.skype.Client.IsRunning:
                 print 'Starting Skype..'
                 self.skype.Client.Start()
 
-            # Attatching to Skype..
+            # Attaching to Skype..
             print 'Connecting to Skype..'
             self.skype.Attach()
             self.skype.ChangeUserStatus(Skype4Py.cusOnline)
+            self.rxvid = 0
+            self.incoming = False
         except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
             print e
             
@@ -104,73 +118,101 @@ class Skype(object):
     def CallStatusText(self, status):
         return self.skype.Convert.CallStatusToText(status)
 
-    def OnCallVideoSend(self, call, status):
-        print 'Video Send status: ' + status
-    def OnCallVideoReceive(self, call, status):
-        print 'Video Receive status: ' + status
-        if status == Skype4Py.vssRunning:
-            self.maximizeVideo()
-    def OnCallVideo(self, call, status):
-        print 'Video status: ' + status
-        if status == Skype4Py.vssRunning:
-            self.maximizeVideo()
-
     def pushCallStatus(self, status, call):
         self.observer.pushResponse( { "action": "call-status", "status": status, "partner": call.PartnerHandle } )
         
-    def pushSkypeStatus(xelf, status):
+    def pushError(self, command, number, description):
+        self.observer.pushResponse( { "action": "skype-error", "command": command.Command, "number": number, "description": description } )
+        
+    def pushSkypeStatus(self, status):
         self.observer.pushResponse( { "action": "skype-status", "status": status } )
 
     def hideSkype(self):
         self.skype.Client.WindowState = Skype4Py.wndHidden;
 
     def showSkype(self):
-        self.skype.Client.WindowState = Skype4Py.wndMaximized;
+        self.skype.Client.WindowState = Skype4Py.wndNormal;
+    
+    def HideCallNotificationDialog(self):
+        sleep(1)
         
+        # Hide the skype call alert window
+        hWnd = win32gui.FindWindowEx(0, 
+                                     0, 
+                                     "TCallNotificationWindow", 
+                                     None)
+        win32gui.SetWindowPos(hWnd, win32con.HWND_BOTTOM, 0, 0, 0, 0, win32con.SWP_NOACTIVATE)
+
     def maximizeVideo(self):
-        try:
-            #import time
-            #time.sleep(1)
-            hwndSkype = wga.findTopWindow(wantedClass="tSkMainForm.UnicodeClass")
-            while True:
-                try:
-                    hwndVideo = wga.findControl(hwndSkype, wantedClass="tSkLocalVideoControl")
-                    break;
-                except wga.WinGuiAutoError:
-                    pass
-            wga.mouseClick(hwndVideo, "left")   # may not be necessary
-            while True:
-                try:
-                    hwndButtons = wga.findControls(hwndVideo, wantedClass="tButtonWithText")
-                    if  len(hwndButtons) > 0:
-                        break    
-                except wga.WinGuiAutoError:
-                    pass
-            wga.mouseClick(hwndButtons[0], "left")
-        except :
-            import traceback
-            print traceback.print_exc()
-            pass
+        if self.rxvid == 0:
+            self.showSkype()
+            self.skype.Client.OpenCallHistoryTab()
+            sleep(1)
+        SendKeys("{ENTER}") # force video in all cases - specifically in default view with nothing useful in right pane
+        sleep(1)
+        SendKeys("%{ENTER}") # doesn't work if video not show at all - no way in skype api to force it to show
+        self.rxvid += 1
+
+    def KillCallQualityDialog(self):
+        sleep(1)
+        hWnd = win32gui.FindWindowEx(0, 
+                                     0, 
+                                     "TCallQualityForm.UnicodeClass", 
+                                     '')
+        SendKeys("{ESC}") 
+    
+    def OnError(self, command, number, description):
+        self.pushError(command, number, description)
+
+    def OnCommand(self, command):
+        print 'Command: ' + command.Command
+        
+    def OnClientWindowState(self, state):
+        print 'Client Window State: ' + state
+    
+    def OnCallVideoSend(self, call, status):
+        print 'Video Send status: ' + status
+ 
+    def OnCallVideoReceive(self, call, status):
+        print 'Video Receive status: ' + status
+        if status == Skype4Py.vssRunning:
+            self.maximizeVideo()
+
+    def OnCallVideo(self, call, status):
+        print 'Video status: ' + status
+        if status in [Skype4Py.cvsSendEnabled, Skype4Py.cvsBothEnabled]:
+            call.StartVideoSend()
+        if status in [Skype4Py.cvsReceiveEnabled, Skype4Py.cvsBothEnabled]:
+            call.StartVideoReceive()
 
     def OnCall(self, call, status):
         try:
             self.CallStatus = status
             print 'Call status: ' + self.CallStatusText(status)
-            
+
             if status == Skype4Py.clsRinging and ( call.Type in self.CallIncoming):
+                print call.PartnerHandle
                 self.pushCallStatus("incoming", call )
+                self.incoming = True
+                self.HideCallNotificationDialog()
                 
             elif status == Skype4Py.clsInProgress:
                 print call.PartnerHandle
-                call.StartVideoReceive()
-                call.StartVideoSend()
-                self.showSkype()
                 self.pushCallStatus("inprogress", call)
+                if self.incoming:
+                    self.showSkype()
+                    self.incoming=False
+
+            elif status == Skype4Py.clsRinging:
+                print call.PartnerHandle
+                self.pushCallStatus("ringing", call)
 
             else:
-                self.hideSkype()
                 if status in self.CallIsFinished:
+                    self.skype.Client.OpenContactsTab()
+                    self.hideSkype()
                     self.pushCallStatus("finished", call )
+                    self.rxvid = 0
                 
         except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
             print e
@@ -188,7 +230,7 @@ class Skype(object):
     def call(self, who):
         try:
             print 'Calling ' + who + '...'
-            self.skype.PlaceCall(who)
+            call = self.skype.PlaceCall(who)
         except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
             print e
 
@@ -209,3 +251,8 @@ class Skype(object):
         except IndexError:
             pass
  
+    def videoTest(self):
+        try:
+            call = self.skype.Client.OpenVideoTestDialog()
+        except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
+            print e

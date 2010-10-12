@@ -4,7 +4,7 @@
 "speakLabels":"no",
 "showLabels":"yes",
 "showImages":"yes",
-"useSkype":"no",
+"useSkype":"yes",
 "userType":"scan",
 "splashTime":"1",
 "scanRate":"2000",

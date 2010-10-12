@@ -113,8 +113,7 @@ serverProxy=
             const useSource = false; // use the python source or the py2exe dist
             var args, prog;
 			
-			utils.logit(utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists());
-            if (useSource || !utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists())
+			if (useSource || !utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists())
             {
                 prog = "c:\\python25\\python.exe -i "; // -i keeps window open at python prompt
                 args = utils.buildPath(null, 'platform', 'outfox.py').path + " " + port;

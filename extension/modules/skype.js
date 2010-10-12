@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["init", "shutdown", "isAvailable", "call", "endCall", "answerCall", "setCallStatusObserver", "initJoys", "setJoyStatusObserver"];
+var EXPORTED_SYMBOLS = ["init", "shutdown", "isAvailable", "call", "endCall", "videoTest", "answerCall", "setCallStatusObserver", "initJoys", "setJoyStatusObserver"];
 
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
@@ -89,6 +89,14 @@ function call(who)
     _sendRequest( { action: "call", who: who } );
 }
 
+function videoTest()
+{
+    if (!g_isAvailable)
+        return;
+        
+    _sendRequest( { action: "videoTest"} );
+}
+
 function endCall()
 {
     if (!g_isAvailable)
@@ -123,6 +131,10 @@ function _onResponse(json) {
     {
         if (_csobserver)
             _csobserver(cmd.status, cmd.partner);
+    }
+    elif (cmd.action == 'error')
+    {
+        utils.logit('Skype Error ' + cms.command + ' ' + cmd.number + ' ' + cmd.description);
     }
 }
 

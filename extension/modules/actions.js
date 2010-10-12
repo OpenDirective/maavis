@@ -159,8 +159,9 @@ function loadActions()
     action.setAction('browseScrollRight', function(){ window.document.getElementById('browser').contentWindow.scrollBy(window.innerWidth*.75, 0);}, setContext);
 
     action.setAction('voipCall', function(vid){ if (skype.isAvailable()) { skype.call(vid); showCall(true); } }, setContext);
-    action.setAction('voipAnswerCall', function(){ if (skype.isAvailable()) skype.answerCall(); }, setContext);
+    action.setAction('voipAnswerCall', function(){ if (skype.isAvailable()) skype.answerCall();}, setContext);
     action.setAction('voipEndCall', function(){ if (skype.isAvailable()) skype.endCall(); }, setContext);
+    action.setAction('voipVideoTest', function(vid){ if (skype.isAvailable()) skype.videoTest(); }, setContext);
 
     function exec(progs)
     {
