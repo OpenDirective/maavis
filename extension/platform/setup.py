@@ -40,9 +40,9 @@ packages = ['encodings', 'win32skype', 'Skype4Py']
 
 maavis_skype_server = {
     # for the versioninfo resources
-    "version" : "0.1.0",
-    "company_name" : "Fullmeasure",
-    "copyright" : "Copyright 2008 Fullmeasure",
+    "version" : "0.1.1",
+    "company_name" : "Full Measure",
+    "copyright" : "Copyright 2008-10 Full Measure",
     "name" : "Maavis Skype Server",
     "description" : "Maavis Skype Server",
 
@@ -51,12 +51,12 @@ maavis_skype_server = {
 }
 
 setup(name='Outfox for Skype',
-      version='0.1.0',
+      version='0.1.1',
       description='Mavis skype server. Based on  Outfox server from CCAT',
       author='Steve Lee, CCAT',
       windows=[maavis_skype_server],
 #      console=[maavis_skype_server], # for debug output
-      options={"py2exe": {"compressed": 1,
+      options={"py2exe": {"compressed": 1, #TODO see if 0 makes faster
                           'optimize': 2,
                           'excludes' : excludes,
 #                          'includes' : includes,

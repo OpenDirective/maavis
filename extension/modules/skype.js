@@ -4,6 +4,8 @@ var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
 var server = {};
 Components.utils.import("resource://modules/outfox.js", server);
+var ticker = {};
+Components.utils.import("resource://modules/ticker.js", ticker);
 
 var _proxy = null;
 const _id = 0;
@@ -47,10 +49,17 @@ function initJoys()
     _proxy.send(_id2, '{"action" : "enablejoys", "channel":"2000"}');
 }
 
-function init()
+var g_attachTimer;
+var g_onAttachSuccess;
+
+function init(onAttach, onFailAttach)
 {
     if (!_checkInstalled())
+    {
+        if (onFailAttach) 
+            onFailAttach();
         return;
+    }
 
     if (!_proxy)
     {
@@ -59,9 +68,10 @@ function init()
     }
     _proxy.addObserver(_id, utils.bind(this, _onResponse));
     _sendRequest('{"action": "launch"}');
-    
-    //TODO need a statemachine to track success/failure/shutdown
-    g_isAvailable = true;
+
+    g_attachTimer = new ticker.Ticker(15000, function() {g_attachTimer.stop(); if (onFailAttach) onFailAttach(); });
+    g_onAttachSuccess = onAttach;
+    g_attachTimer.start();
 }
 
 function setCallStatusObserver(ob)
@@ -125,6 +135,7 @@ function _sendRequest(what) {
     }
 }
 
+
 function _onResponse(json) {
     var cmd = utils.fromJson(json);
     if (cmd.action == 'call-status')
@@ -132,9 +143,16 @@ function _onResponse(json) {
         if (_csobserver)
             _csobserver(cmd.status, cmd.partner);
     }
-    elif (cmd.action == 'error')
+    else if (cmd.action == 'skype-status' && cmd.status == 'attach_success')
     {
-        utils.logit('Skype Error ' + cms.command + ' ' + cmd.number + ' ' + cmd.description);
+        g_attachTimer.stop();
+        g_isAvailable = true;
+        if (g_onAttachSuccess)
+            g_onAttachSuccess();
+    }
+    else if (cmd.action == 'skype-error')
+    {
+        utils.logit('Skype Error ' + cmd.command + ' ' + cmd.number + ' ' + cmd.description);
     }
 }
 

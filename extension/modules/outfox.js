@@ -3,6 +3,10 @@ var EXPORTED_SYMBOLS = ["serverProxy"];
 var utils = {};
 Components.utils.import("resource://modules/utils.js", utils);
 
+// use the python source or the py2exe dist
+const useSource = false; 
+
+            
 /*
  * Copyright (c) 2008 Carolina Computer Assistive Technology
  *
@@ -110,7 +114,6 @@ serverProxy=
         const execute = {};
         Components.utils.import("resource://modules/execute.js", execute);
         try {
-            const useSource = false; // use the python source or the py2exe dist
             var args, prog;
 			
 			if (useSource || !utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists())

@@ -172,72 +172,10 @@ const page =
 				answer.collapsed = true;
 			}
 		}
-        if (!_ns.skype.isAvailable())
+        
+        if (_ns.skype.isAvailable())
         {
-        }
-        else
-        {
-            function onSkypeCallStatus(status, partner)
-            { 
-                utils.logit(status);
-                if (status == "inprogress")
-                {
-                    actions.showCall(true);
-                    execute.execSkype('incall.xul');
-                }
-                else if (status == "finished")
-                {
-                    actions.showCall(false);
-                    execute.killSkype();
-					answer.collapsed = true;
-                    if (page.isScanUser)
-                    {
-                        scan.releaseScan();
-                    }
-                }
-                else if (status == "ringing")
-                {
-                    if (page.isScanUser)
-                    {
-                        const endcall = pad.content.getElementsByClassName('endcallbutton scankey')[0];
-                        if (endcall.getAttribute('hidden') == 'false')
-                        {
-                            scan.holdScan();
-                            scan.setCurrent(endcall);
-                        }
-                    }
-                }
-                else if (status == "incoming")
-                {
-                    function isIn(element)
-                    {
-                        return (element.vid == partner);
-                    }
-                    var contact = config.getUserContacts().filter(isIn);
-                    if (contact.length != 0)
-                    {
-                        answer.collapsed = false;
-                        if (page.isScanUser)
-                        {
-                            scan.holdScan();
-                            scan.setCurrent(answer);
-                        }
-                        actions.showCall(true, partner);
-                        const player = document.getElementById("player");
-                        if (player && player.isPlaying == 'true')
-                        {
-                           player.togglePause();
-                        }
-                    }
-                    else
-                    {
-                        _ns.skype.endCall();
-                    }
-                }
-            }
-            _ns.skype.setCallStatusObserver(onSkypeCallStatus);
-
-            window.addEventListener('unload', _ns.skype.endCall, false);
+            page.enableCalls();
         }
 
         if (pad)
@@ -339,12 +277,22 @@ const page =
 				var cbItem = { "name": item.name, 
 										"URI": item.URI,
 										"thumbURI": item.thumbURI, 
-										"action": action ,
-										"arg": arg};
+										"action": action,
+										"arg": arg,
+                                        "disabled": false,
+                                        "klassname": ''};
 				if (alterItemCB && !alterItemCB(cbItem))
 					return;
 				const prompt = getPromptFile(folder, item.name);
 				var key = container.addSelectionsItem(cbItem.name, cbItem.thumbURI, 0.8, cbItem.action,'', prompt);
+                if (cbItem.disabled)
+                {
+                    key.setAttribute("disabled", "true");
+                }
+                if (cbItem.klassname != '')
+                {
+                    key.className += ' ' + cbItem.klassname;
+                }
 				if (key && page.isScanUser)
 				{
 					page._makeScanKey(key);
@@ -377,6 +325,71 @@ const page =
 		page.setUserAction('nextSelectionsPage', onNextSelectionsPage);
 
         return arItems.length;
+    },
+
+    enableCalls: function()
+    {
+        function onSkypeCallStatus(status, partner)
+        { 
+            utils.logit(status);
+            if (status == "inprogress")
+            {
+                actions.showCall(true);
+                execute.execSkype('incall.xul');
+            }
+            else if (status == "finished")
+            {
+                actions.showCall(false);
+                execute.killSkype();
+                answer.collapsed = true;
+                if (page.isScanUser)
+                {
+                    scan.releaseScan();
+                }
+            }
+            else if (status == "ringing")
+            {
+                if (page.isScanUser)
+                {
+                    const endcall = pad.content.getElementsByClassName('endcallbutton scankey')[0];
+                    if (endcall.getAttribute('hidden') == 'false')
+                    {
+                        scan.holdScan();
+                        scan.setCurrent(endcall);
+                    }
+                }
+            }
+            else if (status == "incoming")
+            {
+                function isIn(element)
+                {
+                    return (element.vid == partner);
+                }
+                var contact = config.getUserContacts().filter(isIn);
+                if (contact.length != 0)
+                {
+                    answer.collapsed = false;
+                    if (page.isScanUser)
+                    {
+                        scan.holdScan();
+                        scan.setCurrent(answer);
+                    }
+                    actions.showCall(true, partner);
+                    const player = document.getElementById("player");
+                    if (player && player.isPlaying == 'true')
+                    {
+                       player.togglePause();
+                    }
+                }
+                else
+                {
+                    _ns.skype.endCall();
+                }
+            }
+        }
+        _ns.skype.setCallStatusObserver(onSkypeCallStatus);
+
+        window.addEventListener('unload', _ns.skype.endCall, false);
     },
     
     get _pageName () { return window.location.pathname.split('/')[2].split('.')[0]; },// TODO Fragile,

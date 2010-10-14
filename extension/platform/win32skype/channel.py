@@ -16,6 +16,12 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 '''
 from common.channel import ChannelBase
+import Skype4Py
+import win32gui
+import win32con
+from time import sleep
+from SendKeys import SendKeys
+       
 
 # only expect to create one of these (e.g a single channel)
 class ChannelController(ChannelBase):
@@ -62,15 +68,6 @@ class ChannelController(ChannelBase):
         self.observer.pushResponse(cmd)
         return
         
-
-
-import Skype4Py
-import win32gui
-import win32con
-from time import sleep
-from SendKeys import SendKeys
-        
-
 class Skype(object):
     def __init__(self):
         self. CallStatus = 0
@@ -92,9 +89,9 @@ class Skype(object):
             self.skype.OnCallVideoStatusChanged = self.OnCallVideo
             self.skype.OnError = self.OnError
 
-            #these 2 are for debug info
-            #self.skype.OnClientWindowState = self.OnClientWindowState
-            #self.skype.OnCommand = self.OnCommand
+            #these 2 are for extra debug info
+            self.skype.OnClientWindowState = self.OnClientWindowState
+            self.skype.OnCommand = self.OnCommand
             
             # Starting Skype if it's not running already..
             if not self.skype.Client.IsRunning:
@@ -122,7 +119,11 @@ class Skype(object):
         self.observer.pushResponse( { "action": "call-status", "status": status, "partner": call.PartnerHandle } )
         
     def pushError(self, command, number, description):
-        self.observer.pushResponse( { "action": "skype-error", "command": command.Command, "number": number, "description": description } )
+        if command is None:
+            cmd = 'None'
+        else:
+            cmd = command.Command
+        self.observer.pushResponse( { "action": "skype-error", "command": cmd, "number": number, "description": description } )
         
     def pushSkypeStatus(self, status):
         self.observer.pushResponse( { "action": "skype-status", "status": status } )
@@ -220,10 +221,14 @@ class Skype(object):
     def OnAttach(self, status):
         try:
             print 'API attachment status: ' + self.AttachmentStatusText(status)
-            if status == Skype4Py.apiAttachAvailable:
-                self.skype.Attach()
+            if status == Skype4Py.apiAttachPendingAuthorization:
+                self.pushSkypeStatus('attach_authorise')
+                self.showSkype() # doesn't work
+            elif status == Skype4Py.apiAttachAvailable:
+                self.pushSkypeStatus('attach_available')
             elif status == Skype4Py.apiAttachSuccess:
-                self.hideSkype();
+                self.pushSkypeStatus('attach_success')
+                self.hideSkype()
         except (Skype4Py.SkypeAPIError, Skype4Py.SkypeError), e:
             print e
         

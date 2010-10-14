@@ -5,14 +5,24 @@ Components.utils.import("resource://modules/path.js", path);
 const skype = {};
 Components.utils.import("resource://modules/skype.js", skype);
 
+            
 function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
-	
+
+    const pad = mainwindow.getElementById("pad");
+
     const bConfig = config.getCommandLineConfig().config;
     if(!bConfig && page.config.useSkype == "yes")
     {
-        skype.init();
+        function onSkypeAttached()
+        {
+            const klassname = (page.isScanUser) ? 'choosecallbutton scankey' : 'choosecallbutton';
+            var keys = pad.content.getElementsByClassName(klassname);
+            Array.forEach(keys, function(e, i, a){e.setAttribute("disabled", "false");});
+        }
+        const skypeFail = 'Skype is not responding.\n\nYou may need to run/open Skype and authorise access for MaavisSkypeServer.';
+        skype.init(onSkypeAttached, function(){alert(skypeFail);});
     }
     
     const avatar = mainwindow.getElementById("avatar");
@@ -22,21 +32,28 @@ function loadPage()
         avatar.image = path.fileToURI(thumbnail);
     }
 
-    const pad = mainwindow.getElementById("pad");
     if (!page.login)
     {
         const byeKey =  mainwindow.getElementById("quit");
         byeKey.setAttribute('hidden', 'true');
-        /*const title =  mainwindow.getElementById("title");
-        title.setAttribute('col', '0');
-        title.setAttribute('cols', '10'); // assumes units in XUL
-        pad.adjustKey(title);*/
     }
     
 	function mkItem( item ) 
 	{
-		// Don't show call page button if can not call
-		return (page.canCall || (item.action.indexOf('showPage|choosecall.xul') == -1));
+        const choosecallbutton = (item.action.indexOf('showPage|choosecall.xul') != -1);
+
+        if (!choosecallbutton)
+            return true
+            
+		if (page.config.useSkype != "yes")
+            return false;  // hide it
+            
+        if (item.action.indexOf('showPage|choosecall.xul') != -1)
+        {
+            item.disabled = true;
+            item.klassname = 'choosecallbutton';
+        }
+        return true;
 	}
 	
     page.addFolderKeys(pad, "file:///%UserDir%", true, mkItem, /^(?!Passwords$).*$/i);
