@@ -2,11 +2,19 @@ const config = {};
 Components.utils.import("resource://modules/config.js", config);
 const path = {};
 Components.utils.import("resource://modules/path.js", path);
+const skype = {};
+Components.utils.import("resource://modules/skype.js", skype);
 
 function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
 	
+    const bConfig = config.getCommandLineConfig().config;
+    if(!bConfig && page.config.useSkype == "yes")
+    {
+        skype.init();
+    }
+    
     const avatar = mainwindow.getElementById("avatar");
     const thumbnail = path.getThumbnailFile(config.getUserDataDir());
     if (thumbnail)

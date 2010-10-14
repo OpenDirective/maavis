@@ -51,10 +51,6 @@ function initWindow()
     document.getElementById("promptMaavis").setAttribute("collapsed", (bConfig) ? "true" : "false")
     document.getElementById("promptSettings").setAttribute("collapsed", (!bConfig) ? "true" : "false")
 
-    if(!bConfig && page.config.useSkype == "yes")
-    {
-        skype.init();
-    }
     skype.initJoys();
     
     const splashtime = page.config.splashTime;
