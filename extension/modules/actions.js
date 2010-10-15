@@ -232,6 +232,6 @@ function alterMasterVolume(bDec)
     const tts = Components.classes["@fullmeasure.co.uk/tts;1"]
                          .getService(Components.interfaces.ITTS);
 
-    tts.alterMasterVolume(bDec); 
+    utils.logit(tts);
 }
 // EOF

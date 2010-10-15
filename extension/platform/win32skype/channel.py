@@ -16,12 +16,11 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 '''
 from common.channel import ChannelBase
-import Skype4Py
 import win32gui
 import win32con
 from time import sleep
 from SendKeys import SendKeys
-       
+import Skype4Py
 
 # only expect to create one of these (e.g a single channel)
 class ChannelController(ChannelBase):
@@ -46,7 +45,8 @@ class ChannelController(ChannelBase):
         self.observer.pushResponse( { "action": "loopback-response", "text": text } )
 
     def do_launch(self, cmd):
-        self.skype.launch()
+        portablepath = cmd.get('portablepath')
+        self.skype.launch(portablepath)
 
     def do_call(self, cmd):
         who = cmd.get('who')
@@ -75,11 +75,11 @@ class Skype(object):
         self.CallIncoming = set([Skype4Py.cltIncomingPSTN, Skype4Py.cltIncomingP2P]);
         self._theCall = None
         self.observer = None
-        
+       
     def setObserver(self, ob): # TODO this seems to be the fave pattern but could multiple inherit 
         self.observer = ob
 
-    def launch(self):
+    def launch(self, portablepath):
         try:
             self.skype = Skype4Py.Skype()
             self.skype.OnAttachmentStatus = self.OnAttach
@@ -96,7 +96,20 @@ class Skype(object):
             # Starting Skype if it's not running already..
             if not self.skype.Client.IsRunning:
                 print 'Starting Skype..'
-                self.skype.Client.Start()
+                try:
+                    if portablepath:
+                        # Alter Skype4Py to use portablepath
+                        # should only ever happen once - poor assumption
+                        oldmeth = Skype4Py.api.SkypeAPI.get_skype_path
+                        def newmeth(self):
+                          from ctypes import c_char_p
+                          return c_char_p(portablepath)
+                        Skype4Py.api.SkypeAPI.get_skype_path = newmeth
+
+                    self.skype.Client.Start(Minimized=True, Nosplash=True)
+                except Skype4Py.SkypeAPIError, e:
+                    print 'Skype not installed'
+                    self.pushSkypeStatus('not_installed')
 
             # Attaching to Skype..
             print 'Connecting to Skype..'

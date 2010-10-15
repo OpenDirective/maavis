@@ -66,14 +66,20 @@ var ext_path: null,
 
 function buildPath(root) {
     var path = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-    if(root == null) {
+    if(root == null)
+    {
         const simwinpath = {};
         Components.utils.import("resource://modules/path.js", simwinpath);
         root = simwinpath.getExtensionRootPath();
     }
     path.initWithPath(root);
-    for(var i=1; i < arguments.length; i++) {
-        path.append(arguments[i]);
+    for(var i=1; i < arguments.length; i++)
+    {
+        const arg = arguments[i];
+        if (arg == '..')
+            path = path.parent;
+        else
+            path.append(arg);
     }
     return path;
 }

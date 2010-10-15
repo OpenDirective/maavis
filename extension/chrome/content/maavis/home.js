@@ -15,14 +15,26 @@ function loadPage()
     const bConfig = config.getCommandLineConfig().config;
     if(!bConfig && page.config.useSkype == "yes")
     {
-        function onSkypeAttached()
+        function onOutcome(what)
         {
-            const klassname = (page.isScanUser) ? 'choosecallbutton scankey' : 'choosecallbutton';
-            var keys = pad.content.getElementsByClassName(klassname);
-            Array.forEach(keys, function(e, i, a){e.setAttribute("disabled", "false");});
+            if (what == 'attach_success')
+            {
+                const klassname = (page.isScanUser) ? 'choosecallbutton scankey' : 'choosecallbutton';
+                var keys = pad.content.getElementsByClassName(klassname);
+                Array.forEach(keys, function(e, i, a){e.setAttribute("disabled", "false");});
+            }
+            else if (what == 'attach_failed')
+            {
+                alert('Skype is not responding.\n\nYou may need to sign in to Skype or authorise access for MaavisSkypeServer.\n\nIf you press the Ctrl + Esc keys you will be able to open Skype from the task bar tray icon with a right click and then authorise the MaavisSkypeServer.');
+            }
+            else if (what == 'not_installed')
+            {
+                alert('Skype is does not appear to be installed and SkypePortable cannot be found.');
+            }
         }
-        const skypeFail = 'Skype is not responding.\n\nYou may need to run/open Skype and authorise access for MaavisSkypeServer.';
-        skype.init(onSkypeAttached, function(){alert(skypeFail);});
+        
+        if (!skype.isAvailable()) // so only first time to home page
+            skype.init(onOutcome);
     }
     
     const avatar = mainwindow.getElementById("avatar");
@@ -48,7 +60,7 @@ function loadPage()
 		if (page.config.useSkype != "yes")
             return false;  // hide it
             
-        if (item.action.indexOf('showPage|choosecall.xul') != -1)
+        if (!skype.isAvailable() && item.action.indexOf('showPage|choosecall.xul') != -1)
         {
             item.disabled = true;
             item.klassname = 'choosecallbutton';

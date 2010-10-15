@@ -129,9 +129,6 @@ const page =
         
         page._setColourStylesheet();
         
-        var execute = {};
-        Components.utils.import("resource://modules/execute.js", execute);
-
         const userDisp = (page.config.name == 'Default') ? '' : page.config.name + ' : ';
         document.title = 'Maavis : '+userDisp + page._pageName;
         
@@ -331,7 +328,9 @@ const page =
     {
         function onSkypeCallStatus(status, partner)
         { 
-            utils.logit(status);
+            var execute = {};
+            Components.utils.import("resource://modules/execute.js", execute);
+        
             if (status == "inprogress")
             {
                 actions.showCall(true);

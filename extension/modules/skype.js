@@ -18,25 +18,6 @@ function isAvailable()
 	return g_isAvailable;
 }
 
-function _checkInstalled()
-{
-    var bInstalled = false;
-    try
-    {
-        const wrk = Components.classes["@mozilla.org/windows-registry-key;1"]
-                            .createInstance(Components.interfaces.nsIWindowsRegKey);
-        wrk.open(wrk.ROOT_KEY_CURRENT_USER,
-                 "SOFTWARE\\Skype\\Phone",
-                 wrk.ACCESS_READ);
-        bInstalled = wrk.hasValue("SkypePath");
-        wrk.close();
-    }
-    catch(e)
-    {
-    }
-    return bInstalled
-}
-
 // TODO - this is a *monster* kludge to get some joystick input. refactor or use XPCOM component
 function initJoys()
 {
@@ -50,27 +31,43 @@ function initJoys()
 }
 
 var g_attachTimer;
-var g_onAttachSuccess;
+var g_onAttachOutcome;
 
-function init(onAttach, onFailAttach)
+function init(onOutcome)
 {
-    if (!_checkInstalled())
-    {
-        if (onFailAttach) 
-            onFailAttach();
-        return;
-    }
-
     if (!_proxy)
     {
         _proxy = server.serverProxy;
         _proxy.constructor(); // TODO sort this out - couldn't use declare as it used window
     }
     _proxy.addObserver(_id, utils.bind(this, _onResponse));
-    _sendRequest('{"action": "launch"}');
+    g_onAttachOutcome = onOutcome;
+    
+    var pp = '';
+    var ps;
+    var chk = utils.buildPath(null, '..', 'AppInfo');
+    if (chk.exists())
+    { // see if portable version
+        ps = utils.buildPath(null, '..', '..', '..', '..', 'SkypePortable', 'SkypePortable.exe');
+    }
+    else
+    { // for dev only - default install location 
+        ps = utils.buildPath('C:\\', 'PortableApps', 'SkypePortable', 'SkypePortable.exe');
+    }
+    if (ps && ps.exists())
+    {
+        pp = ', "portablepath": "' + ps.path.replace('\\', '\\\\', 'g') +'"';
+    }
+    _sendRequest('{"action": "launch"' + pp + '}');
 
-    g_attachTimer = new ticker.Ticker(15000, function() {g_attachTimer.stop(); if (onFailAttach) onFailAttach(); });
-    g_onAttachSuccess = onAttach;
+    function _tick()
+    {
+        g_attachTimer.stop();
+//        _proxy.send(_id, '{"action" : "shutdown"}');
+        if (onOutcome)
+            onOutcome('attach_failed');
+    }
+    g_attachTimer = new ticker.Ticker(15000, _tick);
     g_attachTimer.start();
 }
 
@@ -143,12 +140,21 @@ function _onResponse(json) {
         if (_csobserver)
             _csobserver(cmd.status, cmd.partner);
     }
-    else if (cmd.action == 'skype-status' && cmd.status == 'attach_success')
+    else if (cmd.action == 'skype-status')
     {
-        g_attachTimer.stop();
-        g_isAvailable = true;
-        if (g_onAttachSuccess)
-            g_onAttachSuccess();
+        if (cmd.status == 'not_installed')
+        {
+            g_attachTimer.stop();
+            if (g_onAttachOutcome)
+                g_onAttachOutcome(cmd.status);
+        }
+        else if (cmd.status == 'attach_success')
+        {
+            g_attachTimer.stop();
+            g_isAvailable = true;
+            if (g_onAttachOutcome)
+                g_onAttachOutcome(cmd.status);
+        }
     }
     else if (cmd.action == 'skype-error')
     {

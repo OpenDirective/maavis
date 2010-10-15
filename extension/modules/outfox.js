@@ -115,8 +115,8 @@ serverProxy=
         Components.utils.import("resource://modules/execute.js", execute);
         try {
             var args, prog;
-			
-			if (useSource || !utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists())
+
+            if (useSource || !utils.buildPath(null, 'platform', 'dist', 'MaavisSkypeServer.exe').exists())
             {
                 prog = "c:\\python25\\python.exe -i "; // -i keeps window open at python prompt
                 args = utils.buildPath(null, 'platform', 'outfox.py').path + " " + port;
