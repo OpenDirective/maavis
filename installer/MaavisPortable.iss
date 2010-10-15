@@ -1,17 +1,17 @@
 [Setup]
 AppName=MaavisPortable
-AppVerName=MaavisPortable 0.1.14
-OutputBaseFilename=MaavisPortable-0.1.14
-AppVersion=0.1.14
-VersioninfoVersion=0.1.14
+AppVerName=MaavisPortable 0.1.15
+OutputBaseFilename=MaavisPortable-0.1.15
+AppVersion=0.1.15
+VersioninfoVersion=0.1.15
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
 AppCopyright=Copyright (C) 2008,2010 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
 ;LicenseFile=GPL.txt
-DefaultDirName={userdesktop}
-AppendDefaultDirName=no
+DefaultDirName=\MaavisPortable
+;AppendDefaultDirName=no
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
 Uninstallable=no
@@ -24,7 +24,7 @@ Uninstallable=no
 
 [Messages]
 WelcomeLabel1=Notes for installing [name/ver].
-WelcomeLabel2=The portable version of Maavis is designed to be installed on a memory stick and so can be run without beng installed on the computer. Thus this 'installer' simply copies Maavis files ready to be run.%n%nSkype can optionally be installed to provide video conferencing.
+WelcomeLabel2=The portable version of Maavis is designed to run from a memory stick and can be run without installation onto a specific computer. Thus this 'installer' simply copies Maavis files ready to be run.%n%nIMPORTANT - in order to use the optional video call facility you need to install SkypePortable to the memory stick. You can choose this option later on%n%nAn example setup with media files will be installed ready for you to customise.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
@@ -33,10 +33,11 @@ ClickFinish=Click Finish to exit Setup after unchecking any of the following tha
 [Files]
 ; we might expect *.* to copy *this* file too but looks Inno like writes to temp file 1st so not a problem
 Source: "MaavisPortable\*"; DestDir: "{app}\MaavisPortable"; Flags: recursesubdirs ignoreversion
-Source: "3rdParty\FirefoxPortable\*"; DestDir: "{app}\MaavisPortable\App\FirefoxPortable"; Flags: recursesubdirs ignoreversion
+Source: "3rdParty\FirefoxPortable\*"; DestDir: "{app}\MaavisPortable\App\FirefoxPortable"; Excludes: "\Data\*"; Flags: recursesubdirs ignoreversion
 Source: "..\extension\*"; DestDir: "{app}\MaavisPortable\App\extension"; Excludes: "\platform"; Flags: recursesubdirs ignoreversion
 Source: "Credits and attribution.txt"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
 Source: "Maavis.ico"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
+Source: "MaavisPortable\help.html"; DestDir: "{app}"; Flags: ignoreversion
 
 ; MaavisSkypeServer
 ;Source: "..\extension\platform\dist\*"; DestDir: "{app}\App\platform\dist\extension"; Flags: ignoreversion
@@ -48,7 +49,7 @@ Source: "*.cmd"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
 
 ; Installers
-;Source: ".\3rdParty\skype*"; DestDir: "{app}\MaavisPortable\Other\installers"; Flags: ignoreversion
+Source: "3rdParty\Skype*"; DestDir: "{app}\MaavisPortable\Other\installers"; Flags: ignoreversion
 
 ; Media
 ;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
@@ -60,12 +61,12 @@ Source: "..\media\*"; DestDir: "{app}\MaavisMedia"; Excludes: "Thumbs.db"; Flags
 [Icons]
 
 [Run]
-Filename: "{app}\MaavisPortable\Other\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser unchecked
+Filename: "{app}\MaavisPortable\Other\installers\{code:SkypeInstaller}";  Description: "Install SkypePortable - required for the optional video call feature.  IMPORTANT - you must install it onto the memory stick next to MaavisPortable - if you installed Maavis to E:\MaavisPortable then ensure you select E:\PortableSkype.  This will download Skype files so you need to be connnected to the internet. It is recommended that you sign in to skype and test it to ensure it is working before using it with Maavis"; Flags: postinstall runascurrentuser unchecked
 
 [code]
 function SkypeInstaller(Param: String): String;
 begin
-  Result := 'SkypeSetup.exe';
+  Result := 'SkypePortable_4.2.0.187_online.paf.exe';
 end;
 
 // shame we can't use this as {code:} errors in first section

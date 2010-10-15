@@ -1,9 +1,9 @@
 [Setup]
 AppName=Maavis
-AppVerName=Maavis 0.1.14
-OutputBaseFilename=Maavis-0.1.14
-AppVersion=0.1.14
-VersioninfoVersion=0.1.14
+AppVerName=Maavis 0.1.15
+OutputBaseFilename=Maavis-0.1.15
+AppVersion=0.1.15
+VersioninfoVersion=0.1.15
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
 AppCopyright=Copyright (C) 2008,2010 The University Of Sheffield
@@ -23,7 +23,7 @@ SetupIconFile=Maavis.ico
 
 [Messages]
 WelcomeLabel1=Notes for installing [name/ver].
-WelcomeLabel2=Maavis uses the Mozilla Firefox web browser and you will be given an option to install it.%n%nYou can continue to use your current web browser. If you do not want Firefox to be your default browser you should uncheck the option in the Firefox installer. If you already use Firefox please check it is the latest version and you must ensure it is not running during installation.%n%nSkype can optionally be installed to provide video conferencing.
+WelcomeLabel2=Maavis uses the Mozilla Firefox web browser and you will be given an option to install it.%n%nYou can continue to use your current web browser. If you do not want Firefox to be your default browser you should uncheck the option in the Firefox installer. If you already use Firefox please check it is the latest version and you must ensure it is not running during installation.%n%nIMPORTANT - in order to use the optional video call facility you need to install SkypePortable to the memory stick. You can choose this option later on.
 ClickFinish=Click Finish to exit Setup after unchecking any of the following that you do not want to happen.
 
 [Tasks]
@@ -99,7 +99,7 @@ Filename: "{app}\installers\{code:FirefoxInstaller}"; Description: "Install Fire
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile default";
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; Parameters: "-CreateProfile Maavis"; AfterInstall: InstallMaavisFFExtension;
 Filename: "{%COMSPEC}"; parameters: "/C xcopy /e/y/q ""{app}\media"" ""{userdocs}\MaavisMedia\"""; StatusMsg: "Installing media..."; Description: "Install the example Maavis setup and media files to the documents folder."; Flags: postinstall skipifsilent runhidden
-Filename: "{app}\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for Video Calls."; Flags: postinstall runascurrentuser unchecked
+Filename: "{app}\installers\{code:SkypeInstaller}";  Description: "Install Skype - required for the optional video call feature. This will download Skype files so you need to be connnected to the internet."; Flags: postinstall runascurrentuser unchecked
 Filename: "{pf}\Mozilla Firefox\firefox.exe"; parameters: "-P ""Maavis"" -no-remote"; Description: "Run Maavis now."; Flags: postinstall skipifsilent
 
 
@@ -149,7 +149,7 @@ end;
 // Constants
 function FirefoxInstaller(Param: String): String;
 begin
-  Result := 'Firefox Setup 3.5.13.exe';
+  Result := 'Firefox Setup 3.6.10.exe';
 end;
 
 function SkypeInstaller(Param: String): String;
