@@ -3,13 +3,107 @@
 	<link rel="SHORTCUT ICON" href="Other/Help/images/favicon.ico">
 </head>
 <body>
-<h1 class="hastagline">Maavis Portable Help</h1>
-<h2 class="tagline">Simplified and managed access to media, communications and programs</h2>
+<h1 class="hastagline">MaavisPortable Quick Guide</h1>
+<h2 class="tagline">Simplified access to media, communications and programs</h2>
 <div>
+<p><a href='http://maavis.fullmeasure.co.uk/quick-quide'>Latest version of this page</a></p>
+<h3>Introduction To MaavisPortable</h3>
+<p>Welcome to MaavisPortable. Maavis is designed to give an ultra simple user experience when accessing photos, videos, music, video calls and running programs. 
+It allows support staff, facilitators or others to easy configure settings and select media suitable for their users. 
+This is usually a matter of simply copying files into suitable folders and possibly editing a few text files. 
+Those with more technical experience can also create customs colour schemes or even brand now pages using basic web development skills.
+A settings utility allows various user options to be set such as if images are shown on buttons.
+Maavis is ideal in supported or managed environments where end users can access it by touch screen, mouse or switch(s) through the built in scanning options. 
+It also supports the automatic speech of items and even recordings.</p>
+<p>Maavis is designed to be configured for each use scenario and while it comes with an example configuration and set of media files, these are fairly rough and not designed to be presented to end users. 
+You can easily provide something specific to your user's needs.</p>
 <p>
-For details on using Maavis and how to configure it, please see the <a href="https://www.assembla.com/wiki/show/maavis/UserNotes">online documentation</a>.
+MaavisPortable can be run from a memory stick as it is not 'installed' onto a computer in the usual fashion. 
+The 'installer' simply extracts files into a MaavisPortable folder which may be placed anywhere or later moved.
+SkypePortable can also be optionally installed for when video calling is required, but Maavis can be used without this feature.
 </p>
-<h2 class="tagline">Other useful websites</h2>
+<p>The following is a quick quide through the basics of using and configuring Maavis. Full details can be found in the <a href="https://www.assembla.com/wiki/show/maavis/UserNotes">online documentation</a>.
+</p>
+
+<h3>Maavis is an open source community project</h3>
+<p>Maavis is still very young and there are many features to add and even some bugs to fix. 
+We'd love to hear about your interesting uses of Maavis, ideas for new features or bug reports. 
+Even better, we'd love you to join in and contribute to the project in any other way you'd like to. 
+Perhaps you'd like to provide a sample media set or colour scheme.
+Accordingly we have made Maavis an opensource project to help ensure it is as open and approachable as possible.
+We encourage you to join our <a href="http://groups.google.com/group/maavis">user and development community</a> and join in the fun.
+</p>
+ 
+<h3>Exploring MaavisPortable</h3>
+Once you have run the installer to extract MaavisPortable, and optionally SkypePortable, you will find a folder called 'MaavisPortable' which contains this file, a number of icons to run Maavis and an example 'MaavisMedia' media set that includes various media files and user configurations.
+The ways to run Maavis include:</p>
+<ul>
+<li>MaavisPortable - runs Maavis with the default user</li>
+<li>MaavisPortable Settings - the settings utility for configuring each users options</li>
+<li>MaavisPortable with Login - run the simple user login feature</li>
+<li>MaavisPortable Video Calls (user Ethel) - login in user Ethel who is set up to make and receive video calls with Skype</li>
+</ul>
+
+<p>Double click on one of these items to run Maavis. Use the Alt + Q keys to exit Maavis. Click on the buttons and explore. 
+If you have a touch screen you can really enjoy using Maavis. 
+The example users are configured differently in order to show the various options. For example Bert and Ethel demonstrate the scanning options, with Bert not showing images on buttons. Ethel speaks each label in turn while scanning and provide access to video calls. 
+Use the Maavis Settings item to explore and change these settings for each user.
+</p>
+<p>The MaavisMedia folder is explained in detail below but for now notice you can rename most files and folders and add additional images, videos and music by dropping new files into suitable folders. 
+For example, using Windows explorer, try renaming 'MaavisMedia -> Users -> Default -> 1;Photos -> Cats and Dogs' to 'Pets' or copy a new photo file into it. You can then explore the changes when operating in Maavis and see how easy it is to configure.
+</p>
+
+<h3>MaavisMedia - configuring contents</h3>
+<p>MaavisMedia is the top level folder of the folders and files containing all the media available to users. 
+These files and folders also define what buttons are presented to the user to access various features of Maavis. 
+The features are organised into screens that can be explored as follows</p>
+<ul>
+    <li>Login - a simple and optional login system. The user selects their button and then a specific button for their 'password'</li>
+    <ul>
+        <li>User home page - a set of buttons, each of which accesses a 'chooser' for a particular type of content/activity</li>
+        <ul>
+            <li>Picture Chooser - select a photo album</li>
+            <ul>
+                <li>Picture player - with pause and other controls</li>
+            </ul>
+            <li>Video Chooser - select a video (or album)</li>
+            <ul>
+                <li>Video player - with pause and other controls</li>
+            </ul>
+            <li>Music Chooser - select a music album or collection</li>
+            <ul>
+                <li>Music player - with track select, pause and other controls</li>
+            </ul>
+            <li>Speech Chooser - select a collection of speech buttons</li>
+            <ul>
+                <li>Speech player - select a button to speak its label</li>
+            </ul>
+            <li>Information Chooser - select web page to visit</li>
+            <ul>
+                <li>Simple browser - with simple controls</li>
+            </ul>
+            <li>Program Chooser - select programs to run. A stop button is shown to exit the program</li>
+        </ul>
+    </ul>
+</ul>
+<p>If you explore 'MaavisMedia/Users' you should clearly see how this structure is created with folders and files. Here are the basics:</p>
+<ul>
+    <li>A folder or file appears to the user as a button with the folder/file name becoming the label shown on the button (note it is possible to prefix name with a number and ';' to control the order of the buttons)</li>
+    <li>The folders under 'Users' are selected when Maavis login is used. Othewise the 'default' folder is used</li>
+    <li>Each user folder has a 'Passwords' folder containing images for passwords. The one with an '!' in the name is the one that allows login</li>
+    <li>If a folder contains a image file named 'thumbnail' it appears on the folder's button</li>
+    <li>The type of chooser used for a folder is selected by a file with a name like _choosemusic</li>
+</ul>
+<p>Information buttons display web pages and the web page URIs are put in a text file called _items.ini. 
+Each item is on its own line and the order of the lines controls the order of the items. 
+An image file in the folder with the same name as the item in the '_items.ini' will appear on the button.
+It is also possible use media from the web rather than local files by using an _items.ini file as is the case with the 'Events (web)' photo album. 
+</p>
+
+<h3>Getting help and advice</h3>
+<p>Head on over to the <a href="http://groups.google.com/group/maavis">google group</a> and join. You can then send emails or use the web interface to ask questions.</p>
+
+<h2 class="tagline">Useful websites</h2>
 <ul>
   <li><a href='http://maavis.fullmeasure.co.uk/'>Maavis website</a></li>
   <li><a href='http://fullmeasure.co.uk'>Full Measure website</a></li>
