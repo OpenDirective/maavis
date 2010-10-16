@@ -11,6 +11,7 @@ communities of developers and users.
 
 * Mozilla Firefox - platform for user interface and web access
 * VLC media player - plays music and videos
+* PortableApps - creating Maavis Portableand supply SkypePortable
 * Outfox - a server used to access Windows programs 
 * Python - programing language used for outfox
 * Inno setup - creates the installer
