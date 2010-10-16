@@ -1,9 +1,9 @@
 [Setup]
 AppName=MaavisPortable
-AppVerName=MaavisPortable 0.1.15
-OutputBaseFilename=MaavisPortable-0.1.15
-AppVersion=0.1.15
-VersioninfoVersion=0.1.15
+AppVerName=MaavisPortable 0.2.0
+OutputBaseFilename=MaavisPortable-0.2.0
+AppVersion=0.2.0
+VersioninfoVersion=0.2.0
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
 AppCopyright=Copyright (C) 2008,2010 The University Of Sheffield
