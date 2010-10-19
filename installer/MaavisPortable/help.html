@@ -12,10 +12,10 @@
 <p><a href='https://sites.google.com/a/fullmeasure.co.uk/maavis/quick-quide'>Latest version of this guide</a>.</p>
 <!-- copy to below from html view of above link -->
 
-<h2>Simple managed access to media, communications and programs</h2>
+<h2><span id="goog_176899779"></span>Simple managed access to media, communications and programs</h2>
 
 <div>
-<h3>Introduction To MaavisPortable</h3>
+<h3><span id="goog_176899780"></span>Introduction To MaavisPortable</h3>
 <p>With MaavisPortable you can now run Maavis from a memory stick or any disk. Maavis is designed to give an ultra simple user experience when accessing photos, videos, music, video calls and running programs. 
 It allows support staff or facilitators to easily configure settings and select media suitable for their users. 
 This is usually a matter of simply copying files into suitable folders and possibly editing a few text files. 
@@ -126,8 +126,17 @@ The features are organised into screens that can be explored as follows</p>
 <p>Web page URIs for Information buttons and the target for programs are entered into a text file called <span style="font-family: courier new,monospace;">_items.ini</span>. 
 Each item is on its own line and the order of the lines controls the order of the buttons. 
 An image file in the folder with the same name as the item in the <b style="font-family: courier new,monospace;">_items.ini</b> will appear on the button.
-It is also possible use media from the web rather than local files by using an <span style="font-family: courier new,monospace;">_items.ini</span> file as is the case with the 'Events (web)' photo album.&nbsp;</p>
-<p>Hint: it is easiest to create new users, choosers or albums by simply copying an existing one and then editing the filenames and contents.<br>
+It is also possible use media from the web rather than local files by using an <span style="font-family: courier new,monospace;">_items.ini</span> file as is the case with the 'Events (web)' photo album. <br>
+</p>
+<p></p>
+<p>Hint: it is easiest to create new users, choosers or albums by simply copying an existing one and then editing the filenames and contents.</p>
+<h3>Running Programs</h3>
+The entries in the _items.ini for running programs have to be programs, not documents. If you want to open a document then you need to run the program passing the document as an argument. For example to open WindowsUpdate.log in notepad add the following line:<br>
+<br>
+<span style="font-family: courier new,monospace;">WindowsUpdate log="C:\Windows\system32\notepad.exe" "C:\Windows\WindowsUpdate.log"</span><br>
+<br>
+To run more than one program when a button is pressed, enter them all on the same line but with a <b style="font-family: courier new,monospace;">;</b> character between them<br>
+<p>
 </p>
 
 <h3>User Settings</h3>
