@@ -43,7 +43,7 @@ Source: "MaavisPortable\help.html"; DestDir: "{app}"; Flags: ignoreversion
 ;Source: "..\extension\platform\dist\*"; DestDir: "{app}\App\platform\dist\extension"; Flags: ignoreversion
 Source: "..\extension\platform\dist\*"; DestDir: "{app}\MaavisPortable\App\extension\platform\dist"; Flags: recursesubdirs ignoreversion
 
-Source: "*.cmd"; DestDir: "{app}"; Flags: ignoreversion
+Source: "*.cmd"; DestDir: "{app}"; Excludes: "build.cmd"; Flags: ignoreversion
 
 ; copy the non debug version of prefs.js
 ;Source: "..\extension\defaults\preferences\prefs_deploy.js"; DestDir: "{app}\extension\defaults\preferences"; Flags: ignoreversion
