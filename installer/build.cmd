@@ -4,17 +4,25 @@ del /q *.pyc 2> nul:
 rd /s/q build 2> nul:
 rd /s/q dist 2> nul: 
 
+echo Don't forget to install FirefoxPortable and the flash player
+pause
+
 c:\python25\python setup.py py2exe
 if errorlevel 1 goto error 
 
 cd ..\..\installer
-"C:\Program Files\Inno Setup 5\iscc" "Maavis.iss"
-if errorlevel 1 goto error 
+
+rem clean up firefox portable data
+rd /s/q MaavisPortable\App\FirefoxPortable\Data
+mkdir MaavisPortable\App\FirefoxPortable\Data
+
+rem "C:\Program Files\Inno Setup 5\iscc" "Maavis.iss"
+rem if errorlevel 1 goto error 
 "C:\Program Files\Inno Setup 5\iscc" "MaavisPortable.iss"
 if errorlevel 1 goto error 
 
 goto OK
- 	
+
 :error
 echo.
 echo Whoops, an error occured
