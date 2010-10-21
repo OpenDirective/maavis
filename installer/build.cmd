@@ -1,11 +1,13 @@
+@echo off
+echo Don't forget to install FirefoxPortable and the flash player
+pause
+
+
 rem Clean up first to force complete rebuild - optional
 cd ..\extension\platform
 del /q *.pyc 2> nul:
 rd /s/q build 2> nul:
 rd /s/q dist 2> nul: 
-
-echo Don't forget to install FirefoxPortable and the flash player
-pause
 
 c:\python25\python setup.py py2exe
 if errorlevel 1 goto error 
