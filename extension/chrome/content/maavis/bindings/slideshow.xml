@@ -240,6 +240,16 @@
 
   </implementation>
 
+    <handlers>
+      <!-- While it would seem we could do this by handling oncommand, we can't
+           because any external oncommand handlers might get called before ours,
+           and then they would see the incorrect value of checked. Additionally
+           a command attribute would redirect the command events anyway.-->
+        <!-- I'm assumong don't need to call base class methods -->
+      <handler event="click" button="0" action="if (this._caption) this._caption.playPrompt();"/>
+      <handler event="keypress" key=" " action="if (this._caption) this._caption.playPrompt();"/>
+    </handlers>
+
   </binding>
 
   <binding id="slide" display='xul:box'>
