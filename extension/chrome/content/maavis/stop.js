@@ -2,8 +2,8 @@ function loadPage()
 {
     window.removeEventListener('load', loadPage, false);
 
-    //alert(window.screen.width +' ' + window.outerWidth)
-    window.moveTo(window.screen.width - window.outerWidth, 0);
+    //window.moveTo(window.screen.width - window.outerWidth, 0); // outerWidth is 1?
+    window.moveTo(window.screen.width - 181, 1);
 
     Components.utils.import("resource://modules/execute.js");
     document.title = stopWindowName;
