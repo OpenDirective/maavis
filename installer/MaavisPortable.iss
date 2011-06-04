@@ -25,7 +25,8 @@ Uninstallable=no
 [Messages]
 WelcomeLabel1=Notes for installing [name/ver].
 WelcomeLabel2=MaavisPortable is designed to run from a hard disk or memory stick without being 'installed' onto a specific computer. Thus this 'installer' simply copies Maavis files ready to be run.%n%nIMPORTANT - in order to use the optional video call facility you need to choose the option to install SkypePortable.%n%nAn example setup with media files will be installed ready for you to customise.
-InstallingLabel=Please wait while Setup copies [name] on your computer.
+WizardInstalling=Copying
+InstallingLabel=Please wait while Setup copies [name] to your computer.
 FinishedLabelNoIcons=Setup has copied [name] and the example MaavisMedia.
 ClickFinish=To use Maavis video calls please check the box and click Finish. Otherwise click Finish to exit.
 
@@ -63,7 +64,7 @@ Source: "..\media\*"; DestDir: "{app}\MaavisMedia"; Excludes: "Thumbs.db"; Flags
 [Icons]
 
 [Run]
-Filename: "{app}\MaavisPortable\Other\installers\{code:SkypeInstaller}";  Description: "Install SkypePortable for video call feature.  IMPORTANT - you must install it in a folder next to MaavisPortable - if you installed Maavis to E:\MaavisPortable then ensure you select E:\PortableSkype.  This will download Skype files so you need to be connnected to the internet. You need to sign in to Skype and test it to ensure it is working before using it with Maavis"; Flags: postinstall runascurrentuser unchecked
+Filename: "{app}\MaavisPortable\Other\installers\{code:SkypeInstaller}";  Description: "Install SkypePortable for video call feature.  IMPORTANT - you must install it in a folder next to MaavisPortable - if you installed Maavis to E:\MaavisPortable then ensure you select E:\SkypePortable.  This will download Skype files so you need to be connnected to the internet. You need to sign in to Skype and test it to ensure it is working before using it with Maavis"; Flags: postinstall runascurrentuser unchecked
 
 [code]
 function SkypeInstaller(Param: String): String;
