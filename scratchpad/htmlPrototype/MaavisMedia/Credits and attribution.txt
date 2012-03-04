@@ -1,0 +1,27 @@
+Credits and Attribution
+
+Maavis' concept, research and design is by the ACT Programme team at
+The University of Sheffield led by Peter Cudd.
+
+Maavis has been developed by Steve Lee of Full Measure (fullmeasure.co.uk).
+
+Maavis use builds on the work of many others by using software
+that is made free available as Open Source and has been developed by
+communities of developers and users. 
+
+* Mozilla Firefox - platform for user interface and web access
+* VLC media player - plays music and videos
+* PortableApps - creating Maavis Portableand supply SkypePortable
+* Outfox - a server used to access Windows programs 
+* Python - programing language used for outfox
+* Inno setup - creates the installer
+
+In addition the following non Open Source programs compliment Maavis 
+
+* Flash Plugin for Firefox
+* Skype
+
+Maavis itself is Open Source so that anyone may freely help to improve it.
+See the File GPL.txt for details.
+
+/End

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		document.createElement('header');
+		document.createElement('nav');
+		document.createElement('footer');
+	</script>
+	<script src="../../javascript/photo.js"></script>
+	<link REL=StyleSheet HREF="../../CSS/styleIntroPage.css" TYPE="text/css" MEDIA=screen>
+	<title>MAAVIS</title>
+</head>
+<body onload="init()">
+	<header id="header">
+		<h1 id="title" onclick="init()" onkeypress="onEnter(event)" tabindex="1"></h1>
+	</header>
+	<nav>
+	<!-- Navigation -->
+	</nav>
+	<section id="intro">
+<!-- Introduction -->
+	</section>
+	<section>
+	<!-- Main content area -->
+		<fieldset>
+			<div>
+				<iframe id="photoFrame1" src="photoOptions.html" width="750" height="600" frameBorder="0" scrolling="no" seamless></iframe>
+				<iframe id="contolFrame" src="../OtherControlButton.html" width="300" height="600" frameBorder="0" scrolling="no" onclick="location.href='../home.html'" seamless></iframe>
+			</div>
+		</fieldset>
+	</section>
+
+	<aside>
+		<!-- Sidebar -->
+	</aside>
+	<footer>
+		<!-- Footer -->
+	</footer>
+</body>
+</html>

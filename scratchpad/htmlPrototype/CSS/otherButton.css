@@ -1,0 +1,13 @@
+button {
+	background-color: green;
+	color:white;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	width: 280px;
+	height: 100px;
+} 
+
+button:active { background-color: purple;}
+
+button:focus {background-color:Peru;}

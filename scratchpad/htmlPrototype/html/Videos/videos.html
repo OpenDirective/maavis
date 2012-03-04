@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		 function init(){
+		     audio = new Audio("../../MaavisMedia/Sounds/touchLook.ogg");
+		     audio.play();
+		    }
+
+		document.createElement('header');
+		document.createElement('nav');
+		document.createElement('footer');
+		function changeControlButtons(){
+			this.controlFrame.src="../photos.hmtl";
+
+		}
+	</script>
+	<script src="../javascript/maavis.js"></script>
+	<link REL=StyleSheet HREF="../../CSS/styleIntroPage.css" TYPE="text/css" MEDIA=screen>
+	<title>MAAVIS</title>
+</head>
+<body onload="init()">
+	<header>
+		<h1 id="header" onclick="init()">Touch the video you want to look at</h1>
+	</header>
+	<nav>
+	<!-- Navigation -->
+	</nav>
+	<section id="intro">
+<!-- Introduction -->
+	</section>
+	<section>
+	<!-- Main content area -->
+		<fieldset>
+			<div>
+				<iframe id="videoFrame1" src="videoOptions.html" width="750" height="600" scrolling="no" seamless></iframe>
+				<iframe id="contolFrame" src="../OtherControlButton.html" width="300" height="600" scrolling="no" onclick="location.href='../IntroPage.html'" seamless></iframe>
+			</div>
+		</fieldset>
+	</section>
+
+	<aside>
+		<!-- Sidebar -->
+	</aside>
+	<footer>
+		<!-- Footer -->
+	</footer>
+</body>
+</html>
+
