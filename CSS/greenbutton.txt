@@ -1,0 +1,48 @@
+h1 {	
+	-moz-border-radius: 30px;
+	border-radius: 30px;	
+	background-color:#b0c4de;
+	width: 900px;
+	height: 40px; line-height: 40px;
+	text-align: center;
+	color: darkBlue;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+h1:focus{background-color:Peru;}
+
+h3 {font-family: "Comic Sans MS", cursive, sans-serif;}
+
+button {
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+	background-color: green;
+	text-align: center;
+	width: 310px;
+	height: 230px;
+	color: white;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+button:active { background-color: purple;}
+
+button:focus{background-color:Peru;}
+
+fieldset {
+	border: none;
+}
+
+.greenbground { 	
+	background-color: green;
+	color:white;
+}
+
+.pinkbground { 	
+	background-color: pink;
+	color:white;
+}
+
+iframe {
+	-moz-border-radius: 30px;
+	border-radius: 30px;
+
+}

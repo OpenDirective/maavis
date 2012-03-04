@@ -1,0 +1,40 @@
+.slideShow {
+       background-color: #ebebeb;
+       text-align: center;
+       margin-bottom: 10px;
+       padding: 5px;
+}
+
+.slides {
+                position: relative;
+       z-index: 1;
+       display: none;
+}
+
+.setTitle, .slideTitle {
+                font-family: "Franklin Gothic Book", Arial, Helvitica, sans-serif;
+}
+
+.setTitle {
+	color: #995a01;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.slideTitle {
+	color: #666666;
+        font-size: 12px;
+}
+
+.controls {
+	position: relative;
+	z-index: 10;
+}
+
+#slide1 {
+	display: block;
+}
+
+img {
+	border: outset 1px #999999;
+}

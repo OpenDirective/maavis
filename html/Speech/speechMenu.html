@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		document.createElement('header');
+		document.createElement('nav');
+		document.createElement('footer');
+	</script>
+	<link REL=StyleSheet HREF="../../CSS/styleIntroPage.css" TYPE="text/css" MEDIA=screen>
+	<script type="text/javascript" src="../../javascript/speech.js"></script>
+	<title>MAAVIS</title>
+</head>
+<body onload="init('topic')">
+	<header id="header">
+		<h1 tabindex="1" onkeypress="onEnter(event,'topic')" onclick="init('topic')">Touch the topic you want to speak about</h1>
+	</header>
+	<nav>
+	<!-- Navigation -->
+	</nav>
+	<section id="intro">
+<!-- Introduction -->
+	</section>
+	<section>
+	<!-- Main content area -->
+		<fieldset>
+			<div>
+				<iframe id="musicFrame1" src="speechOptions.html" width="750" height="600" frameBorder="0" scrolling="no" seamless></iframe>
+				<iframe id="contolFrame" src="../OtherControlButton.html" width="300" height="600" frameBorder="0" scrolling="no" onclick="location.href='../home.html'" seamless></iframe>
+			</div>
+		</fieldset>
+	</section>
+	<aside>
+		<!-- Sidebar -->
+	</aside>
+	<footer>
+		<!-- Footer -->
+	</footer>
+</body>
+</html>
+

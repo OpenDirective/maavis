@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link REL="StyleSheet" HREF="../CSS/styleIntroPage.css" TYPE="text/css" id="ss" title="blue" MEDIA=screen>
+	<meta http-equiv="Cache-control" content="no-cache">
+	<script src="../javascript/maavis.js"></script>
+	<script>
+		document.createElement('header');
+   		if (document.addEventListener) {
+   		    document.addEventListener("DOMContentLoaded", checkButtonColour, false);
+   		}
+	</script>
+	<title>MAAVIS</title>
+</head>
+<body>
+	<header>
+		<h1 onclick="init()" tabindex="1" onkeypress="onEnter(event)" id="title"></h1>
+	</header>
+	<nav>
+	<!-- Navigation -->
+	</nav>
+	<section id="intro">
+<!-- Introduction -->
+	</section>
+	<section>
+	<!-- Main content area -->
+		<fieldset id ="buttonfieldset">
+		</fieldset>
+		<audio id="testmusic" autoplay="autoplay">
+			<source id="oggtouch" src="../MaavisMedia/Sounds/touchActivity.ogg" type="audio/ogg" />
+			<source id="mp3touch" src="../MaavisMedia/Sounds/touchActivity.mp3" type="audio/mp3" />
+			Your browser does not support the audio tag.
+ 		</audio>
+	</section>
+</body>
+</html>

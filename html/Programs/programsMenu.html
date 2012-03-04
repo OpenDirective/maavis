@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script>
+			document.createElement('header');
+			function init(){
+				var audio = document.getElementById('programsaudio');
+				audio.play();
+			}
+			function onEnter( evt ) {
+				var keyCode = null;
+
+				if( evt.which ) {
+					keyCode = evt.which;
+				} else if( evt.keyCode ) {
+					keyCode = evt.keyCode;
+				}
+				if( 13 == keyCode ) {
+					init();
+				}
+}
+		</script>
+		<link REL=StyleSheet HREF="../../CSS/styleIntroPage.css" TYPE="text/css" MEDIA=screen />
+		<meta http-equiv="Cache-control" content="no-cache">
+		<title>MAAVIS</title>
+	</head>
+	<body>
+		<header><h1 class="chk" onclick="init()" tabindex="1" onkeypress="onEnter(event)">Touch the program you want to use</h1>
+		</header>
+		<section id="intro">
+		</section>
+		<section>
+			<fieldset>
+				<div>
+					<button type="submit" class="chk" style="height: 220px; width: 300px"><h2>Solitare XP</h2></button>
+					<button type="submit" class="chk" style="height: 220px; width: 300px"><h2>Solitare Vista</h2></button>
+					<button type="submit" class="chk" style="height: 220px; width: 300px" onclick="location.href='../index.html'"><h2>Other things to do</h2></button>
+				</div>
+			</fieldset>
+			<audio id="programsaudio" autoplay="autoplay">
+				<source id="oggtouch" src="../../MaavisMedia/Sounds/touchProgram.ogg" type="audio/ogg" />
+				<source id="mp3touch" src="../../MaavisMedia/Sounds/touchProgram.mp3" type="audio/mp3" />
+				Your browser does not support the audio tag.
+ 			</audio>
+		</section>
+	</body>
+</html>
