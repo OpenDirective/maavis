@@ -1,12 +1,12 @@
 [Setup]
 AppName=MaavisPortable
-AppVerName=MaavisPortable 0.2.1
-OutputBaseFilename=MaavisPortable-0.2.1
-AppVersion=0.2.1
-VersioninfoVersion=0.2.1
+AppVerName=MaavisPortable 0.2.2
+OutputBaseFilename=MaavisPortable-0.2.2
+AppVersion=0.2.2
+VersioninfoVersion=0.2.2
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
-AppCopyright=Copyright (C) 2008-11 The University Of Sheffield
+AppCopyright=Copyright (C) 2008-12 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
 ;LicenseFile=GPL.txt
@@ -18,6 +18,7 @@ Uninstallable=no
 ;DisableWelcomePage=yes
 
 ;Note the Firefox and Skype installer filenames are defined at the end of this file
+;Firefox portable must be placed in the installerPart
 
 ; max compression - slower, not recommended over around 100 MB
 ;SolidCompression=true
@@ -69,7 +70,7 @@ Filename: "{app}\MaavisPortable\Other\installers\{code:SkypeInstaller}";  Descri
 [code]
 function SkypeInstaller(Param: String): String;
 begin
-  Result := 'SkypePortable_4.2.0.187_online.paf.exe';
+  Result := 'SkypePortable_5.10.0.114_online.paf.exe';
 end;
 
 // shame we can't use this as {code:} errors in first section

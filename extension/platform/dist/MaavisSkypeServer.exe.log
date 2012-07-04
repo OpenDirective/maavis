@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "outfox.py", line 125, in <module>
+  File "outfox.py", line 118, in main
+IndexError: list index out of range
+None
+None
+None
+None
+None
+None
+None
+None
+None
+None
+None
