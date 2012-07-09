@@ -6,16 +6,19 @@ xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 	<Description about="urn:mozilla:install-manifest">
 
 		<em:id>maavis@fullmeasure.co.uk</em:id>
-		<em:version>0.2.1</em:version>
+		<em:version>0.2.2</em:version>
 		<em:type>2</em:type>
 		<em:name>Maavis</em:name>
-		<em:description>Maavis - simple access to media, programs and communications</em:description>
+		<em:description>Simple access to media, programs and communications</em:description>
 		<em:creator>Steve Lee, Full Measure for Sheffield University</em:creator>
+		<em:homepageURL>http://maavis.fullmeasure.co.uk/</em:homepageURL>
+		<em:targetPlatform>WINNT_x86-msvc</em:targetPlatform>
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+				<em:unpack>true</em:unpack>
 				<em:minVersion>3.0</em:minVersion>
-				<em:maxVersion>3.6.*</em:maxVersion>
+				<em:maxVersion>13.*</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 	</Description>
