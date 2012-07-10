@@ -37,7 +37,7 @@ ClickFinish=To use Maavis video calls please check the box and click Finish. Oth
 [Files]
 ; we might expect *.* to copy *this* file too but looks Inno like writes to temp file 1st so not a problem
 Source: "MaavisPortable\*"; DestDir: "{app}\MaavisPortable"; Flags: recursesubdirs ignoreversion
-Source: "3rdParty\FirefoxPortable\*"; DestDir: "{app}\MaavisPortable\App\FirefoxPortable"; Excludes: "\Data\*"; Flags: recursesubdirs ignoreversion
+Source: "MaavisPortable\App\FirefoxPortable\*"; DestDir: "{app}\MaavisPortable\App\FirefoxPortable"; Excludes: "\Data\*"; Flags: recursesubdirs ignoreversion
 Source: "..\extension\*"; DestDir: "{app}\MaavisPortable\App\extension"; Excludes: "\platform"; Flags: recursesubdirs ignoreversion
 Source: "Credits and attribution.txt"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
 Source: "Maavis.ico"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
