@@ -1,21 +1,21 @@
 [Setup]
 AppName=MaavisPortable
-AppVerName=MaavisPortable 0.2.2
-OutputBaseFilename=MaavisPortable-0.2.2
-AppVersion=0.2.2
-VersioninfoVersion=0.2.2
+AppVerName=MaavisPortable 0.2.3
+OutputBaseFilename=MaavisPortable-0.2.3
+AppVersion=0.2.3
+VersioninfoVersion=0.2.3
 ; Developed by Steve Lee of Full Measure.
 AppPublisher=Full Measure for the University Of Sheffield
 AppCopyright=Copyright (C) 2008-12 The University Of Sheffield
 AppPublisherURL=http://fullmeasure.co.uk
 AppSupportURL=http://maavis.fullmeasure.co.uk
-;LicenseFile=GPL.txt
 DefaultDirName={userdesktop}\MaavisPortable
 ;AppendDefaultDirName=no
 PrivilegesRequired=admin
 SetupIconFile=Maavis.ico
 Uninstallable=no
 ;DisableWelcomePage=yes
+ChangesEnvironment=yes
 
 ;Note the Firefox and Skype installer filenames are defined at the end of this file
 ;Firefox portable must be placed in the installerPart
@@ -36,8 +36,7 @@ ClickFinish=To use Maavis video calls please check the box and click Finish. Oth
 
 [Files]
 ; we might expect *.* to copy *this* file too but looks Inno like writes to temp file 1st so not a problem
-Source: "MaavisPortable\*"; DestDir: "{app}\MaavisPortable"; Flags: recursesubdirs ignoreversion
-Source: "MaavisPortable\App\FirefoxPortable\*"; DestDir: "{app}\MaavisPortable\App\FirefoxPortable"; Excludes: "\Data\*"; Flags: recursesubdirs ignoreversion
+Source: "MaavisPortable\*"; DestDir: "{app}\MaavisPortable"; Excludes: "\App\FirefoxPortable\Data\*"; Flags: recursesubdirs ignoreversion
 Source: "..\extension\*"; DestDir: "{app}\MaavisPortable\App\extension"; Excludes: "\platform"; Flags: recursesubdirs ignoreversion
 Source: "Credits and attribution.txt"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
 Source: "Maavis.ico"; DestDir: "{app}\MaavisPortable\Other\Src"; Flags: ignoreversion
@@ -59,7 +58,11 @@ Source: "3rdParty\Skype*"; DestDir: "{app}\MaavisPortable\Other\installers"; Fla
 ;Source: "..\media\*"; DestDir: "{userdocs}\MaavisMedia"; Flags: recursesubdirs ignoreversion; Tasks: "media"
 Source: "..\media\*"; DestDir: "{app}\MaavisMedia"; Excludes: "Thumbs.db"; Flags: recursesubdirs ignoreversion;
 
-
+[Registry]
+; set MAAVIS_HOME & MAVIS_MEDIA env vars for GPII to find them - see ticket #216
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType:string; ValueName:"MAAVIS_HOME"; ValueData:"{app}"; Flags: preservestringtype
+Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; ValueType:string; ValueName:"MAAVIS_MEDIA"; ValueData:"{app}\MaavisMedia"; Flags: preservestringtype
+ 
 [INI]
 
 [Icons]
