@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI",  "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleSpeakOnActivate", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "toggleScanStart", "getCommandLineConfig"];
+var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI", "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleSpeakOnActivate", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "toggleScanStart", "getCommandLineConfig", "translateString"];
 
 //TODO clean up this file
 
@@ -56,6 +56,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, "userType", 'scan');
     _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCH");
     _defaultSetting(g_userConfig, 'scanRate', "2500");
+    _defaultSetting(g_userConfig, 'language', "en");
     
     // these aren't persisted 
     g_userConfig.__defineGetter__("startsoundURI", function(){ return (g_commandLineConfig.quickStart || g_userConfig.playStartSound == 'no') ? null  : _getStartSoundURI();});
@@ -190,6 +191,24 @@ function getUserDataDir()
     return dir;
 }
 
+function getStringsFile(lang)
+{
+    var dir = _getMaavisDataDir();
+    dir.append('strings');
+    dir.append(lang+'.json');
+    return dir;
+}
+
+function getStrings(lang)
+{
+    stringsFile = getStringsFile(lang);
+    const strStrings = file.readFileToString(stringsFile);
+    if ("" == strStrings)
+        return {};
+    const stringsObj =  utils.fromJson(strStrings); //TODO handle errors
+    return stringsObj;
+}
+
 function _getStartSoundURI()
 {
     var dir = _getMaavisDataDir();
@@ -261,6 +280,7 @@ function getUserConfig()
         }
         // set defaults 
         _setConfigDefaults();
+        g_userConfig.strings = getStrings(g_userConfig.language);
     }
     return g_userConfig;
 }
@@ -344,6 +364,13 @@ function getUserContacts()
     return contacts;
 }
 
+function translateString(str)
+{
+    var str2 = g_userConfig.strings[str];
+    if (str2 === undefined)
+        return str;
+    return str2;
+}
 
 /* no good as the cascade iscompletely messed up
 var g_currentSheet = null;

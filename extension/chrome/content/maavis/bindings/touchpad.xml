@@ -239,7 +239,11 @@
             var label = this.obLabel;
             if (!label)
                  throw "XBL binding for <button type=\"touchkey\"/> binding must contain an element with anonid=\"label\"";
-            label.value = this.getAttribute('label');
+            var config = {};
+            Components.utils.import("resource://modules/config.js", config);
+            label.value = config.translateString(this.getAttribute('label'));
+            this.setAttribute('label', label.value);
+
             const szText = this._getTextExtent(label, label.value);
             const szContent = this._getContentExtent(label);
             //utils.logit(this.getAttribute('id')+': '+szContent.cx+'x'+szContent.cy+' '+szText.cx+'x'+szText.cy);
