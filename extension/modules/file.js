@@ -10,11 +10,13 @@ function readFileToString(file)
     // this is ASCII only
     try
     { 
-        var data = "";
         var fstream = Components.classes["@mozilla.org/network/file-input-stream;1"]
                                 .createInstance(Components.interfaces.nsIFileInputStream);
         var sstream = Components.classes["@mozilla.org/scriptableinputstream;1"]
                                 .createInstance(Components.interfaces.nsIScriptableInputStream);
+        var utf8Converter = Components.classes["@mozilla.org/intl/utf8converterservice;1"]
+                                .getService(Components.interfaces.nsIUTF8ConverterService);
+
         fstream.init(file, -1, 0, 0);
         sstream.init(fstream);
     }
@@ -24,10 +26,11 @@ function readFileToString(file)
         return "";
     }
 
+    var data = "";
     var str = sstream.read(4096);
     while (str.length > 0)
     {
-      data += str;
+      data += utf8Converter.convertURISpecToUTF8 (str, "UTF-8");
       str = sstream.read(4096);
     }
 
