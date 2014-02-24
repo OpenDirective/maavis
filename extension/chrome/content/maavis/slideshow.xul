@@ -15,26 +15,26 @@
                 label="Watch Slideshow" speakOnLoad='false'/>
                 
         <touchkey row='1' col='7' rows='1' cols='3'
-                class='goback' label="Change Photos" accesskey='c' 
+                class='goback' label="Change Photos" 
                 action="popPage" />
 
         <touchkey row='2' col='7' rows='2' cols='3'
-                class='answer' label="Answer" accesskey='a' 
+                class='answer' label="Answer" 
                 action="voipAnswerCall" />
                 
         <togglekey id="pause" row='4' col='7' rows='2' cols='3'
-                class='player_pause' label='Play' labelB="Pause" accesskey='p' 
+                class='player_pause' label='Play' labelB="Pause" 
                 image='chrome://maavis/skin/playerbuttons/play.png' 
                 imageB='chrome://maavis/skin/playerbuttons/pause.png' 
                 action="mediaPause" autoToggle='false' watch='player.isPlaying' />
                 
         <touchkey id="prev" row='6' col='7' rows='2' cols='3'
-                class='player_prev' label="Back" accesskey='b' 
+                class='player_prev' label="Back" 
                 image='chrome://maavis/skin/playerbuttons/back.png' 
                 action="mediaPrev" />
                 
         <touchkey id="next" row='8' col='7' rows='2' cols='3'
-                class='player_next' label='Next' accesskey='n' 
+                class='player_next' label='Next' 
                 image='chrome://maavis/skin/playerbuttons/forward.png' 
                 action="mediaNext" />
 
