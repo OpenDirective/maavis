@@ -1,4 +1,4 @@
-var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI", "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleSpeakOnActivate", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "toggleScanStart", "getCommandLineConfig", "translateString"];
+var EXPORTED_SYMBOLS = ["ConfigException", "getPageUrl", "isValidMediaDir", "getUserDataDir", "parseURI", "setCurrentUser", "getcontactDetails", "getUserConfig", "saveUserConfig", "getUserContacts", "toggleTheme", "togglePlayStartSound", "toggleSpeakTitles", "toggleSpeakLabels", "toggleSpeakOnActivate", "toggleShowLabels", "toggleShowImages", "toggleUseSkype", "toggleUserType", "toggleNSwitches", "toggleScanMode", "toggleScanStart", "getCommandLineConfig", "translateString", "setBrowserLang"];
 
 //TODO clean up this file
 
@@ -27,6 +27,12 @@ ConfigException.prototype.toString = function ()
 var g_user = 'Default';
 var g_userConfig;
 var g_commandLineConfig;
+var g_browserLang = 'en';
+
+function setBrowserLang(lang)
+{
+    g_browserLang = lang;
+}
 
 function setCurrentUser(user)
 {
@@ -56,7 +62,7 @@ function _setConfigDefaults()
     _defaultSetting(g_userConfig, "userType", 'scan');
     _defaultSetting(g_userConfig, 'scanMode', "AUTO1SWITCH");
     _defaultSetting(g_userConfig, 'scanRate', "2500");
-    _defaultSetting(g_userConfig, 'language', "en");
+    _defaultSetting(g_userConfig, 'language', "auto");
     
     // these aren't persisted 
     g_userConfig.__defineGetter__("startsoundURI", function(){ return (g_commandLineConfig.quickStart || g_userConfig.playStartSound == 'no') ? null  : _getStartSoundURI();});
@@ -191,7 +197,7 @@ function getUserDataDir()
     return dir;
 }
 
-function getStringsFile(lang)
+function _getStringsFile(lang)
 {
     var dir = _getMaavisDataDir();
     dir.append('strings');
@@ -199,14 +205,22 @@ function getStringsFile(lang)
     return dir;
 }
 
-function getStrings(lang)
+function _getStrings(lang)
 {
-    stringsFile = getStringsFile(lang);
+    stringsFile = _getStringsFile(lang);
     const strStrings = file.readFileToString(stringsFile);
     if ("" == strStrings)
         return {};
     const stringsObj =  utils.fromJson(strStrings); //TODO handle errors
     return stringsObj;
+}
+
+function translateString(str)
+{
+    var str2 = g_userConfig.strings[str];
+    if (str2 === undefined)
+        return str;
+    return str2;
 }
 
 function _getStartSoundURI()
@@ -280,7 +294,11 @@ function getUserConfig()
         }
         // set defaults 
         _setConfigDefaults();
-        g_userConfig.strings = getStrings(g_userConfig.language);
+
+        var lang = (g_userConfig.language === 'auto') ? g_browserLang : g_userConfig.language;
+        utils.logit(lang+':'+g_browserLang);
+                    
+        g_userConfig.strings = _getStrings(lang);
     }
     return g_userConfig;
 }
@@ -364,13 +382,6 @@ function getUserContacts()
     return contacts;
 }
 
-function translateString(str)
-{
-    var str2 = g_userConfig.strings[str];
-    if (str2 === undefined)
-        return str;
-    return str2;
-}
 
 /* no good as the cascade iscompletely messed up
 var g_currentSheet = null;

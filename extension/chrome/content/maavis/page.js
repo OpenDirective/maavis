@@ -34,7 +34,10 @@ Components.utils.import("resource://modules/skype.js", _ns.skype);
 const page = 
 {
     set config(u) {},
-    get config() { return _ns.config.getUserConfig(); },
+    get config() { 
+                    _ns.config.setBrowserLang(window.navigator.language);
+                    return _ns.config.getUserConfig();
+                 },
 
     set user(u) {_ns.config.setCurrentUser(u);},
     get user() {return page.config.name;},
