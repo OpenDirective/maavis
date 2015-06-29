@@ -34,17 +34,11 @@ TTS::TTS()
 TTS::~TTS()
 {
 }
-
 NS_IMETHODIMP TTS::Speak(const nsAString & what)
 {
-    // TODO review char* not wchar*
-    char* strWhat = ToNewUTF8String(what); // free this later 
+	LPCWSTR strWhat = what;
     try
     {
-/*    HRESULT hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
-    if (FAILED(hr))
-        _com_issue_error(hr);
-*/    
         sapi::ISpeechVoicePtr spVoice;
         // TODO see if can get asynch working
         const sapi::SpeechVoiceSpeakFlags flags = static_cast<sapi::SpeechVoiceSpeakFlags>(sapi::SVSFPurgeBeforeSpeak /*| sapi::SVSFlagsAsync*/);
@@ -58,9 +52,6 @@ NS_IMETHODIMP TTS::Speak(const nsAString & what)
         wprintf(L"\n Error: %08lx Message: %s Source: %s Description: %s \n", e.Error(), (LPCWSTR)e.ErrorMessage(), (LPCWSTR)bstrSource, (LPCWSTR)bstrDescription);
     }
         
-        NS_Free(strWhat);
-//    ::CoUninitialize();
-
     return NS_OK;
 }
 
